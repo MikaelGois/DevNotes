@@ -1,17 +1,17 @@
 ---
-title: My Site
+title: Anotações de Mikael Gois
 toc: false
 ---
 
-This is the landing page.
+Este site é usado para anotações pessoais a respeito do meu processo de aprendizado, tanto para que eu possa revisar o conteudo quando necessário, quanto para compartilhar como material de apoio para outras pessoas.
 
-## Explore
+## Explorar
 
 {{< cards >}}
   {{< card link="docs" title="Docs" icon="book-open" >}}
-  {{< card link="about" title="About" icon="user" >}}
+  {{< card link="sobre" title="About" icon="user" >}}
 {{< /cards >}}
 
-## Documentation
+<!-- ## Documentation
 
-For more information, visit [Hextra](https://imfing.github.io/hextra).
+For more information, visit [Hextra](https://imfing.github.io/hextra). -->
