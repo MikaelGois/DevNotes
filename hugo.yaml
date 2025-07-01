@@ -18,16 +18,20 @@ markup:
 
 menu:
   main:
-    - name: Docs
+    - identifier: documentation
+      name: Arquivos
       pageRef: /docs
       weight: 1
-    - name: Sobre
+    - identifier: about
+      name: Sobre
       pageRef: /about
       weight: 2
-    - name: Portifolio ↗
+    - identifier: portifolio
+      name: Portifólio ↗
       url: "https://mikaelgois.github.com"
       weight: 3
-    - name: Search
+    - identifier: search
+      name: Procurar
       weight: 4
       params:
         type: search
@@ -39,6 +43,15 @@ menu:
 
 # Parse Git commit
 enableGitInfo: true
+
+defaultContentLanguage: pt
+languages:
+  pt:
+    languageName: Português
+    weight: 1
+  en:
+    languageName: English
+    weight: 2
 
 params:
   theme:
