@@ -37,7 +37,15 @@ menu:
       params:
         icon: github
 
+# Parse Git commit
+enableGitInfo: true
+
 params:
+  theme:
+    # light | dark | system
+    default: system
+    displayToggle: true
+
   navbar:
     displayTitle: true
     displayLogo: false
@@ -47,5 +55,9 @@ params:
     displayPoweredBy: true
 
   editURL:
-    enable: true
+    enable: false
     base: "https://github.com/imfing/hextra-starter-template/edit/main/content"
+
+  # Display the last modification date
+  displayUpdatedDate: true
+  dateFormat: "2 Jan 2006"
