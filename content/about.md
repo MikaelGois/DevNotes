@@ -14,6 +14,6 @@ Não sufoque o dev!</p>
     decidi complicar ainda mais minha vida e criar uma versão em inglês, 
     tanto para aprender mais sobre o modo multilíngue em um site quanto para praticar minha escrita em inglês.</p>
 
-<p>Para conferir a versão em inglês do site clique em "Portuquês" no lado esquerdo do rodapé da página, 
+<p>Para conferir a versão em inglês do site clique em "Português" no lado esquerdo do rodapé da página, 
     isso irá abrir um menu suspenso com os idiomas disponíveis, 
     na sequencia basta selecionar a opção "English".</p>
