@@ -4,7 +4,7 @@ type: about
 ---
 
 <p>Don't worry!
-This is a WIP, I'm still thinkin about how I'm going to do this.
+This is a WIP, I'm still thinking about how I'm going to do this.
 So calm down (please).</p>
 
 <p>This website is used for personal notes about my learning process, 
