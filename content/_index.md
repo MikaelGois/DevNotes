@@ -3,13 +3,17 @@ title: Anotações de Mikael Gois
 toc: false
 ---
 
-Este site é usado para anotações pessoais a respeito do meu processo de aprendizado, tanto para que eu possa revisar o conteudo quando necessário, quanto para compartilhar como material de apoio para outras pessoas.
+<p>Aqui eu escrevo algumas anotações (ah vá) em caráter pessoal, 
+    quase como uma conversa comigo mesmo (o que pode indicar sintomas de esquizofrenia).
+    A escrita é informal e ocorre sem constancia, 
+    se estiver interessado em saber mais e entender o porquê disso, 
+    leia a página ["Sobre"](about).</p>
 
 ## Explorar
 
 {{< cards >}}
-  {{< card link="docs" title="Docs" icon="book-open" >}}
-  {{< card link="sobre" title="About" icon="user" >}}
+  {{< card link="docs" title="Arquivos" icon="book-open" >}}
+  {{< card link="about" title="Sobre" icon="user" >}}
 {{< /cards >}}
 
 <!-- ## Documentation
