@@ -9,7 +9,7 @@ the English version of these notes,
 almost like a conversation with myself (which may indicate symptoms of schizophrenia). 
 The writing is informal and occurs without constancy, 
 if you are interested in knowing more and understanding why this is so, 
-read the ["About"](about) page.
+read the "[About](about)" page.
 
 ## Explorar
 
