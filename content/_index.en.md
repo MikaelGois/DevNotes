@@ -3,7 +3,6 @@ title: Mikael Gois's notes
 toc: false
 ---
 
-
 Here I write some notes (oh come on) of a personal nature, 
 the English version of these notes, 
 almost like a conversation with myself (which may indicate symptoms of schizophrenia). 
@@ -14,8 +13,11 @@ read the "[About](about)" page.
 ## Explorar
 
 {{< cards >}}
-  {{< card link="docs" title="Docs" icon="book-open" >}}
-  {{< card link="about" title="About" icon="user" >}}
+    {{< card link="docs" title="Docs" icon="book-open" >}}
+    {{< card link="about" title="About" icon="user" >}}
+    {{< card link="https://mikaelgois.github.io" title="Portfolio" icon="code" >}}
+    {{< card link="https://www.github.io/mikaelgois" title="GitHub" icon"github" >}}
+    {{< card link="https://www.msglabs.site/" title="Digital Lab" icon"beaker" >}}
 {{< /cards >}}
 
 <!-- ## Documentation
