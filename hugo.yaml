@@ -44,6 +44,9 @@ menu:
 # Parse Git commit
 enableGitInfo: true
 
+# Enable icons
+enableInlineShortcodes: true
+
 defaultContentLanguage: pt
 languages:
   pt:
