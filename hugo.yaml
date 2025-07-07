@@ -28,7 +28,7 @@ menu:
       weight: 2
     - identifier: portfolio
       name: Portfólio ↗
-      url: "https://mikaelgois.github.com"
+      url: "https://mikaelgois.github.io"
       weight: 3
     - identifier: search
       name: Procurar
