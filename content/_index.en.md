@@ -16,8 +16,8 @@ read the "[About](about)" page.
     {{< card link="docs" title="Docs" icon="book-open" >}}
     {{< card link="about" title="About" icon="user" >}}
     {{< card link="https://mikaelgois.github.io" title="Portfolio" icon="code" >}}
-    {{< card link="https://github.com/mikaelgois" title="GitHub" icon"github" >}}
-    {{< card link="https://www.msglabs.site/" title="Digital Lab" icon"beaker" >}}
+    {{< card link="https://www.github.com/mikaelgois" title="GitHub" icon="github" >}}
+    {{< card link="https://www.msglabs.site/" title="Digital Lab" icon="beaker" >}}
 {{< /cards >}}
 
 <!-- ## Documentation
