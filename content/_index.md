@@ -15,7 +15,7 @@ leia a página "[Sobre](about)".
     {{< card link="docs" title="Arquivos" icon="book-open" >}}
     {{< card link="about" title="Sobre" icon="user" >}}
     {{< card link="https://mikaelgois.github.io" title="Portfólio" icon="code" >}}
-    {{< card link="https://www.github.io/mikaelgois" title="GitHub" icon"github" >}}
+    {{< card link="https://github.com/mikaelgois" title="GitHub" icon="github" >}}
     {{< card link="https://www.msglabs.site/" title="Lab digital" icon"beaker" >}}
 {{< /cards >}}
 
