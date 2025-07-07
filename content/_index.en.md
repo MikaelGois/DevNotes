@@ -3,6 +3,7 @@ title: Mikael Gois's notes
 toc: false
 ---
 
+<style>body {text-align: justify}</style>
 Here I write some notes (oh come on) of a personal nature, 
 the English version of these notes, 
 almost like a conversation with myself (which may indicate symptoms of schizophrenia). 

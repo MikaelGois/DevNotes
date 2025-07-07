@@ -3,6 +3,7 @@ title: About
 type: about
 ---
 
+<style>body {text-align: justify}</style>
 Don't worry!
 This is a WIP, I'm still thinking about how I'm going to do this.
 So calm down (please).
