@@ -1,5 +1,5 @@
 ---
-title: Junho
+title: Julho
 type: docs
 prev: articles/2025/_index
 next: articles/2025/07/leaf
