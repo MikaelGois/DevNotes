@@ -1,6 +1,6 @@
 ---
 title: Articles
-next: ./2025/07/_index.md
+next: 2025/07/_index
 ---
 
 This is a demo of the theme's documentation layout.
