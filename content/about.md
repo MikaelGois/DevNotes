@@ -1,6 +1,7 @@
 ---
 title: Sobre 
 type: about
+weight: 2
 ---
 
 <style>body {text-align: justify}</style>
