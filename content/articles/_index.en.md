@@ -1,6 +1,6 @@
 ---
-title: Documentation
-next: first-page
+title: Articles
+next: ./2025/07/_index.md
 ---
 
 This is a demo of the theme's documentation layout.

@@ -1,11 +1,11 @@
 ---
-title: Documentation
-next: first-page
+title: Artigos
+next: ./2025/07/_index.md
 ---
 
-This is a demo of the theme's documentation layout.
+Esta é uma página de demonstração.
 
-## Hello, World!
+## Olá, Mundo!
 
 ```go {filename="main.go"}
 package main
