@@ -1,8 +1,8 @@
 ---
-title: Junho
+title: July
 type: blog
-prev: articles/first-page
-next: articles/folder/leaf
+prev: articles/2025/_index
+next: articles/2025/07/leaf
 sidebar:
   open: true
 ---
