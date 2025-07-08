@@ -1,6 +1,6 @@
 ---
 title: Leaf Page
-type: blog
+type: docs
 prev: articles/2025/07/_index
 ---
 
