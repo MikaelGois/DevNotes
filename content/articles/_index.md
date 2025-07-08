@@ -1,6 +1,6 @@
 ---
 title: Artigos
-next: ./2025/07/_index.md
+next: 2025/07/_index
 ---
 
 Esta é uma página de demonstração.
