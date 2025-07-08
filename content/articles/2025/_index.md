@@ -2,7 +2,7 @@
 title: Junho
 type: blog
 prev: articles/first-page
-next: blog/folder/leaf
+next: articles/folder/leaf
 sidebar:
   open: true
 ---
