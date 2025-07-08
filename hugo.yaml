@@ -18,7 +18,7 @@ markup:
 
 menu:
   main:
-    - identifier: documentation
+    - identifier: articles
       name: Arquivos
       pageRef: /articles
       weight: 1
