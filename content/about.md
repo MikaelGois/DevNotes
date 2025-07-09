@@ -1,5 +1,5 @@
 ---
-title: Sobre 
+title: Sobre
 type: about
 weight: 2
 ---
