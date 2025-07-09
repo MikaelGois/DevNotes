@@ -1,9 +1,9 @@
 ---
 title: Artigos
-type: default
-weight: 1
+cascade:
+    type: default
 sidebar:
-    exclude: true
+    exclude: false
 next: articles/2025/07/_index.md
 ---
 
