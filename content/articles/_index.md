@@ -1,6 +1,8 @@
 ---
 title: Artigos
-next: 2025/07/_index.md
+sidebar:
+    exclude: true
+next: articles/2025/07/_index.md
 ---
 
 Esta é uma página de demonstração.

@@ -1,6 +1,7 @@
 ---
 title: Mikael Gois's notes
 toc: false
+weight: 1
 ---
 
 <style>body {text-align: justify}</style>

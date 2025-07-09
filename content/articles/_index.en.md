@@ -1,5 +1,6 @@
 ---
 title: Articles
+type: blog
 next: 2025/07/_index.md
 ---
 
