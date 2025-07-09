@@ -3,6 +3,7 @@ title: About
 type: about
 weight: 2
 ---
+
 <style>body {text-align: justify}</style>
 Don't worry!
 This is a WIP, I'm still thinking about how I'm going to do this.
@@ -44,5 +45,5 @@ in addition to being a well-designed tool and using Markdown and LaTeX to write 
 won me over with the possibility of implementing the project with GitHub Pages. 
 In addition, the devs provide a template that makes implementing the project much easier.
 
-> "The only true wisdom is in knowing you know nothing."
+> "The only true wisdom is in knowing you know nothing."<br>
 > — <cite>Socrates</cite>

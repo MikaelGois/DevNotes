@@ -1,5 +1,7 @@
 ---
 title: Artigos
+type: default
+weight: 1
 sidebar:
     exclude: true
 next: articles/2025/07/_index.md
@@ -18,3 +20,5 @@ func main() {
     fmt.Println("Hello, World!")
 }
 ```
+
+[página de teste](articles/2025/07/leaf)
