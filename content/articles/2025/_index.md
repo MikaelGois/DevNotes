@@ -1,12 +1,13 @@
 ---
 title: 2025
 type: docs
-next: 2025/07/_index.md
+# next: 2025/07/_index.md
 ---
 
-## Bem-vindos a 2025
+## Bem-vindos a 2025!
 
 O ano de 2025 corresponde ao ano 4723 no calendário chinês, sendo o ano da serpente e ao ano 5785 no calendário judaico.
+
 
 Há 100 anos (segundo a Wikipédia):
 * A primeira fábrica da General Motors do Brasil é inaugurada.
