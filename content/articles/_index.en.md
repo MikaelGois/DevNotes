@@ -4,16 +4,6 @@ type: blog
 next: 2025/07/_index.md
 ---
 
-This is a demo of the theme's documentation layout.
+## [2025](2025/_index)
 
-## Hello, World!
-
-```go {filename="main.go"}
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, World!")
-}
-```
+### [July](2025/07/_index)

@@ -1,24 +1,10 @@
 ---
 title: Artigos
-cascade:
-    type: default
-sidebar:
-    exclude: false
+type: blog
 next: articles/2025/07/_index.md
 ---
 
-Esta é uma página de demonstração.
+## [2025](2025/_index)
 
-## Olá, Mundo!
-
-```go {filename="main.go"}
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, World!")
-}
-```
-
+### [Julho](2025/07/_index)
 [página de teste](articles/2025/07/leaf)
