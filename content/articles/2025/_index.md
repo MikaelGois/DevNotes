@@ -14,7 +14,7 @@ Há 100 anos (segundo a Wikipédia):
 * Nasce Malcolm X.
 * Nasce Margaret Thatcher.
 * Gustav Ludwig Hertz recebe o Nobel de Física em colaboração com James Franck.
-* Um certo austríaco de bigodinho pública o primeiro capítulo do seu livro.
+* Um certo austríaco de bigodinho publica o primeiro capítulo do seu livro.
 
 
 ## Artigos publicados:
