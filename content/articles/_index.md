@@ -6,5 +6,5 @@ type: blog
 
 ## [2025](2025/)
 
-### [Julho](2025/07/index)
+### [Julho](2025/07/)
 <!-- [página de teste](articles/2025/07/leaf) -->
