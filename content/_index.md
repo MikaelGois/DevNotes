@@ -20,7 +20,3 @@ leia a página "[Sobre](about)".
     {{< card link="https://www.github.com/mikaelgois" title="GitHub" icon="github" >}}
     {{< card link="https://www.msglabs.site/" title="Lab digital" icon="beaker" >}}
 {{< /cards >}}
-
-<!-- ## Documentation
-
-For more information, visit [Hextra](https://imfing.github.io/hextra). -->
