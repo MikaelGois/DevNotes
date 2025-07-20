@@ -1,10 +1,15 @@
 ---
 title: July
-type: blog
-prev: articles/2025/_index
-next: articles/2025/07/leaf
+type: docs
+weight: 1
+#prev: articles/2025/
+#next: articles/2025/07/1-raspberry-pi-cluster
 sidebar:
   open: true
 ---
 
-Pages can be organized into folders.
+## Published articles:
+
+{{< cards cols="1" >}}
+  {{< card link="articles/2025/07/1-hadoop-cluster" title="Creating a computer cluster with Apache Hadoop (portuguese only)" >}}
+{{< /cards >}}

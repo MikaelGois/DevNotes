@@ -1,5 +1,7 @@
 ---
 title: Teste 1
+sidebar:
+  exclude: true
 ---
 
 ## teste 1

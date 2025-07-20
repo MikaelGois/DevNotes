@@ -1,10 +1,10 @@
 ---
 title: Artigos
-type: blog
-# next: articles/2025/07/_index.md
+type: default
+next: articles/2025/
 ---
 
-## [2025](2025/)
+## [2025](articles/2025/)
 
-### [Julho](2025/07/)
+### [Julho](articles/2025/07/)
 <!-- [página de teste](articles/2025/07/leaf) -->

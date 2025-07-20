@@ -1,7 +1,9 @@
 ---
 title: 2025
 type: docs
-# next: 2025/07/_index.md
+weight: 1
+prev: articles/
+next: articles/2025/07/
 ---
 
 ## Bem-vindos a 2025!
