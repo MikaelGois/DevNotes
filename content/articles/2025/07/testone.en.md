@@ -1,6 +1,8 @@
 ---
 title: Teste 1
 type: blog
+sidebar:
+  exclude: true
 ---
 
 ## test 1

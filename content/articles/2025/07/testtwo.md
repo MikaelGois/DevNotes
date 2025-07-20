@@ -1,6 +1,8 @@
 ---
 name: Teste 2
 weight: 1
+sidebar:
+  exclude: true
 ---
 
 ## teste 2

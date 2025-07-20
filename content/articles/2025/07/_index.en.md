@@ -8,8 +8,8 @@ sidebar:
   open: true
 ---
 
-Pages can be organized into folders.
+## Published articles:
 
 {{< cards cols="1" >}}
-  {{< card link="articles/2025/07/1-raspberry-pi-cluster" title="Creating a computer cluster with Apache Hadoop" >}}
+  {{< card link="articles/2025/07/1-hadoop-cluster" title="Creating a computer cluster with Apache Hadoop (portuguese only)" >}}
 {{< /cards >}}
