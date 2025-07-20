@@ -2,8 +2,8 @@
 title: 2025
 type: docs
 weight: 1
-prev: articles/
-next: articles/2025/07/
+prev: ../
+next: 07/
 ---
 
 ## Bem-vindos a 2025!
@@ -24,6 +24,4 @@ Há 100 anos (segundo a Wikipédia):
 
 ### Julho:
 
-* [leaf](07/leaf)
-* [testone](07/testone)
-* [testtwo](07/testtwo)
+* [Criando um cluster de computadores com Apache Hadoop](07/1-hadoop-cluster)

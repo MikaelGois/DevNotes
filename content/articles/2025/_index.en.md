@@ -2,8 +2,8 @@
 title: 2025
 type: docs
 weight: 1
-prev: articles/2025/
-next: articles/2025/07/
+prev: ../
+next: 07/
 ---
 
 ## Welcome to 2025!
@@ -24,6 +24,4 @@ The year 2025 corresponds to the year 4723 in the Chinese calendar, the year of 
 
 ### July:
 
-* [leaf](07/leaf)
-* [testone](07/testone)
-* [testtwo](07/testtwo)
+* [Creating a computer cluster with Apache Hadoop (portuguese only)](07/1-hadoop-cluster)

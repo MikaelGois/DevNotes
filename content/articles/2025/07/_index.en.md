@@ -11,5 +11,5 @@ sidebar:
 ## Published articles:
 
 {{< cards cols="1" >}}
-  {{< card link="articles/2025/07/1-hadoop-cluster" title="Creating a computer cluster with Apache Hadoop (portuguese only)" >}}
+  {{< card link="1-hadoop-cluster" title="Creating a computer cluster with Apache Hadoop (portuguese only)" >}}
 {{< /cards >}}
