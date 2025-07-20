@@ -1,10 +1,11 @@
 ---
 title: Artigos
 type: default
-next: articles/2025/
+next: 2025/
 ---
 
-## [2025](articles/2025/)
+## [2025](2025/)
 
-### [Julho](articles/2025/07/)
-<!-- [página de teste](articles/2025/07/leaf) -->
+### [Julho](2025/07/)
+
+* [Criando um cluster de computadores com Apache Hadoop](2025/07/1-hadoop-cluster)

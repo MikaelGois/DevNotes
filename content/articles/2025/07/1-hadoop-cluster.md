@@ -54,7 +54,7 @@ Se houver problemas acesse o repositório e baixe o pacote correspondente:
 [https://dlcdn.apache.org/hadoop/common/](https://dlcdn.apache.org/hadoop/common/)
 
 > [!WARNING]
-> O nome do pacote deve se parecer com "hadoop-VERSÃO.tar.gz"!
+> O nome do pacote deve se parecer com `hadoop-VERSÃO.tar.gz`!
 
 Descompacte o pacote:   
 ```sh
