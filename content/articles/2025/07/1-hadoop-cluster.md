@@ -336,7 +336,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@X
 
 
 
-### 8 - Configurações do Hadoop - core, hdfs, mapreduce - (main):
+### 8 - Configurações do Hadoop - core, hdfs, mapreduce, yarn - (main):
 
 #### Configurar o arquivo core do hadoop:
 
@@ -365,7 +365,7 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 
-#### Configurar o arquivo hdfs do hadoop:
+#### Configurar o arquivo hdfs do Hadoop:
 
 Acesse o arquivo:  
 ```sh
@@ -400,7 +400,7 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
-#### Configurar o arquivo mapreduce do hadoop:
+#### Configurar o arquivo mapreduce do Hadoop:
 
 Acesse o arquivo:
 ```sh
@@ -411,27 +411,27 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 ```sh
 <property>
     <name>yarn.app.mapreduce.am.env</name>
-    <value>HADOOP_MAPRED_HOME=$HADOOP_HOME</value>
+    <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
 </property>
 <property>
     <name>mapreduce.map.env</name>
-    <value>HADOOP_MAPRED_HOME=$HADOOP_HOME</value>
+    <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
 </property>
 <property>
     <name>mapreduce.reduce.env</name>
-    <value>HADOOP_MAPRED_HOME=$HADOOP_HOME</value>
+    <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
 </property>
 <property>
     <name>mapreduce.application.classpath</name>
     <value>
-        $HADOOP_HOME/share/hadoop/mapreduce/*,
-        $HADOOP_HOME/share/hadoop/mapreduce/lib/*,
-        $HADOOP_HOME/share/hadoop/common/*,
-        $HADOOP_HOME/share/hadoop/common/lib/*,
-        $HADOOP_HOME/share/hadoop/yarn/*,
-        $HADOOP_HOME/share/hadoop/yarn/lib/*,
-        $HADOOP_HOME/share/hadoop/hdfs/*,
-        $HADOOP_HOME/share/hadoop/hdfs/lib/*
+        /usr/local/hadoop/share/hadoop/mapreduce/*,
+        /usr/local/hadoop/share/hadoop/mapreduce/lib/*,
+        /usr/local/hadoop/share/hadoop/common/*,
+        /usr/local/hadoop/share/hadoop/common/lib/*,
+        /usr/local/hadoop/share/hadoop/yarn/*,
+        /usr/local/hadoop/share/hadoop/yarn/lib/*,
+        /usr/local/hadoop/share/hadoop/hdfs/*,
+        /usr/local/hadoop/share/hadoop/hdfs/lib/*
     </value>
 </property>
 ```
@@ -445,6 +445,37 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
+
+#### Configurar o arquivo yarn do Hadoop:
+
+Acesse o arquivo:  
+```sh
+sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
+```
+
+Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:
+```sh
+<property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>main</value>
+</property>
+<property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce_shuffle</value>
+</property>
+<property>
+    <name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name>
+    <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+</property>
+```
+
+| Parâmetro                                              | Função                                             |
+| ------------------------------------------------------ | -------------------------------------------------- |
+| `yarn.resourcemanager.hostname`                        | Host onde o ResourceManager do YARN está escutando.|
+| `yarn.nodemanager.aux-services`                        | Serviço auxiliar habilitado no NodeManager.        |
+| `yarn.nodemanager.auxservices.mapreduce.shuffle.class` | Classe Java que implementa o serviço de shuffle.   |
+
+Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 #### Configurar o arquivo de nodes no hadoop:
 
@@ -485,11 +516,11 @@ scp /usr/local/hadoop/etc/hadoop/* X:/usr/local/hadoop/etc/hadoop/
 Digite os comandos abaixo **em todas as máquinas** no usuário Hadoop para exportar o PATHs das aplicações:
 ```sh
 export HADOOP_HOME="/usr/local/hadoop"
-export HADOOP_COMMON_HOME=$HADOOP_HOME
-export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
-export HADOOP_HDFS_HOME=$HADOOP_HOME
-export HADOOP_MAPRED_HOME=$HADOOP_HOME
-export HADOOP_YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME="/usr/local/hadoop"
+export HADOOP_CONF_DIR="/usr/local/hadoop/etc/hadoop"
+export HADOOP_HDFS_HOME="/usr/local/hadoop"
+export HADOOP_MAPRED_HOME="/usr/local/hadoop"
+export HADOOP_YARN_HOME="/usr/local/hadoop"
 ```
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
@@ -497,41 +528,8 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 
 
-### 9 - Configurações do Hadoop - yarn - (nodes):
 
-Acesse o arquivo:  
-```sh
-sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
-```
-
-Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:
-```sh
-<property>
-    <name>yarn.resourcemanager.hostname</name>
-    <value>main</value>
-</property>
-<property>
-    <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle</value>
-</property>
-<property>
-    <name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name>
-    <value>org.apache.hadoop.mapred.ShuffleHandler</value>
-</property>
-```
-
-| Parâmetro                                              | Função                                             |
-| ------------------------------------------------------ | -------------------------------------------------- |
-| `yarn.resourcemanager.hostname`                        | Host onde o ResourceManager do YARN está escutando.|
-| `yarn.nodemanager.aux-services`                        | Serviço auxiliar habilitado no NodeManager.        |
-| `yarn.nodemanager.auxservices.mapreduce.shuffle.class` | Classe Java que implementa o serviço de shuffle.   |
-
-Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
-
-
-
-
-### 10 - Criar a pasta nameNode (main):
+### 9 - Criar a pasta nameNode (main):
 
 Digite o seguinte comando apenas na máquina main:
 ```sh
@@ -541,7 +539,7 @@ mkdir -p /usr/local/hadoop/data/nameNode
 
 
 
-### 11 - Criar a pasta dataNode (nodes):
+### 10 - Criar a pasta dataNode (nodes):
 
 Digite o seguinte comando apenas nas máquinas nodes:  
 ```sh
@@ -551,7 +549,7 @@ mkdir -p /usr/local/hadoop/data/dataNode
 
 
 
-### 12 - Formatar o Haddop Directory File System - hdfs (main):
+### 11 - Formatar o Haddop Directory File System - hdfs (main):
 
 Digite o comando abaixo para carregar as variáveis de ambiente:
 ```sh
@@ -568,7 +566,7 @@ hdfs namenode -format
 
 
 
-### 13 - Inicializar, monitorar e finalizar o cluster (main):
+### 12 - Inicializar, monitorar e finalizar o cluster (main):
 
 Sempre que você desejar inicializar o cluster, você terá que primeiro carregar as variáveis de ambiente primeiro:  
 ```sh
