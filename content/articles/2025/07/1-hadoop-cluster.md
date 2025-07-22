@@ -549,7 +549,7 @@ mkdir -p /usr/local/hadoop/data/dataNode
 
 
 
-### 11 - Formatar o Haddop Directory File System - hdfs (main):
+### 11 - Formatar o Hadoop Directory File System - hdfs (main):
 
 Digite o comando abaixo para carregar as variáveis de ambiente:
 ```sh
