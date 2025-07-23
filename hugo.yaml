@@ -20,7 +20,7 @@ menu:
   main:
     - identifier: articles
       name: Arquivos
-      pageRef: /articles
+      pageRef: /articles/_index
       weight: 1
     - identifier: about
       name: Sobre

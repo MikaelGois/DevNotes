@@ -2,8 +2,8 @@
 title: 2025
 type: docs
 weight: 1
-prev: ../
-next: 07/
+# prev: articles/08/
+# next: 07/
 ---
 
 ## Welcome to 2025!
