@@ -6,11 +6,9 @@ weight: 2
 
 <style>body {text-align: justify}</style>
 
-Este artigo foi originalmente criado em 2023 como parte do projeto de avaliação da 2ª unidade da disciplina de Arquitetura de Computadores no curso de bacharelado em Ciência da Computação do Instituto Federal de Sergipe, curso do qual sou discente.
+Este artigo foi originalmente criado em 2023 como parte do projeto de avaliação da 2ª unidade da disciplina de Arquitetura de Computadores no curso de bacharelado em Ciência da Computação do Instituto Federal de Sergipe, curso do qual sou discente.  
 
-
-Mantinha o documento apenas no meu Google Drive, porém achei que seria uma boa ideia escrever aqui e revisar parte do conteúdo.
-
+Mantinha o documento apenas no meu Google Drive, porém achei que seria uma boa ideia escrever aqui e revisar parte do conteúdo.  
 
 Temos o seguinte cenário: 3 SBCs *Raspberry Pi*, onde uma será a "*main*", ou seja, 
 vai controlar todo o *cluster* e duas atuarão como "*nodes*" que serão responsáveis pelo processamento propriamente dito. 
