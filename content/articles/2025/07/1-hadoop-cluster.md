@@ -694,8 +694,8 @@ Os passos a seguir são opcionais, mas podem ser úteis para quem deseja monitor
 
 ### 13 - Instalação do sistema de monitoramento do cluster (Zabbix e Grafana):
 
-* [Instalando o Zabbix e Grafana para monitorar o cluster com Hadoop (em breve))]()
-* [Realizando testes de benchmark com o Hadoop (em breve)]()
+* [Instalando o Zabbix e Grafana para monitorar o cluster com Hadoop (em breve))](#)
+* [Realizando testes de benchmark com o Hadoop (em breve)](#)
 
 <!-- Imagens -->
 
