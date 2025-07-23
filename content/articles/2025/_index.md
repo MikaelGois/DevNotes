@@ -2,9 +2,11 @@
 title: 2025
 type: docs
 weight: 1
-prev: ../
-next: 07/
+# prev: articles/08/
+# next: 07/
 ---
+
+<style>body {text-align: justify}</style>
 
 ## Bem-vindos a 2025!
 

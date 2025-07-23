@@ -27,9 +27,9 @@ Antes de iniciar, é importante atualizar os repositórios e pacotes instalados 
 sudo apt update && sudo apt upgrade
 ```
 
-## Passos obrigatórios:
+## Passos necessários para a criação do cluster:
 
-Os passos a seguir são obrigatórios para o funcionamento do cluster:
+Os passos a seguir são fundamentais para o funcionamento do cluster:
 
 
 
@@ -168,7 +168,7 @@ allow-hotplug enp0s3
 iface enp0s3 inet static                # substitua pelo nome da interface e desabilite o DHCP
     address 192.168.0.X                 # substitua pelo IP da máquina
     netmask 255.255.255.0               # máscara de sub-rede
-    gateway 192.168.0.1                 # caso tenha um gateway
+    gateway 192.168.0.1                 # caso tenha um gateway, coloque o IP do seu gateway
     dns-nameservers 192.168.0.1 8.8.8.8 # ou outro servidor dns, ex.: roteador/gateway, 8.8.4.4
 ```
 
@@ -189,8 +189,8 @@ sudo nano /etc/resolv.conf
 
 Insira as informações:
 ```sh
-domain cluster.local
-search cluster.local
+domain cluster.local    # ou outro domínio, ex.: local
+search cluster.local    # ou outro endereço, ex.: local
 nameserver 192.168.0.1  # ou outro servidor dns, ex.: roteador/gateway, 8.8.8.8. Um por linha!
 nameserver 8.8.8.8
 ```
@@ -244,7 +244,7 @@ network:
             addresses:          
             - 192.168.0.X/24    # substitua pelo IP da máquina
             gateway4:
-            - 192.168.0.1       # caso tenha um gateway, defina o IP do gateway
+            - 192.168.0.1       # caso tenha um gateway, coloque o IP do seu gateway
             nameservers:
                 addresses:
                 - 192.168.0.1   # caso tenha um servidor DNS, defina o IP do servidor
@@ -274,18 +274,38 @@ Caso deseje aplicar as modificações diretamente, sem testar, use o seguinte co
 sudo netplan apply
 ```
 
+Para configurar o serviço de resolução de nomes, acesse:  
+```sh
+sudo nano /etc/resolv.conf
+```
+
+Insira as informações:
+```sh
+domain cluster.local    # ou outro domínio, ex.: local
+search cluster.local    # ou outro endereço, ex.: local
+nameserver 192.168.0.1  # ou outro servidor dns, ex.: roteador/gateway, 8.8.8.8. Um por linha!
+nameserver 8.8.8.8
+```
+
+Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
+
+Você pode aplicar as configurações reiniciando o serviço do `resolv.conf`:
+```sh
+sudo systemctl restart resolvconf
+```
+
 #### Configurar o arquivo de host e nome de host:
 
-Acesse:
+Acesse o arquivo de hosts:
 ```sh
 sudo nano /etc/hosts
 ```
 
 No arquivo você deverá inserir os IPs e o hostname das máquinas, por exemplo:
 ```sh
-192.168.0.10 main.cluster.local main
-192.168.0.11 node1.cluster.local node1
-192.168.0.12 node2.cluster.local node2
+192.168.0.10 main.cluster.local main    # pode ser apenas main ao invés de main.cluster.local
+192.168.0.11 node1.cluster.local node1  # pode ser apenas node1 ao invés de node1.cluster.local
+192.168.0.12 node2.cluster.local node2  # pode ser apenas node2 ao invés de node2.cluster.local
 ```
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
@@ -346,10 +366,11 @@ sudo nano /usr/local/hadoop/etc/hadoop/core-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:
-```sh
+```xml
 <property>
     <name>fs.defaultFS</name>
-    <value>hdfs://main:9000</value>
+    <value>hdfs://main.cluster.local:9000</value>
+    <!-- o valor pode ser apenas hdfs://main:9000 caso tenha colocado assim nas configurações de hosts -->
 </property>
 <property>
     <name>hadoop.http.staticuser.user</name>
@@ -373,7 +394,7 @@ sudo nano /usr/local/hadoop/etc/hadoop/hdfs-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:  
-```sh
+```xml
 <property>
     <name>dfs.namenode.name.dir</name>
     <value>/usr/local/hadoop/data/nameNode</value>
@@ -408,7 +429,11 @@ sudo nano /usr/local/hadoop/etc/hadoop/mapred-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:
-```sh
+```xml
+<property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+</property>
 <property>
     <name>yarn.app.mapreduce.am.env</name>
     <value>HADOOP_MAPRED_HOME=/usr/local/hadoop</value>
@@ -434,14 +459,29 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
         /usr/local/hadoop/share/hadoop/hdfs/lib/*
     </value>
 </property>
+<!-- Configurações para visualizar o historico dos jobs finalizados (opcional) -->
+<property>
+    <name>mapreduce.jobhistory.address</name>
+    <value>main.cluster.local:10020</value>
+    <!-- o valor pode ser apenas main:10020 caso tenha colocado assim nas configurações de hosts -->
+</property>
+<property>
+    <name>mapreduce.jobhistory.webapp.address</name>
+    <value>main.cluster.local:19888</value>
+    <!-- o valor pode ser apenas main:19888 caso tenha colocado assim nas configurações de hosts -->
+</property>
 ```
 
 | Parâmetro                         | Função                                                             |
 | --------------------------------- | ------------------------------------------------------------------ |
+| `mapreduce.framework.name`        | Define qual framework de execução será utilizado pelo MapReduce. O valor `yarn` indica que o YARN (Yet Another Resource Negotiator) será utilizado. |
 | `yarn.app.mapreduce.am.env`       | Define variáveis de ambiente para o ApplicationMaster de MapReduce.|
 | `mapreduce.map.env`               | Define variáveis de ambiente para as tarefas Map.                  |
 | `mapreduce.reduce.env`            | Define variáveis de ambiente para as tarefas Reduce.               |
 | `mapreduce.application.classpath` | Define o classpath necessário para execução dos jobs MapReduce.    |
+| `mapreduce.jobhistory.address`        | Endereço e porta onde o **JobHistory Server** escuta para requisições RPC de clientes CLI/API. |
+| `mapreduce.jobhistory.webapp.address` | Endereço e porta da interface **web (HTTP)** do JobHistory Server.                             |
+
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
@@ -454,10 +494,11 @@ sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:
-```sh
+```xml
 <property>
     <name>yarn.resourcemanager.hostname</name>
-    <value>main</value>
+    <value>main.cluster.local</value>
+    <!-- o valor pode ser apenas main caso tenha colocado assim nas configurações de hosts -->
 </property>
 <property>
     <name>yarn.nodemanager.aux-services</name>
@@ -467,13 +508,37 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
     <name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name>
     <value>org.apache.hadoop.mapred.ShuffleHandler</value>
 </property>
+<!-- Configurações de log aggregation (opcional) -->
+<property>
+    <name>yarn.log-aggregation-enable</name>
+    <value>true</value>
+</property>
+<property>
+    <name>yarn.nodemanager.remote-app-log-dir</name>
+    <value>/tmp/logs</value>
+</property>
+<property>
+    <name>yarn.nodemanager.remote-app-log-dir-suffix</name>
+    <value>logs</value>
+</property>
+<!-- Configurações do ResourceManager WebApp (opcional) -->
+<property>
+    <name>yarn.resourcemanager.webapp.address</name>
+    <value>main.cluster.local:8088</value>
+    <!-- o valor pode ser apenas main:8088 caso tenha colocado assim nas configurações de hosts -->
+</property>
 ```
 
-| Parâmetro                                              | Função                                             |
-| ------------------------------------------------------ | -------------------------------------------------- |
-| `yarn.resourcemanager.hostname`                        | Host onde o ResourceManager do YARN está escutando.|
-| `yarn.nodemanager.aux-services`                        | Serviço auxiliar habilitado no NodeManager.        |
-| `yarn.nodemanager.auxservices.mapreduce.shuffle.class` | Classe Java que implementa o serviço de shuffle.   |
+| Parâmetro                                              | Função                                                                                       |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `yarn.resourcemanager.hostname`                        | Host onde o ResourceManager do YARN está escutando.                                          |
+| `yarn.nodemanager.aux-services`                        | Serviço auxiliar habilitado no NodeManager.                                                  |
+| `yarn.nodemanager.auxservices.mapreduce.shuffle.class` | Classe Java que implementa o serviço de shuffle.                                             |
+| `yarn.log-aggregation-enable`                          | Ativa a **agregação de logs** dos containers após o término das aplicações.                  |
+| `yarn.nodemanager.remote-app-log-dir`                  | Diretório HDFS onde os logs agregados das aplicações serão armazenados.                      |
+| `yarn.nodemanager.remote-app-log-dir-suffix`           | Sufixo do caminho final de log remoto (útil para organizar subpastas por aplicação/usuário). |
+| `yarn.resourcemanager.webapp.address`                  | Endereço e porta onde o Web UI do **ResourceManager** estará acessível.                      |
+
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
@@ -598,7 +663,7 @@ Se você estiver usando a máquina main como um node, também aparecerá os proc
 ![Saida do JPS main como node][image4]
 
 O comando `start-dfs`, além de inicializar o sistema de arquivos do hadoop, também irá inicializar um localhost com as informações e arquivos referente aos nodes. 
-Para acessar, digite no navegador: `ip_da_main:9870` ou `main:9870`
+Para acessar, digite no navegador: `ip_da_main:9870` ou `main:9870` (no meu caso `main.cluster.local:9870`).
 
 Na aba Datanodes, você verá os nodes que estão conectados ao cluster.
 
@@ -608,17 +673,29 @@ Na imagem de exemplo acima, podemos ver 3 nodes conectados ao cluster, sendo a m
 No cenanário abordado aqui, a máquina main não está processando dados, apenas coordenando o cluster, por isso ela não aparecerá na aba de nodes.
 
 O comando `start-yarn`, além de inicializar os serviços do cluster, também irá inicializar um localhost com as informações sobre o cluster. 
-Para acessar, digite no navegador: `ip_da_main:8088` ou `main:8088`
+Para acessar, digite no navegador: `ip_da_main:8088` ou `main:8088` (no meu caso `main.cluster.local:8088`).
 
-Você deverá ver informações sobre o cluster, semelhante ao exemplo anterior.
+Você deverá ver informações sobre o cluster semelhante ao exemplo anterior com informações sobre os nodes conectados, como: numero de containers, memória, vCores, etc. Além disso é possivel ver os trabalhos que estão sendo executados no cluster e os que ja foram executados.
+
+Com `ip_da_main:19888/jobhistory` ou `main:19888/jobhistory` (no meu caso `main.cluster.local:19888/jobhistory`), você poderá acessar o histórico dos jobs que foram executados no cluster.
 
 Outros comandos úteis são:
 
 * `start-all.sh`: inicia tanto o HDFS quanto o YARN ao mesmo tempo. 
 * `stop-all.sh`: encerra tanto o HDFS quanto o YARN ao mesmo tempo.
 * `yarn node -list`: lista os nodes conectados ao cluster.
+* `yarn application -list`: lista as aplicações em execução no cluster.
 * `hdfs help`: exibe os comandos disponíveis para o HDFS.
 
+
+## Passos opcionais:
+
+Os passos a seguir são opcionais, mas podem ser úteis para quem deseja monitorar o cluster ou realizar testes de benchmarks.
+
+### 13 - Instalação do sistema de monitoramento do cluster (Zabbix e Grafana):
+
+* [Instalando o Zabbix e Grafana para monitorar o cluster com Hadoop (em breve))]()
+* [Realizando testes de benchmark com o Hadoop (em breve)]()
 
 <!-- Imagens -->
 

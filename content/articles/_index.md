@@ -4,6 +4,8 @@ type: default
 next: 2025/
 ---
 
+## Artigos publicados:
+
 ## [2025](2025/)
 
 ### [Julho](2025/07/)
