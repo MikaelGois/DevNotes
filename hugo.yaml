@@ -20,7 +20,7 @@ menu:
   main:
     - identifier: articles
       name: Arquivos
-      pageRef: /articles/_index
+      pageRef: /articles
       weight: 1
     - identifier: about
       name: Sobre
@@ -77,3 +77,7 @@ params:
   # Display the last modification date
   displayUpdatedDate: true
   dateFormat: "2 Jan 2006"
+
+services:
+  googleAnalytics:
+    ID: G-HDM7GF199V
