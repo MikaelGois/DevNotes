@@ -12,7 +12,7 @@ Este artigo foi originalmente criado em 2023 como parte do projeto de avaliaçã
 Mantinha o documento apenas no meu Google Drive, porém achei que seria uma boa ideia escrever aqui e revisar parte do conteúdo.
 
 
-Temos o seguinte cenário: 3 SBCs *Raspberry Pi*, onde uma atuará será a "*main*", ou seja, 
+Temos o seguinte cenário: 3 SBCs *Raspberry Pi*, onde uma será a "*main*", ou seja, 
 vai controlar todo o *cluster* e duas atuarão como "*nodes*" que serão responsáveis pelo processamento propriamente dito. 
 Podemos incluir a máquina *main* como um dos *nodes*, ou seja, além de coordenar todo o *cluster*, ela também irá processar os dados, porém, não é essa abordagem adotada aqui. No entanto, haverá uma indicação para aqueles que decidirem colocar a *main* para processar os dados juntamente com os *nodes*.
 
