@@ -1081,12 +1081,12 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 #### 15.2 - Ajuste os limites da máquina main.
 
-Caso não tenha definido os limites que uma aplicação pode utilizar, como mostrado na seção [14.1.2 - Configurando os limites de recursos para aplicações](#1411---configurando-os-limites-de-recursos-para-aplicações-nodes), vamos definir agora. 
+Caso não tenha definido os limites que uma aplicação pode utilizar, como mostrado na seção [14.1.2 - Configurando os limites de recursos para aplicações](#1412---configurando-os-limites-de-recursos-para-aplicações-main), vamos definir agora. 
 
 Pode ser confuso pensar em definir limite se deveria ser algo automático, porém, o que definimos como automático é a detecção dos recursos da máquina, mas ainda é importante definir os limites mínimos e máximos que uma aplicação pode rodar nos *nodes* de forma que **mantenha a saúde** do nó e do *cluster*. A ideia é que o limite máximo não é mais um número arbitrário, mas sim um reflexo direto da capacidade real do seu hardware.
 
 > [!NOTE]
-> A configuração abordada aqui é mais simples do que a apresentada na seção [14.1.2 - Configurando os limites de recursos para aplicações](#1411---configurando-os-limites-de-recursos-para-aplicações-nodes), então recomendo fortemente que faça a leitura caso ainda não tenha feito.
+> A configuração abordada aqui é mais simples do que a apresentada na seção [14.1.2 - Configurando os limites de recursos para aplicações](#1412---configurando-os-limites-de-recursos-para-aplicações-main), então recomendo fortemente que faça a leitura caso ainda não tenha feito.
 
 Acesse o arquivo `yarn-site.xml` na *main*:
 ```bash
