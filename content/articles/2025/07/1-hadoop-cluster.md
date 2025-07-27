@@ -2,6 +2,7 @@
 title: Criando um cluster de computadores com Apache Hadoop
 type: docs
 weight: 2
+editURL: "https://devnotes.msglabs.site/articles/hadoop-cluster/"
 ---
 
 <style>body {text-align: justify}</style>
@@ -10,16 +11,18 @@ Este artigo foi originalmente criado em 2023 como parte do projeto de avaliaçã
 
 Mantinha o documento apenas no meu Google Drive, porém achei que seria uma boa ideia escrever aqui e revisar parte do conteúdo.  
 
-Temos o seguinte cenário: 3 SBCs *Raspberry Pi*, onde uma será a "*main*", ou seja, 
-vai controlar todo o *cluster* e duas atuarão como "*nodes*" que serão responsáveis pelo processamento propriamente dito. 
-Podemos incluir a máquina *main* como um dos *nodes*, ou seja, além de coordenar todo o *cluster*, ela também irá processar os dados, porém, não é essa abordagem adotada aqui. No entanto, haverá uma indicação para aqueles que decidirem colocar a *main* para processar os dados juntamente com os *nodes*.
+No trabalho da faculdade, tinhamos o seguinte cenário: 3 SBCs *Raspberry Pi*, onde uma era o ***Name Node*** (também chamada de ***main***/***master***), ou seja, controlava todo o *cluster* e duas atuaram como ***Data Nodes*** (também chamadas de ***nodes***/***slaves***) que eram responsáveis pelo processamento propriamente dito. 
+É possível incluir a máquina *main* como um dos *nodes*, ou seja, além de coordenar todo o *cluster*, ela também processa os dados, porém, não é essa abordagem adotada aqui, na verdade, essa revisão usará máquinas virtuais e uma configuração melhorada. No entanto, haverá uma indicação para aqueles que decidirem colocar a *main* para processar os dados juntamente com os *nodes*.
 
+> [!IMPORTANT]
+> Os valores abordados e os parâmetros usados foram utilizados conforme a necessidade do projeto e dos testes realizados, e portanto não devem ser seguidos a pé da letra.  
+> Ajuste todos os parâmetros conforme as necessidades do seu projeto e a capacidade do seu hardware.
 
 ## Atualizando os repositórios e pacotes:
 
 Antes de iniciar, é importante atualizar os repositórios e pacotes instalados no sistema. No nosso caso, estamos usando um sistema baseado em Debian, então basta digitar o seguinte comando:
 
-```sh
+```bash
 sudo apt update && sudo apt upgrade
 ```
 
@@ -32,7 +35,7 @@ Os passos a seguir são fundamentais para o funcionamento do *cluster*:
 ### 1 - Instalação do Java openJDK (main/nodes):
 
 Instale o Java openJDK tanto na máquina *main* quanto nas máquinas *node*:
-```sh
+```bash
 sudo apt install openjdk-11-jdk
 ```
 
@@ -42,7 +45,7 @@ sudo apt install openjdk-11-jdk
 ### 2 - Download do Hadoop (main/nodes):
 
 Use o comando abaixo para realizar o *download* da versão 3.3.6 do Hadoop:
-```sh
+```bash
 wget https://dlcdn.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
 ```
 
@@ -53,13 +56,12 @@ Se houver problemas, acesse o repositório e baixe o pacote correspondente:  
 > O nome do pacote deve se parecer com `hadoop-VERSÃO.tar.gz`!
 
 Descompacte o pacote:   
-```sh
+```bash
 tar xzf hadoop-3.3.6.tar.gz
-````
+```
 
 De preferência, renomeie a pasta apenas para “hadoop” e mova a pasta para `/usr/local/`, o comando a seguir realiza as duas operações:
-
-```sh
+```bash
 sudo mv hadoop-3.3.6 /usr/local/hadoop
 ```
 
@@ -69,13 +71,13 @@ sudo mv hadoop-3.3.6 /usr/local/hadoop
 ### 3 - Configuração Hadoop (main/nodes):
 
 Acesse o script de *environment* do hadoop:
-```sh
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 ```
 
 Procure por `export JAVA_HOME`, remova o comentário e indique o caminho do java openJDK:
-```sh
-export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-arm64
+```sh {filename="hadoop-env.sh"}
+export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
 ```
 
 > [!WARNING]
@@ -89,15 +91,15 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 ### 4 - Configurando o Environment (main/nodes):
 
 Acesse o arquivo de *environment*:
-```sh
+```bash
 sudo nano /etc/environment
 ```
 
 Indique o caminho de *PATH* do hadoop e o caminho do JAVA_HOME:
-```sh
+```sh {filename="environment"}
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/hadoop/bin:/usr/local/hadoop/sbin"
 
-JAVA_HOME="/usr/lib/jvm/java-1.11.0-openjdk-arm64"
+JAVA_HOME="/usr/lib/jvm/java-1.11.0-openjdk-amd64"
 ```
 
 > [!WARNING]
@@ -111,16 +113,19 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 ### 5 - Usuário hadoop (main/nodes):
 
-Adicionar usuário hadoop:
-```sh
- sudo adduser hadoop
+>[!WARNING]
+> O passo a seguir é necesário apenas caso o seu usuario padrão não seja hadoop.
+
+Adicione usuário hadoop:
+```bash
+sudo adduser hadoop
 ```
 
 > [!TIP]
 > As informações de nome, número, etc, podem ser ignoradas clicando `ENTER`.
 
-Dar permissões de administrador ao usuário hadoop e atribuir a propriedade da pasta hadoop:
-```sh
+Conceda permissões de administrador ao usuário hadoop e atribua a propriedade da pasta hadoop:
+```bash
 sudo usermod -aG hadoop hadoop
 sudo chown hadoop:root -R /usr/local/hadoop/
 sudo chmod g+rwx -R /usr/local/hadoop/
@@ -134,9 +139,8 @@ sudo adduser hadoop sudo
 
 #### 6.1 - Habilite o SSH:
 
-```sh
-sudo systemctl enable ssh
-sudo systemctl start ssh
+```bash
+sudo systemctl enable ssh && sudo systemctl start ssh
 ```
 
 #### 6.2 - Configure o IP estático (raspbian e debian):
@@ -147,25 +151,32 @@ sudo systemctl start ssh
 > Então, se tiver alguma configuração opcional que precise baixar pacotes da internet, como programas de monitoramento, pode ser uma boa hora para realizar essa configuração.
 
 Acesse o arquivo de configuração de IP: 
-```sh
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 No arquivo, você encontrará as configurações de interfaces de redes, a *interface* primária será algo como:           
-```sh
+```sh {filename="interfaces"}
 # The primary network interface
 allow-hotplug enp0s3
 iface enp0s3 inet dhcp
 ```
 
 Remova o parâmetro `dhcp` adicione as configurações de IP da máquina. Exemplo:  
-```sh
-allow-hotplug enp0s3                    # pode ser `auto enp0s3`
-iface enp0s3 inet static                # substitua pelo nome da interface e desabilite o DHCP
-    address 192.168.0.X                 # substitua pelo IP da máquina
-    netmask 255.255.255.0               # máscara de sub-rede
-    gateway 192.168.0.1                 # caso tenha um gateway, coloque o IP do seu gateway
-    dns-nameservers 192.168.0.1 8.8.8.8 # ou outro servidor dns, ex.: roteador/gateway, 8.8.4.4
+```sh {filename="interfaces"}
+allow-hotplug enp0s3
+iface enp0s3 inet static
+    address 192.168.0.X
+    netmask 255.255.255.0
+    gateway 192.168.0.1
+    dns-nameservers 192.168.0.1 8.8.8.8
+
+# 'allow-hotplug enp0s3' pode ser 'auto enp0s3'
+# 'iface enp0s3 inet static' substitua pelo nome da interface e desabilite o DHCP
+# 'address 192.168.0.X' substitua pelo IP da máquina
+# 'netmask 255.255.255.0' substitua pela máscara de sub-rede
+# 'gateway 192.168.0.1' coloque o IP do seu gateway
+# 'dns-nameservers 192.168.0.1 8.8.8.8' defina os endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
 ```
 
 > [!NOTE]
@@ -179,134 +190,149 @@ iface enp0s3 inet static                # substitua pelo nome da interface e des
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 Para configurar o serviço de resolução de nomes, acesse:  
-```sh
+```bash
 sudo nano /etc/resolv.conf
 ```
 
 Insira as informações:
-```sh
-domain cluster.local    # ou outro domínio, ex.: local
-search cluster.local    # ou outro endereço, ex.: local
-nameserver 192.168.0.1  # ou outro servidor dns, ex.: roteador/gateway, 8.8.8.8. Um por linha!
+```sh {filename="resolv.conf"}
+domain home.local
+search home.local
+nameserver 192.168.0.1
 nameserver 8.8.8.8
+# 'domain home.local' ou outro domínio, ex.: cluster.local.
+# 'search home.local' ou outros servidores dns, ex.: cluster.local.
+# 'nameserver 192.168.0.1' ou outros servidores dns, ex.: 8.8.4.4 9.9.9.9 1.1.1.1 Um por linha!
 ```
 
 Você pode aplicar as configurações reiniciando o computador ou o serviço de *network*.
 Caso esteja acessando a máquina via ssh, provavelmente irá perder a conexão e pode ter problemas para conectar com o novo IP.
 
 No meu caso, irei reiniciar a máquina:
-```sh
+```bash
 sudo reboot
 ```
 
 Para reiniciar o serviço:
-```sh
+```bash
 sudo systemctl restart networking
 ```
 
 #### 6.3 - Configure o IP estático (ubuntu):
 
 Digite o seguinte comando para descobrir a *interface* de rede onde está configurado o IP:  
-```sh
+```bash
 ip address
 ```
 
 ou:
-```sh
+```bash
 ifconfig
 ```
 
 Navegue até a pasta `/etc/netplan`:
-```sh
+```bash
 cd /etc/netplan
 ```
 
 Agora liste os arquivos:
-```
+```bash
 ls
 ```
 
-Acesse o arquivo na pasta:
-```sh
-sudo nano nome_da_pasta
+Acesse ou crie o arquivo na pasta:
+```bash
+sudo nano 01-network.yaml
 ```
 
 Digite o endereço IP na *interface* desejada. Exemplo:
-``` sh
+```yaml {filename="01-network.yaml"}
 network:
+    version: 2
+    renderer: networkd
     ethernets:
-        enp0s3:                 # substitua pelo nome da interface
-            dhcp4: false        # desabilita o DHCP
-            addresses:          
-            - 192.168.0.X/24    # substitua pelo IP da máquina
-            gateway4:
-            - 192.168.0.1       # caso tenha um gateway, coloque o IP do seu gateway
+        enp0s3:
+            dhcp4: false
+            addresses:
+            - 192.168.0.X/24
+            routes:
+                - to: default
+                  via: 192.168.0.1
             nameservers:
                 addresses:
-                - 192.168.0.1   # caso tenha um servidor DNS, defina o IP do servidor
-                - 8.8.8.8       # ou outro servidor DNS, ex.: roteador/gateway, 8.8.4.4
-version: 2
+                    - 192.168.0.1
+                    - 8.8.8.8
+# RESPEITE A INDENTAÇÃO!
+# 'enp0s3' substitua pelo nome da interface, pode ser enp0s3, eth0, etc.
+# 'dhcp4: false' desabilita o DHCP.
+# 'addresses: 192.168.0.X/24' substitua pelo IP da máquina.
+# 'gateway4: 192.168.0.1' coloque o IP do seu gateway.
+# 'nameservers: addresses:' defina os endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
 ```
 
 > [!NOTE]
 > O `X` será o número da máquina. Por exemplo, `192.168.0.10/24` para a *main*/*master*.  
+> Caso decida utilizar o arquivo `50-cloud-init.yaml` é necessário desativar o **cloud init** conforme instruido nos comentários do inicio do arquivo.  
 > Você pode configurar outras faixas de IP, porém as máquinas so irão conseguir se comunicar se estiverem na mesma rede.
 
 > [!WARNING]
-> Se a rede onde as máquinas estiverem conectadas possuir servidor DHCP ativo, atente-se para colocar endereços IPs fora da faixa do servidor DHCP. No cenário abordado aqui, as máquinas estão conectadas em um switch e estão em uma rede isolada.
+> Se a rede onde as máquinas estiverem conectadas possuir servidor DHCP ativo, atente-se para colocar endereços IPs fora da faixa do servidor DHCP. No cenário abordado aqui, as máquinas estão conectadas em uma rede isolada.
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 Aplique as novas configurações de rede:
-```sh
+```bash
 sudo netplan try
 ```
 
 O comando acima primeiro testa a configuração e, caso as notações e as indentações estejam corretas, aparecerá uma opção para apertar `ENTER` confirmando as alterações dentro de 120 segundos. Caso o tempo se esgote e nenhuma ação seja tomada, as modificações são descartadas.
 
 Caso deseje aplicar as modificações diretamente, sem testar, use o seguinte comando:
-```sh
+```bash
 sudo netplan apply
 ```
 
 Para configurar o serviço de resolução de nomes, acesse:  
-```sh
+```bash
 sudo nano /etc/resolv.conf
 ```
 
 Insira as informações:
-```sh
-domain cluster.local    # ou outro domínio, ex.: local
-search cluster.local    # ou outro endereço, ex.: local
-nameserver 192.168.0.1  # ou outro servidor dns, ex.: roteador/gateway, 8.8.8.8. Um por linha!
+```sh {filename="resolv.conf"}
+domain home.local
+search home.local
+nameserver 192.168.0.1
 nameserver 8.8.8.8
+# 'domain home.local' ou outro domínio, ex.: cluster.local.
+# 'search home.local' ou outros servidores dns, ex.: cluster.local.
+# 'nameserver 192.168.0.1' ou outros servidores dns, ex.: 8.8.4.4 9.9.9.9 1.1.1.1 Um por linha!
 ```
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 Você pode aplicar as configurações reiniciando o serviço do `resolv.conf`:
-```sh
+```bash
 sudo systemctl restart resolvconf
 ```
 
 #### 6.4 - Configurar o arquivo de host e nome de host:
 
 Acesse o arquivo de *hosts*:
-```sh
+```bash
 sudo nano /etc/hosts
 ```
 
 No arquivo, você deverá inserir os IPs e o *hostname* das máquinas, por exemplo:
-```sh
-192.168.0.10 main.cluster.local main    # pode ser apenas main ao invés de main.cluster.local
-192.168.0.11 node1.cluster.local node1  # pode ser apenas node1 ao invés de node1.cluster.local
-192.168.0.12 node2.cluster.local node2  # pode ser apenas node2 ao invés de node2.cluster.local
+```sh {filename="hosts"}
+192.168.0.10 main
+192.168.0.11 node1
+192.168.0.12 node2
 ```
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 Para alterar o nome do *host*, acesse:  
-```sh
+```bash
 sudo nano /etc/hostname
 ```
 
@@ -315,7 +341,7 @@ O nome do *hostname* deve corresponder com a máquina. Exemplo: "node1" para a m
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 Reinicie a máquina:
-```sh
+```bash
 sudo reboot
 ```
 
@@ -325,19 +351,19 @@ sudo reboot
 ### 7 - Configurar acesso SSH (main):
 
 Acesse o usuário hadoop:  
-```sh
+```bash
 su - hadoop
 ```
 
 Execute o comando a seguir para gerar uma chave ssh:  
-```
+```bash
 ssh-keygen -t rsa
 ```
 
 Quando for solicitado para preencher o local onde a *key* será criada e a *passphrase*, basta ignorar clicando `ENTER`.
 
 Envie essa chave para as outras máquinas:
-```sh
+```bash
 ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@X
 ```
 
@@ -356,16 +382,15 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@X
 #### 8.1 - Configurar o arquivo core do hadoop:
 
 Acesse o arquivo:
-```sh
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/core-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:
-```xml
+```xml {filename="core-site.xml"}
 <property>
     <name>fs.defaultFS</name>
-    <value>hdfs://main.cluster.local:9000</value>
-    <!-- o valor pode ser apenas hdfs://main:9000 caso tenha colocado assim nas configurações de hosts -->
+    <value>hdfs://main:9000</value>
 </property>
 <property>
     <name>hadoop.http.staticuser.user</name>
@@ -373,10 +398,14 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 </property>
 ```
 
-| Parâmetro      | Função                                   |
-| -------------- | ---------------------------------------- |
-| `fs.defaultFS` | URI padrão do sistema de arquivos Hadoop. |
-| `hadoop.http.staticuser.user` | Define qual usuário será assumido pelo servidor HTTP do Hadoop, o que permite gerenciar os arquivos via *interface* web. |
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                     | Função                                                                                                                    |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `fs.defaultFS`                | URI padrão do sistema de arquivos Hadoop.                                                                                 |
+| `hadoop.http.staticuser.user` | Define qual usuário será assumido pelo servidor HTTP do Hadoop, o que permite gerenciar os arquivos via *interface* web.  |
+
+{{% /details %}}
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
@@ -384,12 +413,12 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 #### 8.2 - Configurar o arquivo hdfs do Hadoop:
 
 Acesse o arquivo:  
-```sh
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/hdfs-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:  
-```xml
+```xml {filename="hdfs-site.xml"}
 <property>
     <name>dfs.namenode.name.dir</name>
     <value>/usr/local/hadoop/data/nameNode</value>
@@ -404,11 +433,15 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 </property>
 ```
 
-| Parâmetro               | Função                                                |
-| ----------------------- | ----------------------------------------------------- |
-| `dfs.namenode.name.dir` | Diretório local para metadados do NameNode.           |
-| `dfs.datanode.data.dir` | Diretório local onde os DataNodes armazenam os blocos. |
-| `dfs.replication`       | Número de réplicas por bloco no HDFS.                 |
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro               | Função                                                  |
+| ----------------------- | ------------------------------------------------------- |
+| `dfs.namenode.name.dir` | Diretório local para metadados do NameNode.             |
+| `dfs.datanode.data.dir` | Diretório local onde os DataNodes armazenam os blocos.  |
+| `dfs.replication`       | Número de réplicas por bloco no HDFS.                   |
+
+{{% /details %}}
 
 > [!NOTE]
 > O valor padrão é 3, o que significa que cada bloco de dados será replicado em 3 *DataNodes* diferentes. Isso garante alta disponibilidade e tolerância a falhas, mas também aumenta o uso de espaço em disco.  
@@ -419,12 +452,12 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 #### 8.3 - Configurar o arquivo mapreduce do Hadoop:
 
 Acesse o arquivo:
-```sh
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/mapred-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:
-```xml
+```xml {filename="mapred-site.xml"}
 <property>
     <name>mapreduce.framework.name</name>
     <value>yarn</value>
@@ -454,29 +487,31 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
         /usr/local/hadoop/share/hadoop/hdfs/lib/*
     </value>
 </property>
-<!-- Configurações para visualizar o historico dos jobs finalizados (opcional) -->
+<!-- OPCIONAL - Configurações para visualizar o historico dos trabalhos finalizados.
+Complementar ao `yarn.log-aggregation-enable` -->
 <property>
     <name>mapreduce.jobhistory.address</name>
-    <value>main.cluster.local:10020</value>
-    <!-- o valor pode ser apenas main:10020 caso tenha colocado assim nas configurações de hosts -->
+    <value>main:10020</value>
 </property>
 <property>
     <name>mapreduce.jobhistory.webapp.address</name>
-    <value>main.cluster.local:19888</value>
-    <!-- o valor pode ser apenas main:19888 caso tenha colocado assim nas configurações de hosts -->
+    <value>main:19888</value>
 </property>
 ```
 
-| Parâmetro                         | Função                                                             |
-| --------------------------------- | ------------------------------------------------------------------ |
-| `mapreduce.framework.name`        | Define qual *framework* de execução será utilizado pelo *MapReduce*. O valor `yarn` indica que o **YARN (Yet Another Resource Negotiator)** será utilizado. |
-| `yarn.app.mapreduce.am.env`       | Define variáveis de ambiente para o **ApplicationMaster** de *MapReduce*.|
-| `mapreduce.map.env`               | Define variáveis de ambiente para as tarefas *Map*.                  |
-| `mapreduce.reduce.env`            | Define variáveis de ambiente para as tarefas *Reduce*.               |
-| `mapreduce.application.classpath` | Define o classpath necessário para execução dos jobs *MapReduce*.    |
-| `mapreduce.jobhistory.address`        | Endereço e porta onde o **JobHistory Server** escuta para requisições RPC de clientes CLI/API. |
-| `mapreduce.jobhistory.webapp.address` | Endereço e porta da *interface* **web (HTTP)** do *JobHistory Server*.                             |
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
 
+| Parâmetro                             | Função                                                                                                                                                        |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mapreduce.framework.name`            | Define qual *framework* de execução será utilizado pelo *MapReduce*. O valor `yarn` indica que o **YARN (Yet Another Resource Negotiator)** será utilizado.   |
+| `yarn.app.mapreduce.am.env`           | Define variáveis de ambiente para o **ApplicationMaster** de *MapReduce*.                                                                                     |
+| `mapreduce.map.env`                   | Define variáveis de ambiente para as tarefas *Map*.                                                                                                           |
+| `mapreduce.reduce.env`                | Define variáveis de ambiente para as tarefas *Reduce*.                                                                                                        |
+| `mapreduce.application.classpath`     | Define o classpath necessário para execução dos trabalhos *MapReduce*.                                                                                        |
+| `mapreduce.jobhistory.address`        | Endereço e porta onde o **JobHistory Server** escuta para requisições RPC de clientes CLI/API.                                                                |
+| `mapreduce.jobhistory.webapp.address` | Endereço e porta da *interface* **web (HTTP)** do *JobHistory Server*.                                                                                        |
+
+{{% /details %}}
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
@@ -484,16 +519,15 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 #### 8.4 - Configurar o arquivo yarn do Hadoop:
 
 Acesse o arquivo:  
-```sh
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>` insira as seguintes informações:
-```xml
+```xml {filename="yarn-site.xml"}
 <property>
     <name>yarn.resourcemanager.hostname</name>
-    <value>main.cluster.local</value>
-    <!-- o valor pode ser apenas main caso tenha colocado assim nas configurações de hosts -->
+    <value>main</value>
 </property>
 <property>
     <name>yarn.nodemanager.aux-services</name>
@@ -503,14 +537,18 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
     <name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name>
     <value>org.apache.hadoop.mapred.ShuffleHandler</value>
 </property>
-<!-- Configurações de log aggregation (opcional) -->
+<!-- OPCIONAL - Configurações de log aggregation -->
 <property>
     <name>yarn.log-aggregation-enable</name>
     <value>true</value>
 </property>
 <property>
-  <name>yarn.log-aggregation.retain-seconds</name>
-  <value>172800</value>
+    <name>yarn.log-aggregation.retain-seconds</name>
+    <value>172800</value>
+</property>
+<property>
+  <name>yarn.log.server.url</name>
+  <value>http://main:19888/jobhistory/logs</value>
 </property>
 <property>
     <name>yarn.nodemanager.remote-app-log-dir</name>
@@ -520,43 +558,40 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
     <name>yarn.nodemanager.remote-app-log-dir-suffix</name>
     <value>logs</value>
 </property>
-<!-- Configurações do ResourceManager WebApp (opcional) -->
-<property>
-    <name>yarn.resourcemanager.webapp.address</name>
-    <value>main.cluster.local:8088</value>
-    <!-- o valor pode ser apenas main:8088 caso tenha colocado assim nas configurações de hosts -->
-</property>
 ```
+
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
 
 | Parâmetro                                              | Função                                                                                       |
 | ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `yarn.resourcemanager.hostname`                        | Host onde o *ResourceManager* do YARN está escutando.                                          |
-| `yarn.nodemanager.aux-services`                        | Serviço auxiliar habilitado no *NodeManager*.                                                  |
+| `yarn.resourcemanager.hostname`                        | Host onde o *ResourceManager* do YARN está escutando.                                        |
+| `yarn.nodemanager.aux-services`                        | Serviço auxiliar habilitado no *NodeManager*.                                                |
 | `yarn.nodemanager.auxservices.mapreduce.shuffle.class` | Classe Java que implementa o serviço de shuffle.                                             |
-| `yarn.log-aggregation-enable`                          | Ativa a **agregação de logs** dos *containers* após o término das aplicações.                  |
+| `yarn.log-aggregation-enable`                          | Ativa a **agregação de logs** dos *containers* após o término das aplicações.                |
 | `yarn.log-aggregation.retain-seconds`                  | Tempo em segundos que os logs agregados devem ser mantidos no HDFS.                          |
+| `yarn.log.server.url`                                  | Configura a URL base para acessar os logs agregados das aplicações usada redirecionamento do log do ResourceManager para o JobHistory Server.                                       |
 | `yarn.nodemanager.remote-app-log-dir`                  | Diretório HDFS onde os logs agregados das aplicações serão armazenados.                      |
 | `yarn.nodemanager.remote-app-log-dir-suffix`           | Sufixo do caminho final de log remoto (útil para organizar subpastas por aplicação/usuário). |
-| `yarn.resourcemanager.webapp.address`                  | Endereço e porta onde o Web UI do **ResourceManager** estará acessível.                      |
 
+{{% /details %}}
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 #### 8.5 - Configurar o arquivo de nodes no hadoop:
 
 Acesse o arquivo:  
-```sh
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/workers
 ```
 
 Retire o nome *localhost* e adicione os *hostnames* dos *nodes*. Exemplo:
-```sh
+```sh {filename="workers"}
 node1
 node2
 ```
 
 Se você quiser manter a máquina *main* como um *node*, adicione o parâmetro `main`:
-```sh
+```sh {filename="workers"}
 main
 node1
 node2
@@ -569,7 +604,7 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 #### 8.6 - Enviar a pasta com os arquivos modificados para os nodes:
 
 Execute o comando abaixo:
-```sh
+```bash
 scp /usr/local/hadoop/etc/hadoop/* X:/usr/local/hadoop/etc/hadoop/
 ```
 
@@ -579,7 +614,7 @@ scp /usr/local/hadoop/etc/hadoop/* X:/usr/local/hadoop/etc/hadoop/
 #### 8.7 - Exportação dos paths:
 
 Digite os comandos abaixo **em todas as máquinas** no usuário Hadoop para exportar os *PATHs* das aplicações:
-```sh
+```bash
 export HADOOP_HOME="/usr/local/hadoop"
 export HADOOP_COMMON_HOME="/usr/local/hadoop"
 export HADOOP_CONF_DIR="/usr/local/hadoop/etc/hadoop"
@@ -588,16 +623,13 @@ export HADOOP_MAPRED_HOME="/usr/local/hadoop"
 export HADOOP_YARN_HOME="/usr/local/hadoop"
 ```
 
-Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
-
-
 
 
 
 ### 9 - Criar a pasta nameNode (main):
 
 Digite o seguinte comando apenas na máquina *main*:
-```sh
+```bash
 mkdir -p /usr/local/hadoop/data/nameNode
 ```
 
@@ -607,7 +639,7 @@ mkdir -p /usr/local/hadoop/data/nameNode
 ### 10 - Criar a pasta dataNode (nodes):
 
 Digite o seguinte comando apenas nas máquinas *nodes*:  
-```sh
+```bash
 mkdir -p /usr/local/hadoop/data/dataNode
 ```
 
@@ -617,11 +649,11 @@ mkdir -p /usr/local/hadoop/data/dataNode
 ### 11 - Formatar o Hadoop Directory File System - hdfs (main):
 
 Digite o comando abaixo para carregar as variáveis de ambiente:
-```sh
+```bash
 source /etc/environment
 ```
 Digite o comando abaixo para realizar a formatação do hdfs:
-```sh
+```bash
 hdfs namenode -format
 ```
 
@@ -633,30 +665,40 @@ hdfs namenode -format
 
 ### 12 - Inicializar, monitorar e finalizar o cluster (main):
 
+#### 12.1 - Inicializando o cluster:
+
 Sempre que você desejar inicializar o *cluster*, você terá que primeiro carregar as variáveis de ambiente primeiro:  
-```sh
+```bash
 source /etc/environment
 ```
 
 Em seguida, digite o seguinte comando para inicializar o hdfs:
-```sh
+```bash
 start-dfs.sh
 ```
 
 Logo após, digite o seguinte comando para inicializar o yarn:
-```sh
+```bash
 start-yarn.sh
 ```
 
+Para iniciar todos os serviços do Hadoop de uma só vez, você pode usar o comando:
+```bash
+start-all.sh
+```
+
 Caso tenha configurado o **JobHistory Server**, digite o seguinte comando para iniciar o serviço:
-```sh
+```bash
 mapred --daemon start historyserver
 ```
 
+Para encerrar os serviços do *cluster*, basta substituir `start` por `stop` no comando.
+
 Para verificar se o *cluster* foi inicializado corretamente, você pode digitar tanto na *main*, quanto nos *nodes*, o comando abaixo:  
-```sh
+```bash
 jps
 ```
+
 
 Esse comando deverá retornar algo semelhante às imagens abaixo:  
 ![Saida do JPS main][image1]  
@@ -669,31 +711,44 @@ Se você estiver usando a máquina *main* como um *node*, também aparecerão os
 
 Caso esteja usando o **JobHistory Server** deverá aparecer na saída do `jps` o parâmetro `JobHistoryServer`. 
 
-O comando `start-dfs`, além de inicializar o sistema de arquivos do Hadoop, também irá inicializar um *localhost* com as informações e arquivos referentes aos *nodes*. 
-Para acessar, digite no navegador: `ip_da_main:9870` ou `main:9870` (no meu caso, `main.cluster.local:9870`).
+
+#### 12.2 - Monitorando o cluster:
+
+##### 12.2.1 - Acessando a interface web do NameNode:
+O comando `start-dfs`, além de inicializar o sistema de arquivos do Hadoop, também irá inicializar uma interface web com as informações sobre o *daemon* **NameNode**, nela você verá informações sobre o *cluster* e o *HDFS*.
+
+Para acessar, digite no navegador: `ip_do_nameNode:9870` ou `main:9870`.
 
 Na aba Datanodes, você verá os *nodes* que estão conectados ao *cluster*.
 
-![Aba Datanodes][image5]
+##### 12.2.2 - Acessando a interface web do ResourceManager:
+O comando `start-yarn`, além de inicializar os serviços do *cluster*, também irá inicializar uma interface web com as informações sobre o *daemon* **ResourceManager**, e nela você poderá ver informações sobre os *nodes* conectados ao *cluster* e as aplicações submetidas, em execução e finalizadas.
 
-Na imagem de exemplo acima, podemos ver 3 *nodes* conectados ao *cluster*, sendo a máquina *main* e os *nodes* node1 e node2.
-No cenário abordado aqui, a máquina *main* não está processando dados, apenas coordenando o *cluster*, por isso ela não aparecerá na aba de *nodes*.
+Para acessar, digite no navegador: `ip_do_resourceManager:8088` ou `main:8088`.
 
-O comando `start-yarn`, além de inicializar os serviços do *cluster*, também irá inicializar um *localhost* com as informações sobre o *cluster*. 
-Para acessar, digite no navegador: `ip_da_main:8088` ou `main:8088` (no meu caso, `main.cluster.local:8088`).
+Você deverá ver informações sobre o *cluster* semelhante ao exemplo anterior com informações sobre os *nodes* conectados, como: número de containers, memória, vCores, etc., além das informações sobre os trabalhos/aplicações como informado anteriormente.
 
-Você deverá ver informações sobre o *cluster* semelhante ao exemplo anterior com informações sobre os *nodes* conectados, como: número de containers, memória, vCores, etc., além disso, é possível ver os trabalhos que estão sendo executados no *cluster* e os que já foram executados.
+##### 12.2.3 - Acessando o JobHistory Server:
+O comando `mapred --daemon start historyserver` irá iniciar o *daemon* **MapReduce JobHistory Server**, que é responsável por armazenar o histórico dos trabalhos executados no *cluster*.
 
-Com `ip_da_main:19888/jobhistory` ou `main:19888/jobhistory` (no meu caso, `main.cluster.local:19888/jobhistory`), você poderá acessar o histórico dos trabalhos que foram executados no *cluster*.
+Com `ip_do_JobHistory:19888/jobhistory` ou `main:19888/jobhistory`, você poderá acessar o histórico dos trabalhos que foram executados no *cluster*.
 
-Outros comandos úteis são:
+#### 12.3 - Outros comandos úteis:
 
-* `start-all.sh`: inicia tanto o HDFS quanto o YARN ao mesmo tempo. 
-* `stop-all.sh`: encerra tanto o HDFS quanto o YARN ao mesmo tempo.
 * `yarn node -list`: lista os *nodes* conectados ao *cluster*.
 * `yarn application -list`: lista as aplicações em execução no *cluster*.
+* `mapred --daemon stop historyserver`: para o serviço do  **JobHistory Server**.
 * `hdfs help`: exibe os comandos disponíveis para o HDFS.
 * `hdfs dfsadmin -safemode leave`: sai do modo de segurança do HDFS, permitindo que operações de escrita sejam realizadas (para o caso de aparecer um erro de escrita).
+* `hdfs dfs -put /origem-local /destino-HDFS`: envia um arquivo do sistema de arquivos local para o HDFS.
+* `hdfs dfs -get /origem-HDFS /destino-local`: baixa um arquivo do HDFS para o sistema de arquivos local.
+* `hdfs dfs -ls /`: lista os arquivos e diretórios no HDFS.
+* `hdfs dfs -mkdir /diretorio`: cria um diretório no HDFS.
+* `hdfs dfs -rm /arquivo`: remove um arquivo do HDFS.
+* `hdfs dfs -rmdir /diretorio`: remove um diretório vazio do HDFS.
+* `hdfs dfs -rm -r /diretorio`: remove um diretório e todo o seu conteúdo do HDFS.
+
+
 
 
 ## Passos opcionais:
@@ -703,12 +758,12 @@ Os passos a seguir são opcionais, mas podem ser úteis para quem deseja monitor
 ### 13 - Configurando o **start-history** e **stop-history**:
 
 Acesse o arquivo **bashrc**:
-```sh
+```bash
 sudo nano ~/.bashrc
 ```
 
 Cole o comando de inicialização e parada do **JobHistory Server**:
-```sh
+```sh {filename=".bashrc"}
 # Iniciar o JobHistory Server
 alias start-history='mapred --daemon start historyserver'
 
@@ -719,7 +774,7 @@ alias stop-history='mapred --daemon stop historyserver'
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 Carregue o arquivo **bashrc**:
-```sh
+```bash
 source ~/.bashrc
 ```
 
@@ -732,48 +787,56 @@ Agora você pode iniciar tudo com `start-all.sh && start-history` e parar tudo c
 
 #### 14.1 - Limites para Aplicações nos nodes (via YARN):
 
-Quando não configurado, o YARN assume valores padrão definidos no `yarn-default.xml`, o que pode não ser o caso em um *cluster* com *Raspberry Pi*, por exemplo.
+Quando não configurado, o YARN assume valores padrões definidos no `yarn-default.xml`, o que pode não ser o ideal em um *cluster* com nodes que possuem baixa capacidade de recursos, como o cluster de *Raspberry Pi*, por exemplo. O hadoop também é capaz de detectar automaticamente os recursos das máquinas. Para realizar essa configuração, veja a sessão [15 - Configurando detecção de recursos](#15---configurando-detecção-de-recursos).
 
-Os valores padrão são:
-| Parâmetro      | Valor Padrão                             | Explicação |
-| -------------- | ---------------------------------------- | --------- |
-| `yarn.nodemanager.resource.memory-mb` | `-1`              | Se definido como `-1` e `yarn.nodemanager.resource.detect-hardware-capabilities` for `true`, será calculado automaticamente (no caso de Windows e Linux). Em outros casos, o padrão é 8192 MiB (8GiB). |
-| `yarn.nodemanager.resource.cpu-vcores` | `-1`                | Se definido como -1 e `yarn.nodemanager.resource.detect-hardware-capabilities` for `true`, o número será determinado automaticamente pelo hardware no caso de Windows e Linux. Em outros casos, o número de vCores é 8 por padrão. |
-| `yarn.scheduler.minimum-allocation-mb` | `1024`            | Solicitações de memória inferiores a esse valor serão definidas com o valor desta propriedade. Além disso, um *node manager* configurado para ter menos memória do que esse valor será desligado pelo *resource manager*. |
-| `yarn.scheduler.maximum-allocation-mb` | `8192`            | Solicitações de memória maiores que isso lançarão uma exceção `InvalidResourceRequestException`. |
-| `yarn.scheduler.minimum-allocation-vcores` | `1`              | Solicitações inferiores a esse valor serão definidas com o valor desta propriedade. Além disso, um *node manager* configurado para ter menos núcleos virtuais do que esse valor será desligado pelo *resource manager*. |
-| `yarn.scheduler.maximum-allocation-vcores` | `4`            | Solicitações maiores que isso lançarão uma exceção `InvalidResourceRequestException`. |
+<!-- Os valores padrão para o YARN são: -->
+{{% details title="Valores padrão para o YARN (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                                     | Valor Padrão  | Explicação                                                                                                                                                                                                                            |
+| --------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `yarn.nodemanager.resource.memory-mb`         | `-1`          | Se definido como `-1` e `yarn.nodemanager.resource.detect-hardware-capabilities` for `true`, será calculado automaticamente (no caso de Windows e Linux). Em outros casos, o padrão é 8192 MiB (8GiB).                                |
+| `yarn.nodemanager.resource.cpu-vcores`        | `-1`          | Se definido como -1 e `yarn.nodemanager.resource.detect-hardware-capabilities` for `true`, o número será determinado automaticamente pelo hardware no caso de Windows e Linux. Em outros casos, o número de vCores é 8 por padrão.    |
+| `yarn.scheduler.minimum-allocation-mb`        | `1024`        | Solicitações de memória inferiores a esse valor serão definidas com o valor desta propriedade. Além disso, um *node manager* configurado para ter menos memória do que esse valor será desligado pelo *resource manager*.             |
+| `yarn.scheduler.maximum-allocation-mb`        | `8192`        | Solicitações de memória maiores que isso lançarão uma exceção `InvalidResourceRequestException`.                                                                                                                                      |
+| `yarn.scheduler.minimum-allocation-vcores`    | `1`           | Solicitações inferiores a esse valor serão definidas com o valor desta propriedade. Além disso, um *node manager* configurado para ter menos núcleos virtuais do que esse valor será desligado pelo *resource manager*.               |
+| `yarn.scheduler.maximum-allocation-vcores`    | `4`           | Solicitações maiores que isso lançarão uma exceção `InvalidResourceRequestException`.                                                                                                                                                 |
+
+{{% /details %}}
 
 >[!NOTE]
 > Você pode consultar os valores padrão do yarn na [página oficial do yarn-default do Apache Hadoop](https://hadoop.apache.org/docs/r3.4.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml).  
 > Para demais configurações, consulte a [documentação oficial do Apache Hadoop (3.4.0)](https://hadoop.apache.org/docs/r3.4.0/).
 
-##### 14.1.1 - Configurando os limites de recursos para Aplicações (nodes):
+##### 14.1.1 - Configurando os limites de recursos para aplicações (nodes):
 
-Edite o arquivo `yarn-site.xml` em cada *node*:
-```sh
+Acesse o arquivo `yarn-site.xml` em cada *node*:
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>`, e abaixo das configurações anteriores, adicione as seguintes propriedades:
-```xml
+```xml {filename="yarn-site.xml"}
+<!-- Limites para aplicações - nodes -->
 <property>
-  <name>yarn.nodemanager.resource.memory-mb</name>
-  <value>1024</value>
+    <name>yarn.nodemanager.resource.memory-mb</name>
+    <value>3072</value>
 </property>
-
 <property>
-  <name>yarn.nodemanager.resource.cpu-vcores</name>
-  <value>2</value>
+    <name>yarn.nodemanager.resource.cpu-vcores</name>
+    <value>3</value>
 </property>
 ```
 
-| Parâmetro      | Função                                   |
-| -------------- | ---------------------------------------- |
-| `yarn.nodemanager.resource.memory-mb` | Define a quantidade total de memória física, em MiB, que o YARN pode utilizar neste nó. |
-| `yarn.nodemanager.resource.cpu-vcores` | Define o número de vCores (núcleos de CPU virtuais) que o YARN pode utilizar neste nó. |
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
 
->[!TIP]
+| Parâmetro                                 | Função                                                                                    |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `yarn.nodemanager.resource.memory-mb`     | Define a quantidade total de memória física, em MiB, que o YARN pode utilizar neste nó.   |
+| `yarn.nodemanager.resource.cpu-vcores`    | Define o número de vCores (núcleos de CPU virtuais) que o YARN pode utilizar neste nó.    |
+
+{{% /details %}}
+
+> [!TIP]
 > Defina a quantidade de memoria para 75-80% da RAM total da máquina. Se um nó tem 8GiB, use 6144 (6GiB).  
 > Defina a quantidade de vCores para 75-80% do total de núcleos de CPU da máquina. Se um nó tem 6 cores, use 4 ou 5.
 
@@ -781,40 +844,42 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 ##### 14.1.2 - Configurando os limites de recursos para Aplicações (main):
 
-Edite o arquivo `yarn-site.xml` na máquina *main*:
-```sh
+Acesse o arquivo `yarn-site.xml` na máquina *main*:
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
 ```
 
 Entre as tags `<configuration>` e `</configuration>`, e abaixo das configurações anteriores, adicione as seguintes propriedades:
-```xml
+```xml {filename="yarn-site.xml"}
+<!-- Limites para aplicações - main -->
 <property>
-  <name>yarn.scheduler.minimum-allocation-mb</name>
-  <value>512</value>
+    <name>yarn.scheduler.minimum-allocation-mb</name>
+    <value>512</value>
 </property>
-
 <property>
-  <name>yarn.scheduler.maximum-allocation-mb</name>
-  <value>2048</value>
+    <name>yarn.scheduler.maximum-allocation-mb</name>
+    <value>2048</value>
 </property>
-
 <property>
-  <name>yarn.scheduler.minimum-allocation-vcores</name>
-  <value>1</value>
+    <name>yarn.scheduler.minimum-allocation-vcores</name>
+    <value>1</value>
 </property>
-
 <property>
-  <name>yarn.scheduler.maximum-allocation-vcores</name>
-  <value>4</value>
+    <name>yarn.scheduler.maximum-allocation-vcores</name>
+    <value>3</value>
 </property>
 ```
 
-| Parâmetro      | Função                                   |
-| -------------- | ---------------------------------------- |
-| `yarn.scheduler.minimum-allocation-mb` | A menor unidade de memória que o YARN vai alocar para um contêiner. Geralmente, é bom alinhar isso com a RAM de um contêiner de *map/reduce*. |
-| `yarn.scheduler.maximum-allocation-mb` | A maior quantidade de memória que **UMA ÚNICA** tarefa (contêiner) pode solicitar. Isso previne que uma tarefa mal configurada tente usar toda a memória de um *node*. Este valor **NÃO PODE** ser maior que `yarn.nodemanager.resource.memory-mb`. |
-| `yarn.scheduler.minimum-allocation-vcores` | A menor unidade de vCores que o YARN vai alocar. |
-| `yarn.scheduler.maximum-allocation-vcores` | O número máximo de vCores que **UMA ÚNICA** tarefa pode solicitar. Este valor **NÃO PODE** ser maior que `yarn.nodemanager.resource.cpu-vcores`. |
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                                     | Função                                                                                                                                                                                                                                                |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `yarn.scheduler.minimum-allocation-mb`        | A menor unidade de memória que o YARN vai alocar para um contêiner. Geralmente, é bom alinhar isso com a RAM de um contêiner de *map/reduce*.                                                                                                         |
+| `yarn.scheduler.maximum-allocation-mb`        | A maior quantidade de memória que **UMA ÚNICA** tarefa (contêiner) pode solicitar. Isso previne que uma tarefa mal configurada tente usar toda a memória de um *node*. Este valor **NÃO PODE** ser maior que `yarn.nodemanager.resource.memory-mb`.   |
+| `yarn.scheduler.minimum-allocation-vcores`    | A menor unidade de vCores que o YARN vai alocar.                                                                                                                                                                                                      |
+| `yarn.scheduler.maximum-allocation-vcores`    | O número máximo de vCores que **UMA ÚNICA** tarefa pode solicitar. Este valor **NÃO PODE** ser maior que `yarn.nodemanager.resource.cpu-vcores`.                                                                                                      |
+
+{{% /details %}}
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
@@ -824,16 +889,16 @@ No caso dos *Daemons* do Hadoop, é importante configurar o tamanho do *heap* (t
 Não existe um valor padrão, pois ele escala de forma automática baseado na capacidade da máquina.
 
 ##### 14.2.1 - Configurando os limites de recursos para Daemons (main):
-Edite o arquivo `hadoop-env.sh` na máquina *main*:
-```sh
+Acesse o arquivo `hadoop-env.sh` na máquina *main*:
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 ```
 
 No final do arquivo, adicione as seguintes linhas:
-```sh
+```sh {filename="hadoop-env.sh"}
 # Heap para o NameNode (MUITO importante)
 # Depende do número de arquivos/blocos no HDFS.
-export HADOOP_NAMENODE_OPTS="-Xms1024m -Xmx2048m"
+export HDFS_NAMENODE_OPTS="-Xms1024m -Xmx2048m"
 
 # Heap para o ResourceManager
 # Depende da quantidade de nós e apps.
@@ -844,84 +909,346 @@ export YARN_RESOURCEMANAGER_OPTS="-Xms1024m -Xmx2048m"
 export HADOOP_JOB_HISTORYSERVER_OPTS="-Xms1024m -Xmx2048m"
 ```
 
-| Parâmetro      | Função                                   |
-| -------------- | ---------------------------------------- |
-| `HADOOP_NAMENODE_OPTS` | Define as opções de memória mínima e máxima para o *NameNode*. |
-| `YARN_RESOURCEMANAGER_OPTS` | Define as opções de memória mínima e máxima para o *ResourceManager*. |
-| `HADOOP_JOB_HISTORYSERVER_OPTS` | Define as opções de memória mínima e máxima para o *MapReduce JobHistory Server*. |
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                         | Função                                                                            |
+| --------------------------------- | --------------------------------------------------------------------------------- |
+| `HDFS_NAMENODE_OPTS`              | Define as opções de memória mínima e máxima para o *NameNode*.                    |
+| `YARN_RESOURCEMANAGER_OPTS`       | Define as opções de memória mínima e máxima para o *ResourceManager*.             |
+| `HADOOP_JOB_HISTORYSERVER_OPTS`   | Define as opções de memória mínima e máxima para o *MapReduce JobHistory Server*. |
+
+{{% /details %}}
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 ##### 14.2.2 - Configurando os limites de recursos para Daemons (nodes):
-Edite o arquivo `hadoop-env.sh` em cada *node*:
-```sh
+Acesse o arquivo `hadoop-env.sh` em cada *node*:
+```bash
 sudo nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 ```
 
 No final do arquivo, adicione as seguintes linhas:
-```sh
+```sh {filename="hadoop-env.sh"}
 # Heap para o DataNode
 # Geralmente não precisa de muita memória.
-export HADOOP_DATANODE_OPTS="-Xms512m -Xmx1024m"
+export HDFS_DATANODE_OPTS="-Xms512m -Xmx1024m"
 
 # Heap para o NodeManager
 # O próprio daemon não precisa de muito.
 export YARN_NODEMANAGER_OPTS="-Xms512m -Xmx1024m"
 ```
 
-| Parâmetro      | Função                                   |
-| -------------- | ---------------------------------------- |
-| `HADOOP_DATANODE_OPTS` | Define as opções de memória mínima e máxima para o *DataNode*. |
-| `YARN_NODEMANAGER_OPTS` | Define as opções de memória mínima e máxima para o *NodeManager*. |
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                 | Função                                                            |
+| ------------------------- | ----------------------------------------------------------------- |
+| `HDFS_DATANODE_OPTS`      | Define as opções de memória mínima e máxima para o *DataNode*.    |
+| `YARN_NODEMANAGER_OPTS`   | Define as opções de memória mínima e máxima para o *NodeManager*. |
+
+{{% /details %}}
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
-#### 14.3 - Aplique as configurações:
+#### 14.3 - Limites para MapReduce:
 
-É necessário reiniciar o *cluster* para que as alterações tenham efeito.
+Quando não configurado, o MapReduce assume valores padrões definidos no `mapred-default.xml`, o que pode não ser o ideal em um *cluster* com nodes que possuem baixa capacidade de recursos, como o cluster de *Raspberry Pi*, por exemplo.
+
+<!-- Os valores padrão para o MapReduce são: -->
+{{% details title="Valores padrão para o MapReduce (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                             | Valor Padrão  | Explicação                                                                                                                                                                                                                                                                                                                                    |
+| ------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mapreduce.map.memory.mb`             | `-1`          | A quantidade de memória a ser solicitada ao *scheduler* para cada tarefa de mapeamento. Se não for especificado ou não for positivo, será inferido de `mapreduce.map.java.opts` e `mapreduce.job.heap.memory-mb.ratio`. Se java-opts também não for especificado, o valor será definido como `1024`.                                          |
+| `mapreduce.reduce.memory.mb`          | `-1`          | A quantidade de memória a ser solicitada ao *scheduler* para cada tarefa de redução. Se não for especificado ou não for positivo, será inferido de `mapreduce.reduce.java.opts` e `mapreduce.job.heap.memory-mb.ratio`. Se java-opts também não for especificado, definimos como `1024`.                                                      |
+| `mapreduce.map.java.opts`             | `1024m`       | O valor efetivo é geralmente **-Xmx1024m**. (O Hadoop pode inferir este valor com base na memória do contêiner se não for definido explicitamente).                                                                                                                                                                                           |
+| `mapreduce.reduce.java.opts`          | `1024m`       | O valor efetivo é geralmente **-Xmx1024m**.                                                                                                                                                                                                                                                                                                   |
+| `mapreduce.job.heap.memory-mb.ratio`  | `0.8`         | A proporção entre o tamanho do *heap* e o tamanho do contêiner. Se `-Xmx` não for especificado, será calculado como (`mapreduce.{map\|reduce}.memory.mb` * `mapreduce.heap.memory-mb.ratio`). Se `-Xmx` for especificado, mas `mapreduce.{map\|reduce}.memory.mb` não, será calculado como (`heapSize` / `mapreduce.heap.memory-mb.ratio`).   |
+
+{{% /details %}}
+
+>[!NOTE]
+> Você pode consultar os valores padrão do mapreduce na [página oficial do mapred-default do Apache Hadoop](https://hadoop.apache.org/docs/r3.4.0/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml).  
+> Para demais configurações, consulte a [documentação oficial do Apache Hadoop (3.4.0)](https://hadoop.apache.org/docs/r3.4.0/).
+
+Acesse o arquivo `mapred-site.xml` em cada *node*:
+```bash
+sudo nano /usr/local/hadoop/etc/hadoop/mapred-site.xml
+```
+
+Entre as tags `<configuration>` e `</configuration>`, e abaixo das configurações anteriores, adicione as seguintes propriedades:
+```xml {filename="mapred-site.xml"}
+<!-- Limites para Map e Reduce - main/nodes (recomendado) -->
+<property>
+    <name>mapreduce.map.memory.mb</name>
+    <value>512</value>
+</property>
+<property>
+    <name>mapreduce.map.java.opts</name>
+    <value>-Xmx1024m</value>
+</property>
+<property>
+    <name>mapreduce.reduce.memory.mb</name>
+    <value>512</value>
+</property>
+<property>
+    <name>mapreduce.reduce.java.opts</name>
+    <value>-Xmx1024m</value>
+</property>
+```
+
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                     | Função                                                                                                                                                                                                    |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mapreduce.map.memory.mb`     | Define o tamanho total, em MiB, do **contêiner YARN** que será solicitado para cada tarefa de **Map**.                                                                                                    |
+| `mapreduce.map.java.opts`     | Define as opções da JVM, principalmente o heap máximo (`-Xmx`), para o processo Java que roda **dentro** do contêiner da tarefa de **Map**. Seu valor deve ser menor que `mapreduce.map.memory.mb`.       |
+| `mapreduce.reduce.memory.mb`  | Define o tamanho total, em MiB, do **contêiner YARN** que será solicitado para cada tarefa de **Reduce**.                                                                                                 |
+| `mapreduce.reduce.java.opts`  | Define as opções da JVM, principalmente o heap máximo (`-Xmx`), para o processo Java que roda **dentro** do contêiner da tarefa de **Reduce**. Seu valor deve ser menor que `mapreduce.reduce.memory.mb`. |
+
+{{% /details %}}
+
+> [!TIP]
+> É uma **boa prática manter este arquivo de configuração sincronizado em todos os nós do cluster** (main e nodes) para garantir um comportamento consistente.
+
+Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
+
+#### 14.4 - Aplique as configurações:
+
+Caso o cluster esteja rodando, é necessário reiniciar o *cluster* para que as alterações tenham efeito.
 
 > [!NOTE]
 > Não é necessário apagar as pastas `nameNode` e `dataNode` para aplicar as alterações de memória e formatar o HDFS novamente. Caso deseje, pode realizar, mas nesse caso não irei fazer isso.
 
 Você pode fazer isso com os seguintes comandos:
-```sh
+```bash
+stop-all.sh && start-all.sh
+```
+
+#### 14.5 - Considerações importantes:
+
+Caso apareça um erro sobre o limite de recursos ao rodar um trabalho, é sinal que os limites estão funcionando, mas é necessário entender como o YARN aloca realmente os recursos.
+
+##### Cenário de exemplo:
+
+- 1 - Você rodou um trabalho que pediu ao YARN para criar contêineres para as tarefas Map, e cada um desses contêineres precisava de 1536 MB de RAM.
+
+- 2 - Você configurou o limite máximo teórico do YARN para 2048 MB (`yarn.scheduler.maximum-allocation-mb`).
+
+- 3 - Porém, nos seus nós de trabalho, você configurou a memória total que cada nó oferece para o YARN como sendo apenas 1024 MB (`yarn.nodemanager.resource.memory-mb`).
+
+- 4 - O YARN é inteligente. Ele não pode prometer um contêiner de 2048 MB se o seu nó mais forte só oferece 1024 MB no total. Portanto, ele reduz o limite máximo efetivo para o maior valor que seus nós realmente podem suportar, que no seu caso é 1024 MB.
+
+- 5 - Seu trabalho, ao pedir 1536 MB, ficou exatamente nesse meio-termo: maior que a capacidade real dos nós (1024 MB), mas menor que a sua configuração teórica (2048 MB). E por isso a falha.
+
+É importante entender que o YARN não vai alocar mais recursos do que o que os nós realmente podem oferecer. Portanto, é importante ter isso em mente na hora de definir os limites de recursos. Sempre alinhe as configurações de recursos entre o ***ResourceManager (main)*** e os ***NodeManagers (nodes)*** para evitar erros de alocação.
+
+
+
+
+### 15 - Configurando detecção automática de recursos:
+
+O Hadoop é capaz de detectar automaticamente algumas configurações de *hardware*, porém é necessário indicar que isso deve acontecer, caso contrário, se não houver essa configuração e não houver limites definidos, os valores padrão serão aplicados. Seguem instruções de como configurar a detecção automática.
+
+#### 15.1 - Configure os nodes.
+Acesse o arquivo `yarn-site.xml` em cada *node*:
+```bash
+sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
+```
+
+Entre as tags `<configuration>` e `</configuration>`, e abaixo das configurações anteriores, adicione as seguintes propriedades:
+```xml {filename="yarn-site.xml"}
+<!-- Detecção automática de recursos - nodes -->
+<property>
+    <name>yarn.nodemanager.resource.detect-hardware-capabilities</name>
+    <value>true</value>
+</property>
+<property>
+    <name>yarn.nodemanager.resource.system-reserved-memory-mb</name>
+    <value>2048</value>
+</property>
+```
+
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                                                 | Função                                                                                                                                                                                                        |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `yarn.nodemanager.resource.detect-hardware-capabilities`  | Quando `true`, o NodeManager ignora a configuração manual de **memória** e **vCores** e tenta detectar os valores reais da máquina.                                                                           |
+| `yarn.nodemanager.resource.system-reserved-memory-mb`     | Quando a detecção está ligada, este valor é subtraído do total de RAM detectado. Isso garante que o Sistema Operacional e os *daemons* do Hadoop tenham memória para funcionar sem competir com os trabalhos. |
+
+{{% /details %}}
+
+Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
+
+#### 15.2 - Ajuste os limites da máquina main.
+
+Caso não tenha definido os limites que uma aplicação pode utilizar, como mostrado na seção [14.1.2 - Configurando os limites de recursos para aplicações](#1411---configurando-os-limites-de-recursos-para-aplicações-nodes), vamos definir agora. 
+
+Pode ser confuso pensar em definir limite se deveria ser algo automático, porém, o que definimos como automático é a detecção dos recursos da máquina, mas ainda é importante definir os limites mínimos e máximos que uma aplicação pode rodar nos *nodes* de forma que **mantenha a saúde** do nó e do *cluster*. A ideia é que o limite máximo não é mais um número arbitrário, mas sim um reflexo direto da capacidade real do seu hardware.
+
+> [!NOTE]
+> A configuração abordada aqui é mais simples do que a apresentada na seção [14.1.2 - Configurando os limites de recursos para aplicações](#1411---configurando-os-limites-de-recursos-para-aplicações-nodes), então recomendo fortemente que faça a leitura caso ainda não tenha feito.
+
+Acesse o arquivo `yarn-site.xml` na *main*:
+```bash
+sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
+```
+
+Entre as tags `<configuration>` e `</configuration>`, e abaixo das configurações anteriores, adicione as seguintes propriedades:
+```xml {filename="yarn-site.xml"}
+<!-- Limites para aplicações - main -->
+<property>
+    <name>yarn.scheduler.minimum-allocation-mb</name>
+    <value>512</value> 
+</property>
+<property>
+    <name>yarn.scheduler.maximum-allocation-mb</name>
+    <value>6144</value>
+</property>
+```
+
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro                                 | Função                                                                                                                                                                                                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `yarn.scheduler.minimum-allocation-mb`    | A menor unidade de memória que o YARN vai alocar para um contêiner. Geralmente, é bom alinhar isso com a RAM de um contêiner de *map/reduce*.                                                                                                                 |
+| `yarn.scheduler.maximum-allocation-mb`    | A maior quantidade de memória que **UMA ÚNICA** tarefa (contêiner) pode solicitar. Isso previne que uma tarefa mal configurada tente usar toda a memória de um *node*. Deve ser igual à memória disponível do seu maior nó (RAM Total - Memória Reservada).   |
+
+{{% /details %}}
+
+Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
+
+#### 15.3 - Aplique as configurações:
+
+Caso o cluster esteja rodando, é necessário reiniciar o *cluster* para que as alterações tenham efeito.
+
+> [!NOTE]
+> Não é necessário apagar as pastas `nameNode` e `dataNode` para aplicar as alterações de memória e formatar o HDFS novamente. Caso deseje, pode realizar, mas não será o caso aqui.
+
+Você pode fazer isso com os seguintes comandos:
+```bash
 stop-all.sh && start-all.sh
 ```
 
 
-#### 14.4 - Considerações importantes:
 
-Caso apareça um erro sobre o limite de recursos ao rodar um trabalho, é sinal que os limites estão funcionando, mas é necessário entender como o YARN aloca realmente os recursos.
 
-Por exemplo:  
+### 16 - Configurando o Swap:
 
-|1 - Você rodou um trabalho que pediu ao YARN para criar contêineres para as tarefas Map, e cada um desses contêineres precisava de 1536 MB de RAM.|
-| :---- |
+O *Swap* é uma área no disco rígido que o sistema operacional usa como uma extensão da memória RAM. Ele é útil quando a RAM física está cheia, permitindo que o sistema continue funcionando, mas com uma queda significativa de desempenho. É importante configurar o *Swap* para evitar que o sistema fique sem memória e trave. Em máquinas com pouca RAM, isso pode ser especialmente importante.
 
-|2 - Você configurou o limite máximo teórico do YARN para 2048 MB (yarn.scheduler.maximum-allocation-mb).|
-| :---- |
+#### 16.1 - Verifique o espaço de Swap:
+Para verificar se o *Swap* está configurado, execute o seguinte comando:
+```bash
+sudo swapon --show
+```
 
-|3 - Porém, nos seus nós de trabalho, você configurou a memória total que cada nó oferece para o YARN como sendo apenas 1024 MB (yarn.nodemanager.resource.memory-mb).|
-| :---- |
+Se não houver saída, significa que o *Swap* não está configurado.
 
-|4 - O YARN é inteligente. Ele não pode prometer um contêiner de 2048 MB se o seu nó mais forte só oferece 1024 MB no total. Portanto, ele reduz o limite máximo efetivo para o maior valor que seus nós realmente podem suportar, que no seu caso é 1024 MB.|
-| :---- |
+Se houver saída, você verá algo como:
+```bash
+NAME      TYPE SIZE USED PRIO
+/swapfile file 2G   0B   -2
+```
 
-|5 - Seu trabalho, ao pedir 1536 MB, ficou exatamente nesse meio-termo: maior que a capacidade real dos nós (1024 MB), mas menor que a sua configuração teórica (2048 MB). E por isso a falha.|
-| :---- |
+#### 16.2 - Crie o arquivo de Swap:
+Para criar um arquivo de *Swap*, execute os seguintes comandos:
+```bash
+sudo fallocate -l 2G /swapfile
+```
 
-É importante entender que o YARN não vai alocar mais recursos do que o que os nós realmente podem oferecer. Portanto, é importante ter isso em mente na hora de definir os limites de recursos. Sempre alinhe as configurações de recursos entre o ResourceManager e os NodeManagers para evitar erros de alocação.
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
 
-### 14 - Instalação do sistema de monitoramento do cluster (Zabbix e Grafana):
+| Parâmetro     | Função                                                                                        |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| `-l 4G`       | Especifica o tamanho (*Length*) do arquivo. 2G para 2 Gigabytes. Você pode usar 4G, 8G, etc.  |
+| `/swapfile`   | É o caminho onde o arquivo de *Swap* será criado.                                             |
+
+{{% /details %}}
+
+Caso o `fallocate` não esteja disponível, você pode usar o seguinte comando alternativo:
+```bash
+sudo dd if=/dev/zero of=/swapfile bs=1G count=2
+```
+
+{{% details title="Explicação dos parâmetros (Clique para expandir)" closed="true" %}}
+
+| Parâmetro         | Função                                                |
+| ----------------- | ----------------------------------------------------- |
+| `if=/dev/zero`    | Especifica que o arquivo será preenchido com zeros.   |
+| `of=/swapfile`    | É o caminho onde o arquivo de *Swap* será criado.     |
+| `bs=1G`           | Especifica o tamanho do bloco como 1 Gibibyte.        |
+| `count=2`         | Especifica que serão criados 2 blocos de 1 Gibibyte.  |
+
+{{% /details %}}
+
+#### 16.2.1 - Defina as permissões do arquivo de Swap:
+
+Por segurança, apenas o usuário root deve ter permissão para ler e escrever no arquivo de swap.
+```bash
+sudo chmod 600 /swapfile
+```
+
+#### 16.2.2 - Formate o arquivo de Swap e ative-o:
+Este comando prepara o arquivo para ser usado como swap:
+```bash
+sudo mkswap /swapfile
+```
+
+Agora, diga ao sistema para começar a usar este arquivo como memória swap:
+```bash
+sudo swapon /swapfile
+```
+
+#### 16.3 - Tornando o Swap permanente:
+Para tornar o espaço de *Swap* permanente, adicione a seguinte linha ao arquivo `/etc/fstab`:
+```bash
+sudo nano /etc/fstab
+```
+
+Adicione a seguinte linha ao final do arquivo:
+```bash
+/swapfile none swap sw 0 0
+```
+
+#### 16.4 - Verificando novamente o espaço de Swap:
+Após criar o espaço de *Swap*, execute novamente o comando:
+```bash
+sudo swapon --show
+```
+
+Você deverá ver a saída semelhante a:
+```bash
+NAME      TYPE SIZE USED PRIO
+/swapfile file 2G   0B   -2
+```
+
+Também é possível verificar o uso do *Swap* com o comando:
+```bash
+free -h
+```
+
+A saída do `free -h` na linha "Swap" agora deve mostrar a capacidade total somada (o swap antigo, se houver, mais os 2 GB adicionados).
+
+
+
+
+### 17 - Instalação do sistema de monitoramento do cluster (Zabbix e Grafana):
 
 * [Instalando o Zabbix e Grafana para monitorar o cluster com Hadoop (em breve)](#)
 
 
 
 
-### 15 - Realização de testes de benchmark para medir o desempenho do cluster:
+### 18 - Realização de testes de benchmark para medir o desempenho do cluster:
 
 * [Realizando testes de benchmark com o Hadoop (em breve)](#)
+
+
+
+
+### 19 -  Automatizando o processo de configuração do cluster com Ansible:
+
+* [Automatizando a configuração de servidores com Ansible (em breve)](#)
 
 <!-- Imagens -->
 
