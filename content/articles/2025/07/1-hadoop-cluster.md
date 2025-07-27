@@ -114,7 +114,7 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 ### 5 - Usuário hadoop (main/nodes):
 
 >[!WARNING]
-> O passo a seguir é necesário apenas caso o seu usuario padrão não seja hadoop.
+> O passo a seguir é necessário apenas caso o seu usuário padrão não seja hadoop.
 
 Adicione usuário hadoop:
 ```bash
