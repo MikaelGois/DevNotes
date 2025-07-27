@@ -787,7 +787,7 @@ Agora você pode iniciar tudo com `start-all.sh && start-history` e parar tudo c
 
 #### 14.1 - Limites para Aplicações nos nodes (via YARN):
 
-Quando não configurado, o YARN assume valores padrões definidos no `yarn-default.xml`, o que pode não ser o ideal em um *cluster* com nodes que possuem baixa capacidade de recursos, como o cluster de *Raspberry Pi*, por exemplo. O hadoop também é capaz de detectar automaticamente os recursos das máquinas. Para realizar essa configuração, veja a sessão [15 - Configurando detecção de recursos](#15---configurando-detecção-de-recursos).
+Quando não configurado, o YARN assume valores padrões definidos no `yarn-default.xml`, o que pode não ser o ideal em um *cluster* com nodes que possuem baixa capacidade de recursos, como o cluster de *Raspberry Pi*, por exemplo. O hadoop também é capaz de detectar automaticamente os recursos das máquinas. Para realizar essa configuração, veja a seção [15 - Configurando detecção de recursos](#15---configurando-detecção-de-recursos).
 
 <!-- Os valores padrão para o YARN são: -->
 {{% details title="Valores padrão para o YARN (Clique para expandir)" closed="true" %}}
