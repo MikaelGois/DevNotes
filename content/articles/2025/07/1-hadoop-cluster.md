@@ -11,7 +11,7 @@ Este artigo foi originalmente criado em 2023 como parte do projeto de avaliaçã
 
 Mantinha o documento apenas no meu Google Drive, porém achei que seria uma boa ideia escrever aqui e revisar parte do conteúdo.  
 
-No trabalho da faculdade, tinhamos o seguinte cenário: 3 SBCs *Raspberry Pi*, onde uma era o ***Name Node*** (também chamada de ***main***/***master***), ou seja, controlava todo o *cluster* e duas atuaram como ***Data Nodes*** (também chamadas de ***nodes***/***slaves***) que eram responsáveis pelo processamento propriamente dito. 
+No trabalho da faculdade, tínhamos o seguinte cenário: 3 SBCs *Raspberry Pi*, onde uma era o ***Name Node*** (também chamada de ***main***/***master***), ou seja, controlava todo o *cluster* e duas atuaram como ***Data Nodes*** (também chamadas de ***nodes***/***slaves***) que eram responsáveis pelo processamento propriamente dito.
 É possível incluir a máquina *main* como um dos *nodes*, ou seja, além de coordenar todo o *cluster*, ela também processa os dados, porém, não é essa abordagem adotada aqui, na verdade, essa revisão usará máquinas virtuais e uma configuração melhorada. No entanto, haverá uma indicação para aqueles que decidirem colocar a *main* para processar os dados juntamente com os *nodes*.
 
 > [!IMPORTANT]
