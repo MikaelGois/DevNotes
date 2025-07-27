@@ -50,17 +50,36 @@ enableInlineShortcodes: true
 defaultContentLanguage: pt
 languages:
   pt:
+    languageCode: 'pt-BR'
     languageName: Português
     weight: 1
   en:
+    languageCode: 'en-US'
     languageName: English
     weight: 2
+
+# Enables redirection to page 404.
+server:
+  redirects:
+    # Rule for English
+    - from: "/en/**"
+      to: "/en/404.html"
+      status: 404
+      
+    # Rule for Portuguese (default language must be last)
+    - from: "/**"
+      to: "/404.html"
+      status: 404
 
 params:
   theme:
     # light | dark | system
     default: system
     displayToggle: true
+
+  css:
+    custom:
+      - assets/css/custom.css
 
   navbar:
     displayTitle: true
