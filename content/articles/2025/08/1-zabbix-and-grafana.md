@@ -17,7 +17,7 @@ Porém, monitoramento é algo essencial para qualquer sistema, portanto é recom
 
 ### 1 - Instalação e configuração do zabbix:
 
-#### 1.1 - Instação dos pacotes:
+#### 1.1 - Instalação dos pacotes:
 
 Baixe o pacote debian do zabbix, no meu caso estou usando a versão 6.0 e o Debian 11 (Bullseye):
 ```bash
