@@ -222,7 +222,7 @@ Esses parâmetros controlam o número de processos que o Zabbix Server usa para 
 
 Caso você tenha um grande número de hosts ou itens monitorados, pode ser necessário aumentar esses valores para melhorar o desempenho do Zabbix Server. Para começar, você pode definir `StartPollers` e `StartTrappers` para 5.
 
-Apos fazer as alterações, salve o arquivo e reinicie o serviço do Zabbix Server para aplicar as novas configurações:
+Após fazer as alterações, salve o arquivo e reinicie o serviço do Zabbix Server para aplicar as novas configurações:
 ```bash
 sudo systemctl restart zabbix-server
 ```
