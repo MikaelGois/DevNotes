@@ -94,7 +94,7 @@ create user zabbix@localhost identified by 'SUA_SENHA';
 > [!NOTE]
 > No campo identificado como `'SUA_SENHA'`, você deverá adicionar uma senha, de preferência uma senha forte. Exemplo.: `create user zabbix@localhost identified by 'E5%MxK%qopVlx4'`
 
-Adiocione os ultimos dois parâmetros:
+Adicione os últimos dois parâmetros:
 ```sql
 grant all privileges on zabbix.* to zabbix@localhost;
 set global log_bin_trust_function_creators = 1;
