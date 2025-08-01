@@ -311,7 +311,7 @@ Encontre a linha `Server=` e comente-a, pois não usaremos o modo passivo neste 
 # Server=SEU_IP_DO_ZABBIX_SERVER
 ```
 
-Como o parâmentro `Server` é obrigatório, é necessário descomentar e definir o parâmetro `StartAgents` para `0`, o que faz com que o Zabbix Agent não escute as portas TCPs no host, em outras palavras, ele não ocupa a porta TCP 10050, que é a porta padrão do Zabbix Agent:
+Como o parâmetro `Server` é obrigatório, é necessário descomentar e definir o parâmetro `StartAgents` para `0`, o que faz com que o Zabbix Agent não escute as portas TCPs no host, em outras palavras, ele não ocupa a porta TCP 10050, que é a porta padrão do Zabbix Agent:
 ```ini
 StartAgents=0
 ```
