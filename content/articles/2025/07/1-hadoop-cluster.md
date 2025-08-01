@@ -1,11 +1,10 @@
 ---
 title: Criando um cluster de computadores com Apache Hadoop
 type: docs
-weight: 2
+weight: 1
 editURL: "https://devnotes.msglabs.site/articles/hadoop-cluster/"
+prev: /articles/2025/08/1-zabbix-and-grafana
 ---
-
-<style>body {text-align: justify}</style>
 
 Este artigo foi originalmente criado em 2023 como parte do projeto de avaliação da 2ª unidade da disciplina de Arquitetura de Computadores no curso de bacharelado em Ciência da Computação do Instituto Federal de Sergipe, curso do qual sou discente.  
 
@@ -1234,7 +1233,7 @@ A saída do `free -h` na linha "Swap" agora deve mostrar a capacidade total soma
 
 ### 17 - Instalação do sistema de monitoramento do cluster (Zabbix e Grafana):
 
-* [Instalando o Zabbix e Grafana para monitorar o cluster com Hadoop (em breve)](#)
+* [Instalando o Zabbix e Grafana para monitorar o cluster com Hadoop](/articles/2025/08/1-zabbix-and-grafana)
 
 
 
