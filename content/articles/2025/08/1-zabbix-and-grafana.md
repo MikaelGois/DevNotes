@@ -203,7 +203,7 @@ Selecione o banco de dados MySQL, insira o nome do banco de dados (`zabbix`), o 
 
 Siga as demais instruções na tela para concluir a configuração do Zabbix.
 
-#### 1.4 - Configuraçôes adicionais do Zabbix Server:
+#### 1.4 - Configurações adicionais do Zabbix Server:
 
 Após a instalação e configuração básica do Zabbix, você pode querer ajustar algumas configurações adicionais para otimizar o desempenho e a segurança do seu servidor Zabbix.
 ##### 1.4.1 - Ajuste de parâmetros de desempenho:
