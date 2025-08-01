@@ -86,7 +86,7 @@ Depois crie o banco de dados propriamente dito:
 create database zabbix character set utf8mb4 collate utf8mb4_bin;
 ```
 
-Crie um usúario e senha para o bando de dados:
+Crie um usuário e senha para o banco de dados:
 ```sql
 create user zabbix@localhost identified by 'SUA_SENHA';
 ```
