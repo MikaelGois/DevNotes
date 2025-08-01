@@ -9,7 +9,7 @@ next: /articles/2025/07/1-hadoop-cluster
 ## Passos opcionais:
 
 Os passos a seguir são opcionais, ou seja, não são essenciais para o funcionamento do cluster. 
-Porém, monitoramento é algo essencial para qualquer sistema, portanto é recomentado a implementação.
+Porém, monitoramento é algo essencial para qualquer sistema, portanto é recomendado a implementação.
 
 > [!WARNING]
 > Recomendável fazer as instalações, ou pelo menos baixar os pacotes, antes de configurar a rede (passo 6).
