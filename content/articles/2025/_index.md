@@ -4,9 +4,9 @@ type: docs
 weight: 1
 # prev: articles/08/
 # next: 07/
+sidebar:
+  open: true
 ---
-
-<style>body {text-align: justify}</style>
 
 ## Bem-vindos a 2025!
 
@@ -23,6 +23,10 @@ Há 100 anos (segundo a Wikipédia):
 
 
 ## Artigos publicados:
+
+### Agosto:
+
+* [Monitorando um cluster de computadores com Zabbix e Grafana (português apenas)](08/1-zabbix-and-grafana)
 
 ### Julho:
 

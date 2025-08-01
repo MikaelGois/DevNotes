@@ -4,6 +4,8 @@ type: docs
 weight: 1
 # prev: articles/08/
 # next: 07/
+sidebar:
+  open: true
 ---
 
 ## Welcome to 2025!
@@ -22,6 +24,10 @@ The year 2025 corresponds to the year 4723 in the Chinese calendar, the year of 
 
 ## Published articles:
 
+### August:
+
+* [Monitoring a cluster of computers with Zabbix and Grafana (portuguese only)](https://devnotes.msglabs.site/articles/2025/08/1-zabbix-and-grafana/)
+
 ### July:
 
-* [Creating a computer cluster with Apache Hadoop (portuguese only)](07/1-hadoop-cluster)
+* [Creating a computer cluster with Apache Hadoop (portuguese only)](https://devnotes.msglabs.site/articles/2025/07/1-hadoop-cluster/)

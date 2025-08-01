@@ -1,17 +1,13 @@
 ---
 title: Julho
 type: docs
-weight: 1
-#prev: articles/2025/
+weight: 2
+prev: articles/2025/08
 #next: articles/2025/07/1-raspberry-pi-cluster
-sidebar:
-  open: true
 ---
 
-<style>body {text-align: justify}</style>
-
 O mês de Julho é o sétimo mês do ano no Calendário gregoriano, e tem uma duração de 31 dias. 
-O seu nome se deve ao Cônsul e ditador romano Júlio César (100-44 a.C) sendo antes chamado Quintilis em latim, 
+O seu nome se deve ao Cônsul e ditador romano Júlio César (100-44 AEC) sendo antes chamado Quintilis em latim, 
 dado que era o quinto mês do Calendário Romano, que começava em março.
 
 Eventos do mês de julho:

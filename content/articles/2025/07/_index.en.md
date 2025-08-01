@@ -1,18 +1,14 @@
 ---
 title: July
 type: docs
-weight: 1
-#prev: articles/2025/
+weight: 2
+prev: articles/2025/08
 #next: articles/2025/07/1-raspberry-pi-cluster
-sidebar:
-  open: true
 ---
-
-<style>body {text-align: justify}</style>
 
 July is the seventh month of the year in the Gregorian calendar and has 31 days.
 
-It is named after the Roman consul and dictator Julius Caesar (100-44 BC), and was previously called Quintilis in Latin,
+It is named after the Roman consul and dictator Julius Caesar (100-44 BCE), and was previously called Quintilis in Latin,
 since it was the fifth month of the Roman calendar, which began in March.
 
 Events of the month of July:
@@ -23,5 +19,5 @@ Events of the month of July:
 ## Published articles:
 
 {{< cards cols="1" >}}
-  {{< card link="1-hadoop-cluster" title="Creating a computer cluster with Apache Hadoop (portuguese only)" >}}
+  {{< card link="https://devnotes.msglabs.site/articles/2025/07/1-hadoop-cluster/" title="Creating a computer cluster with Apache Hadoop (portuguese only)" >}}
 {{< /cards >}}
