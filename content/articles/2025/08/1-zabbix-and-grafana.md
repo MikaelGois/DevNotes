@@ -263,7 +263,7 @@ sudo systemctl enable --now zabbix-agent
 ```
 
 ##### 1.5.1 - Configuração do Zabbix Agent passivo:
-Essa é a cocnfiguração padrão do Zabbix Agent, onde o agente aguarda solicitações do Zabbix Server para enviar dados.
+Essa é a configuração padrão do Zabbix Agent, onde o agente aguarda solicitações do Zabbix Server para enviar dados.
 
 Abra o arquivo de configuração do Zabbix Agent:
 ```bash
