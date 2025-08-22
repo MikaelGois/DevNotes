@@ -10,6 +10,7 @@ next: 2025/
 
 ### [Agosto](2025/08/)
 
+* [Configurando um servidor DNS e proxy transparente no Rocky Linux](2025/08/2-dns-and-proxy-server-rockylinux)
 * [Monitorando o cluster de computadores com o Zabbix e o Grafana](2025/08/1-zabbix-and-grafana)
 
 ### [Julho](2025/07/)

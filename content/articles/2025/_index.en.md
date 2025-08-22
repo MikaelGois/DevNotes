@@ -26,6 +26,7 @@ The year 2025 corresponds to the year 4723 in the Chinese calendar, the year of 
 
 ### August:
 
+* [Setting up a DNS server and transparent proxy on Rocky Linux (portuguese only)](https://devnotes.msglabs.site/articles/2025/08/2-dns-and-proxy-server-rockylinux/)
 * [Monitoring a cluster of computers with Zabbix and Grafana (portuguese only)](https://devnotes.msglabs.site/articles/2025/08/1-zabbix-and-grafana/)
 
 ### July:

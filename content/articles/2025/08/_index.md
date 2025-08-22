@@ -15,5 +15,6 @@ dado que era o sexto mês do Calendário Romano de Rômulo. É dito com frequên
 ## Artigos publicados:
 
 {{< cards cols="1" >}}
+  {{< card link="2-dns-and-proxy-server-rockylinux" title="Configurando um servidor DNS e proxy transparente no Rocky Linux" >}}
   {{< card link="1-zabbix-and-grafana" title="Monitorando o cluster de computadores com o Zabbix e o Grafana" >}}
 {{< /cards >}}
