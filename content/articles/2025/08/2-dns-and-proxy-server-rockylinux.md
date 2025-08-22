@@ -424,7 +424,7 @@ $TTL 1D
                         1W              ; Expire
                         1D )            ; Negative Cache TTL
 @       IN      NS      dns1.lab.local.
-1       IN      PTR     dns1.lab.local.
+1       IN      PTR     dns1.main.local.
 2       IN      PTR     cliente.lab.local.
 ```
 
