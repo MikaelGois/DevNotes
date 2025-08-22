@@ -283,7 +283,7 @@ controls {
         keys { rndc-key; };
 };
 
-include "/etc/main.local.zones"; // Zona de pesquisa direta e reversa que será criada
+include "/etc/named.main.local.zones"; // Zona de pesquisa direta e reversa que será criada
 include "/etc/named.rfc1912.zones"; // Zonas de pesquisa direta e reversa padrão
 include "/etc/named.root.key"; // Chave de autenticação para o servidor raiz
 ```
@@ -320,13 +320,13 @@ zone "." IN {
 
 As zonas de consulta direta são usadas para resolver nomes de domínio em endereços IP, já as zonas de consulta reversa são usadas para resolver endereços IP em nomes de domínio. Para configurar uma zona direta e reversa, você precisa criar um arquivo de zona e adicionar as entradas necessárias.
 ```bash
-sudo vi /etc/named/main.local.zones
+sudo vi /etc/named.main.local.zones
 ```
 
 Digite `i` para entrar no modo de inserção e faça as alterações necessárias.
 
 Dentro do arquivo, adicione as informações das zonas:
-```bash {filename="main.zones",linenos=table}
+```bash {filename="named.main.local.zones",linenos=table}
 zone "main.local" IN {
     type master;
     file "main.local.zone";
@@ -359,8 +359,8 @@ Pressione `Esc` e digite `:wq` para salvar e sair do editor.
 #### 3.3 - Conceda a propriedade e as permissões adequadas ao arquivo de declaração de zona:
 Para garantir que o BIND tenha acesso ao arquivo de zonas, você deve definir a propriedade e as permissões corretas:
 ```bash
-sudo chown root:named /etc/named/main.local.zones
-sudo chmod 644 /etc/named/main.local.zones
+sudo chown root:named /etc/named/named.main.local.zones
+sudo chmod 644 /etc/named/named.main.local.zones
 ```
 
 
