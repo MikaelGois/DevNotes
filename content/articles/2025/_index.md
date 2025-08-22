@@ -26,7 +26,8 @@ Há 100 anos (segundo a Wikipédia):
 
 ### Agosto:
 
-* [Monitorando um cluster de computadores com Zabbix e Grafana (português apenas)](08/1-zabbix-and-grafana)
+* [Configurando um servidor DNS e proxy transparente no Rocky Linux](08/2-dns-and-proxy-server-rockylinux)
+* [Monitorando o cluster de computadores com o Zabbix e o Grafana](08/1-zabbix-and-grafana)
 
 ### Julho:
 
