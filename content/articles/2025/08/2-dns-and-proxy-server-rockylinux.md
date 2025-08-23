@@ -28,6 +28,8 @@ O papel do NAT é realizar a tradução dos endereços de uma rede para outra, n
 
 ### 1 - Ativando o encaminhamento no kernel
 
+Encaminhamento de pacotes (ou ***IP forwarding***) é a capacidade do sistema operacional de **receber pacotes de rede em uma interface e repassá-los para outra**, com base nas regras de roteamento.
+
 #### 1.1 - Criando o arquivo de configuração:
 Digite o comando abaixo para criar o arquivo de configuração e escrever a regra de encaminhamento de pacotes:
 ```bash
@@ -95,8 +97,8 @@ Também é importante configurar a zona internal como a zona padrão do servidor
 sudo firewall-cmd --set-default-zone=internal
 ```
 
-#### 4.4 - Definindo a política de roteamento padrão:
-Para definir a política de roteamento padrão, use o comando abaixo:
+#### 4.4 - Habilitando o tráfego entre as zonas:
+O comando a seguir define o alvo (`target`) da política `int-to-ext` como `ACCEPT`, ou seja, permite o tráfego entre as zonas pertencentes a essa política. Para tal, use o comando abaixo:
 ```bash
 sudo firewall-cmd --policy=int-to-ext --set-target=ACCEPT --permanent
 ```
@@ -147,6 +149,9 @@ Para escutar requisições icmp na interface externa, em outra janela do termina
 ```bash
 sudo tcpdump -ni enp0s3 icmp
 ```
+
+> [!TIP]
+> Caso esteja usando um ambiente sem interface gráfica, você pode abrir outra sessão no terminal shell (`TTY`) com o comando `Alt + F2`. Para voltar ao terminal anterior (`TTY 1`), use `Alt + F1`.
 
 Se estiverem chegando requisições ICMP na interface externa a partir da interface interna, você verá as requisições sendo exibidas no terminal. Isso significa que o tráfego do cliente está sendo roteado corretamente através das zonas interna e externa do servidor.
 
