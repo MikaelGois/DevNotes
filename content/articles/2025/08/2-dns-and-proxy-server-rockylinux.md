@@ -81,12 +81,12 @@ sudo firewall-cmd --new-policy=int-to-ext --permanent
 #### 4.2 - Definindo as zonas de entrada e saída:
 Para definir a zona de entrada (`ingress`), use o comando abaixo:
 ```bash
-sudo firewall-cmd --policy=int-to-ext --set-ingress-zone=internal --permanent
+sudo firewall-cmd --policy=int-to-ext --add-ingress-zone=internal --permanent
 ```
 
 Já para definir a zona de saída (`egress`), use o comando abaixo:
 ```bash
-sudo firewall-cmd --policy=int-to-ext --set-egress-zone=external --permanent
+sudo firewall-cmd --policy=int-to-ext --add-egress-zone=external --permanent
 ```
 
 #### 4.3 - Definindo a zona padrão:
@@ -94,6 +94,15 @@ Também é importante configurar a zona internal como a zona padrão do servidor
 ```bash
 sudo firewall-cmd --set-default-zone=internal
 ```
+
+#### 4.4 - Definindo a política de roteamento padrão:
+Para definir a política de roteamento padrão, use o comando abaixo:
+```bash
+sudo firewall-cmd --policy=int-to-ext --set-target=ACCEPT --permanent
+```
+
+
+
 
 ### 5 - Aplicando mudanças no firewall
 Após realizar todas as alterações, é necessário recarregar as configurações do firewall para que as mudanças tenham efeito:
