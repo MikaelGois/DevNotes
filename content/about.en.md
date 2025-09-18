@@ -44,6 +44,7 @@ in this case [Hextra](https://github.com/imfing/hextra), which,
 in addition to being a well-designed tool and using Markdown and LaTeX to write the pages (features that I consider important), 
 won me over with the possibility of implementing the project with GitHub Pages. 
 In addition, the devs provide a template that makes implementing the project much easier.
+Additionally, I used the option to add a custom DNS on GitHub, which makes the site more professional and memorable.
 
 > "The only true wisdom is in knowing you know nothing."<br>
 > — <cite>Socrates</cite>

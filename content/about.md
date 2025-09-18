@@ -44,6 +44,7 @@ o que serviu como inspiração para começar as anotações, e também para a fe
 no caso o [Hextra](https://github.com/imfing/hextra) que além de ser uma ferramenta bem elaborada e usar o Markdown e LaTeX para realizar a escrita das páginas (funcionalidades que considero importantes), 
 me conquistou com a possibilidade de implementar o projeto com o GitHub Pages. 
 Além disso, os devs disponibilizaram um template que facilita muito a implementação do projeto.
+Somado a isso, utilizei a opção de adicionar um DNS personalizado no GitHub, o que torna o site mais profissional e fácil de ser lembrado.
 
 > "A verdadeira virtude só existe acompanhada da sabedoria."<br>
 > — <cite>Platão</cite>

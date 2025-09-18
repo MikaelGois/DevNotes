@@ -19,7 +19,7 @@ markup:
 menu:
   main:
     - identifier: articles
-      name: Arquivos
+      name: Artigos
       pageRef: /articles
       weight: 1
     - identifier: about

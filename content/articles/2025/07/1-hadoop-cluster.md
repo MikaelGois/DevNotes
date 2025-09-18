@@ -14,7 +14,7 @@ No trabalho da faculdade, tínhamos o seguinte cenário: 3 SBCs *Raspberry Pi*, 
 É possível incluir a máquina *main* como um dos *nodes*, ou seja, além de coordenar todo o *cluster*, ela também processa os dados, porém, não é essa abordagem adotada aqui, na verdade, essa revisão usará máquinas virtuais e uma configuração melhorada. No entanto, haverá uma indicação para aqueles que decidirem colocar a *main* para processar os dados juntamente com os *nodes*.
 
 > [!IMPORTANT]
-> Os valores abordados e os parâmetros usados foram utilizados conforme a necessidade do projeto e dos testes realizados, e portanto não devem ser seguidos a pé da letra.  
+> Os valores abordados e os parâmetros usados foram utilizados conforme a necessidade do projeto e dos testes realizados, e portanto não devem ser seguidos ao pé da letra.  
 > Ajuste todos os parâmetros conforme as necessidades do seu projeto e a capacidade do seu hardware.
 
 ## Atualizando os repositórios e pacotes:
