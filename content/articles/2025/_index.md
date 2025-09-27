@@ -26,9 +26,13 @@ Há 100 anos (segundo a Wikipédia):
 
 ### Agosto:
 
-* [Configurando um servidor DNS e proxy transparente no Rocky Linux](08/2-dns-and-proxy-server-rockylinux)
-* [Monitorando o cluster de computadores com o Zabbix e o Grafana](08/1-zabbix-and-grafana)
+{{< cards cols="1" >}}
+  {{< card link="08/2-dns-and-proxy-server-rockylinux" title="Configurando um servidor DNS e proxy transparente no Rocky Linux" tag="Redes" tagColor="red" >}}
+  {{< card link="08/1-zabbix-and-grafana" title="Monitorando o cluster de computadores com o Zabbix e o Grafana" tag="Redes" tagColor="red" >}}
+{{< /cards >}}
 
 ### Julho:
 
-* [Criando um cluster de computadores com Apache Hadoop](07/1-hadoop-cluster)
+{{< cards cols="1" >}}
+  {{< card link="07/1-hadoop-cluster" title="Criando um cluster de computadores com Apache Hadoop" tag="Arquitetura" tagColor="yellow" >}}
+{{< /cards >}}

@@ -18,5 +18,5 @@ Eventos do mês de julho:
 ## Artigos publicados:
 
 {{< cards cols="1" >}}
-  {{< card link="1-hadoop-cluster" title="Criando um cluster de computadores com Apache Hadoop" >}}
+  {{< card link="1-hadoop-cluster" title="Criando um cluster de computadores com Apache Hadoop" tag="Arquitetura" tagColor="yellow" >}}
 {{< /cards >}}

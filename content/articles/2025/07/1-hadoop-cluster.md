@@ -74,7 +74,7 @@ Acesse o script de *environment* do hadoop:
 sudo nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 ```
 
-Procure por `export JAVA_HOME`, remova o comentário e indique o caminho do java openJDK:
+Procure por `export JAVA_HOME`, remova o comentário e indique o caminho do Java OpenJDK:
 ```sh {filename="hadoop-env.sh"}
 export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
 ```
@@ -142,7 +142,7 @@ sudo adduser hadoop sudo
 sudo systemctl enable ssh && sudo systemctl start ssh
 ```
 
-#### 6.2 - Configure o IP estático (raspbian e debian):
+#### 6.2 - Configure o IP estático (Debian):
 
 > [!CAUTION]
 > No nosso cenário, os testes estavam sendo realizados na faculdade, e para evitar maiores problemas, colocamos as máquinas em uma rede isolada conectadas apenas em um switch L2 simples.  
@@ -170,17 +170,17 @@ iface enp0s3 inet static
     gateway 192.168.0.1
     dns-nameservers 192.168.0.1 8.8.8.8
 
-# 'allow-hotplug enp0s3' pode ser 'auto enp0s3'
-# 'iface enp0s3 inet static' substitua pelo nome da interface e desabilite o DHCP
-# 'address 192.168.0.X' substitua pelo IP da máquina
-# 'netmask 255.255.255.0' substitua pela máscara de sub-rede
-# 'gateway 192.168.0.1' coloque o IP do seu gateway
-# 'dns-nameservers 192.168.0.1 8.8.8.8' defina os endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
+# 'allow-hotplug enp0s3': pode ser 'auto enp0s3'.
+# 'iface enp0s3 inet static:' Substitua pelo nome da interface e desabilite o DHCP.
+# 'address 192.168.0.X': Define o endereço IP da máquina.
+# 'netmask 255.255.255.0': Define a máscara de sub-rede.
+# 'gateway 192.168.0.1': Define o endereço do Gateway.
+# 'dns-nameservers 192.168.0.1 8.8.8.8': Define os endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
 ```
 
 > [!NOTE]
 > O `X` será o número da máquina. Por exemplo, `192.168.0.10/24` para a *main*/*master*.  
-> No `dns-nameservers`você pode configurar mais de um servidor dns, como o do google: `8.8.8.8` e `1.1.1.1`, ou o IP do seu roteador caso tenha um na rede.  
+> No `dns-nameservers`você pode configurar mais de um servidor DNS, como o do google: `8.8.8.8` e `1.1.1.1`, ou o IP do seu roteador caso tenha um na rede.  
 > Você pode configurar outras faixas de IP, porém as máquinas so irão conseguir se comunicar se estiverem na mesma rede.
 
 > [!WARNING]
@@ -199,9 +199,9 @@ domain home.local
 search home.local
 nameserver 192.168.0.1
 nameserver 8.8.8.8
-# 'domain home.local' ou outro domínio, ex.: cluster.local.
-# 'search home.local' ou outros servidores dns, ex.: cluster.local.
-# 'nameserver 192.168.0.1' ou outros servidores dns, ex.: 8.8.4.4 9.9.9.9 1.1.1.1 Um por linha!
+# 'domain home.local' Define o domínio, ex.: cluster.local.
+# 'search home.local' Define os domínios de busca, ex.: cluster.local.
+# 'nameserver 192.168.0.1': Define os servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1 Um por linha!
 ```
 
 Você pode aplicar as configurações reiniciando o computador ou o serviço de *network*.
@@ -217,7 +217,7 @@ Para reiniciar o serviço:
 sudo systemctl restart networking
 ```
 
-#### 6.3 - Configure o IP estático (ubuntu):
+#### 6.3 - Configure o IP estático (Ubuntu):
 
 Digite o seguinte comando para descobrir a *interface* de rede onde está configurado o IP:  
 ```bash
@@ -262,11 +262,11 @@ network:
                     - 192.168.0.1
                     - 8.8.8.8
 # RESPEITE A INDENTAÇÃO!
-# 'enp0s3' substitua pelo nome da interface, pode ser enp0s3, eth0, etc.
+# 'enp0s3': Substitua pelo nome da interface, pode ser enp0s3, eth0, etc.
 # 'dhcp4: false' desabilita o DHCP.
-# 'addresses: 192.168.0.X/24' substitua pelo IP da máquina.
-# 'gateway4: 192.168.0.1' coloque o IP do seu gateway.
-# 'nameservers: addresses:' defina os endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
+# 'addresses: 192.168.0.X/24' Define o endereço IP da máquina.
+# 'gateway4: 192.168.0.1' Define o endereço do Gateway.
+# 'nameservers: addresses:' Define os endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
 ```
 
 > [!NOTE]
@@ -291,7 +291,7 @@ Caso deseje aplicar as modificações diretamente, sem testar, use o seguinte co
 sudo netplan apply
 ```
 
-Para configurar o serviço de resolução de nomes, acesse:  
+Para configurar o serviço de resolução de nomes, acesse:
 ```bash
 sudo nano /etc/resolv.conf
 ```
@@ -303,8 +303,8 @@ search home.local
 nameserver 192.168.0.1
 nameserver 8.8.8.8
 # 'domain home.local' ou outro domínio, ex.: cluster.local.
-# 'search home.local' ou outros servidores dns, ex.: cluster.local.
-# 'nameserver 192.168.0.1' ou outros servidores dns, ex.: 8.8.4.4 9.9.9.9 1.1.1.1 Um por linha!
+# 'search home.local' ou outros servidores DNS, ex.: cluster.local.
+# 'nameserver 192.168.0.1' ou outros servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1 Um por linha!
 ```
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
@@ -335,7 +335,7 @@ Para alterar o nome do *host*, acesse:
 sudo nano /etc/hostname
 ```
 
-O nome do *hostname* deve corresponder com a máquina. Exemplo: "node1" para a máquina `node1`.
+O nome do *hostname* deve corresponder à máquina. Exemplo: "node1" para a máquina `node1`.
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
@@ -376,9 +376,9 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@X
 
 
 
-### 8 - Configurações do Hadoop - core, hdfs, mapreduce, yarn - (main):
+### 8 - Configurações do Hadoop - Core, HDFS, MapReduce, YARN - (main):
 
-#### 8.1 - Configurar o arquivo core do hadoop:
+#### 8.1 - Configurar o arquivo Core do hadoop:
 
 Acesse o arquivo:
 ```bash
@@ -409,7 +409,7 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 
-#### 8.2 - Configurar o arquivo hdfs do Hadoop:
+#### 8.2 - Configurar o arquivo HDFS do Hadoop:
 
 Acesse o arquivo:  
 ```bash
@@ -448,7 +448,7 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
-#### 8.3 - Configurar o arquivo mapreduce do Hadoop:
+#### 8.3 - Configurar o arquivo MapReduce do Hadoop:
 
 Acesse o arquivo:
 ```bash
@@ -515,7 +515,7 @@ Complementar ao `yarn.log-aggregation-enable` -->
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 
-#### 8.4 - Configurar o arquivo yarn do Hadoop:
+#### 8.4 - Configurar o arquivo YARN do Hadoop:
 
 Acesse o arquivo:  
 ```bash
@@ -565,10 +565,10 @@ Entre as tags `<configuration>` e `</configuration>` insira as seguintes informa
 | ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
 | `yarn.resourcemanager.hostname`                        | Host onde o *ResourceManager* do YARN está escutando.                                        |
 | `yarn.nodemanager.aux-services`                        | Serviço auxiliar habilitado no *NodeManager*.                                                |
-| `yarn.nodemanager.auxservices.mapreduce.shuffle.class` | Classe Java que implementa o serviço de shuffle.                                             |
+| `yarn.nodemanager.auxservices.mapreduce.shuffle.class` | Classe Java que implementa o serviço de *shuffle*.                                           |
 | `yarn.log-aggregation-enable`                          | Ativa a **agregação de logs** dos *containers* após o término das aplicações.                |
 | `yarn.log-aggregation.retain-seconds`                  | Tempo em segundos que os logs agregados devem ser mantidos no HDFS.                          |
-| `yarn.log.server.url`                                  | Configura a URL base para acessar os logs agregados das aplicações usada redirecionamento do log do ResourceManager para o JobHistory Server.                                       |
+| `yarn.log.server.url`                                  | Configura a URL base para acessar os logs agregados das aplicações usando redirecionamento do log do *ResourceManager* para o *JobHistory Server*.                                       |
 | `yarn.nodemanager.remote-app-log-dir`                  | Diretório HDFS onde os logs agregados das aplicações serão armazenados.                      |
 | `yarn.nodemanager.remote-app-log-dir-suffix`           | Sufixo do caminho final de log remoto (útil para organizar subpastas por aplicação/usuário). |
 
@@ -612,7 +612,7 @@ scp /usr/local/hadoop/etc/hadoop/* X:/usr/local/hadoop/etc/hadoop/
 
 #### 8.7 - Exportação dos paths:
 
-Digite os comandos abaixo **em todas as máquinas** no usuário Hadoop para exportar os *PATHs* das aplicações:
+Digite os comandos abaixo **em todas as máquinas** no usuário Hadoop para exportar os *PATH* das aplicações:
 ```bash
 export HADOOP_HOME="/usr/local/hadoop"
 export HADOOP_COMMON_HOME="/usr/local/hadoop"
@@ -645,19 +645,19 @@ mkdir -p /usr/local/hadoop/data/dataNode
 
 
 
-### 11 - Formatar o Hadoop Directory File System - hdfs (main):
+### 11 - Formatar o Hadoop Directory File System - HDFS (main):
 
 Digite o comando abaixo para carregar as variáveis de ambiente:
 ```bash
 source /etc/environment
 ```
-Digite o comando abaixo para realizar a formatação do hdfs:
+Digite o comando abaixo para realizar a formatação do HDFS:
 ```bash
 hdfs namenode -format
 ```
 
 > [!WARNING]
-> É comum realizar a exclusão das pastas nameNode e dataNode para a correção de alguns possíveis erros, ou após alterações nos arquivos do hadoop, ambos os casos realizar uma nova formatação do hdfs é obrigatório para efetivar as alterações!
+> É comum realizar a exclusão das pastas nameNode e dataNode para a correção de alguns possíveis erros, ou após alterações nos arquivos do hadoop, ambos os casos realizar uma nova formatação do HDFS é obrigatório para efetivar as alterações!
 
 
 
@@ -671,12 +671,12 @@ Sempre que você desejar inicializar o *cluster*, você terá que primeiro carre
 source /etc/environment
 ```
 
-Em seguida, digite o seguinte comando para inicializar o hdfs:
+Em seguida, digite o seguinte comando para inicializar o HDFS :
 ```bash
 start-dfs.sh
 ```
 
-Logo após, digite o seguinte comando para inicializar o yarn:
+Logo após, digite o seguinte comando para inicializar o YARN:
 ```bash
 start-yarn.sh
 ```
@@ -700,13 +700,13 @@ jps
 
 
 Esse comando deverá retornar algo semelhante às imagens abaixo:  
-![Saida do JPS main][image1]  
-![Saida do JPS node 1][image2]  
-![Saida do JPS node 2][image3]
+![Saída do JPS main][image1]
+![Saída do JPS node 1][image2]
+![Saída do JPS node 2][image3]
 
 Se você estiver usando a máquina *main* como um *node*, também aparecerão os processos `DataNode` e `NodeManager`.
 
-![Saida do JPS main como node][image4]
+![Saída do JPS main como node][image4]
 
 Caso esteja usando o **JobHistory Server** deverá aparecer na saída do `jps` o parâmetro `JobHistoryServer`. 
 
@@ -784,9 +784,9 @@ Agora você pode iniciar tudo com `start-all.sh && start-history` e parar tudo c
 
 ### 14 - Configurando limites de recursos:
 
-#### 14.1 - Limites para Aplicações nos nodes (via YARN):
+#### 14.1 - Limites para Aplicações nos nós (via YARN):
 
-Quando não configurado, o YARN assume valores padrões definidos no `yarn-default.xml`, o que pode não ser o ideal em um *cluster* com nodes que possuem baixa capacidade de recursos, como o cluster de *Raspberry Pi*, por exemplo. O hadoop também é capaz de detectar automaticamente os recursos das máquinas. Para realizar essa configuração, veja a seção [15 - Configurando detecção de recursos](#15---configurando-detecção-de-recursos).
+Quando não configurado, o YARN assume valores padrões definidos no `yarn-default.xml`, o que pode não ser o ideal em um *cluster* com nós  que possuem baixa capacidade de recursos, como o cluster de *Raspberry Pi*, por exemplo. O hadoop também é capaz de detectar automaticamente os recursos das máquinas. Para realizar essa configuração, veja a seção [15 - Configurando detecção de recursos](#15---configurando-detecção-de-recursos).
 
 <!-- Os valores padrão para o YARN são: -->
 {{% details title="Valores padrão para o YARN (Clique para expandir)" closed="true" %}}
@@ -803,7 +803,7 @@ Quando não configurado, o YARN assume valores padrões definidos no `yarn-defau
 {{% /details %}}
 
 >[!NOTE]
-> Você pode consultar os valores padrão do yarn na [página oficial do yarn-default do Apache Hadoop](https://hadoop.apache.org/docs/r3.4.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml).  
+> Você pode consultar os valores padrão do YARN na [página oficial do yarn-default do Apache Hadoop](https://hadoop.apache.org/docs/r3.4.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml).  
 > Para demais configurações, consulte a [documentação oficial do Apache Hadoop (3.4.0)](https://hadoop.apache.org/docs/r3.4.0/).
 
 ##### 14.1.1 - Configurando os limites de recursos para aplicações (nodes):
@@ -966,7 +966,7 @@ Quando não configurado, o MapReduce assume valores padrões definidos no `mapre
 {{% /details %}}
 
 >[!NOTE]
-> Você pode consultar os valores padrão do mapreduce na [página oficial do mapred-default do Apache Hadoop](https://hadoop.apache.org/docs/r3.4.0/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml).  
+> Você pode consultar os valores padrão do MapReduce na [página oficial do mapred-default do Apache Hadoop](https://hadoop.apache.org/docs/r3.4.0/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml).  
 > Para demais configurações, consulte a [documentação oficial do Apache Hadoop (3.4.0)](https://hadoop.apache.org/docs/r3.4.0/).
 
 Acesse o arquivo `mapred-site.xml` em cada *node*:
@@ -1025,7 +1025,7 @@ stop-all.sh && start-all.sh
 
 #### 14.5 - Considerações importantes:
 
-Caso apareça um erro sobre o limite de recursos ao rodar um trabalho, é sinal que os limites estão funcionando, mas é necessário entender como o YARN aloca realmente os recursos.
+Caso apareça um erro sobre o limite de recursos ao rodar um trabalho, é sinal de que os limites estão funcionando, mas é necessário entender como o YARN aloca realmente os recursos.
 
 ##### Cenário de exemplo:
 
@@ -1238,16 +1238,16 @@ A saída do `free -h` na linha "Swap" agora deve mostrar a capacidade total soma
 
 
 
-### 18 - Realização de testes de benchmark para medir o desempenho do cluster:
-
-* [Realizando testes de benchmark com o Hadoop (em breve)](#)
-
-
-
-
-### 19 -  Automatizando o processo de configuração do cluster com Ansible:
+### 18 - Automatizando o processo de configuração do cluster com Ansible:
 
 * [Automatizando a configuração de servidores com Ansible (em breve)](#)
+
+
+
+
+### 19 - Testes de benchmark para medir o desempenho do cluster:
+
+* [Realizando testes de benchmark com o Hadoop (em breve)](#)
 
 <!-- Imagens -->
 

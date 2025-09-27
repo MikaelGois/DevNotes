@@ -1,18 +1,20 @@
 ---
-title: Artigos
+title: Artigos publicados
 type: default
 next: 2025/
 ---
 
-## Artigos publicados:
+<h2 style="text-align: center;">&larr; <a href="2025/">2025</a> &rarr;</h2>
 
-## [2025](2025/)
+<h3 style="text-align: center;"><a href="2025/08/">Agosto</a></h3>
 
-### [Agosto](2025/08/)
+{{< cards cols="1" >}}
+  {{< card link="2025/08/2-dns-and-proxy-server-rockylinux" title="Configurando um servidor DNS e proxy transparente no Rocky Linux" tag="Redes" tagColor="red" >}}
+  {{< card link="2025/08/1-zabbix-and-grafana" title="Monitorando o cluster de computadores com o Zabbix e o Grafana" tag="Redes" tagColor="red" >}}
+{{< /cards >}}
 
-* [Configurando um servidor DNS e proxy transparente no Rocky Linux](2025/08/2-dns-and-proxy-server-rockylinux)
-* [Monitorando o cluster de computadores com o Zabbix e o Grafana](2025/08/1-zabbix-and-grafana)
+<h3 style="text-align: center;"><a href="2025/07/">Julho</a></h3>
 
-### [Julho](2025/07/)
-
-* [Criando um cluster de computadores com Apache Hadoop](2025/07/1-hadoop-cluster)
+{{< cards cols="1" >}}
+  {{< card link="2025/07/1-hadoop-cluster" title="Criando um cluster de computadores com Apache Hadoop" tag="Arquitetura" tagColor="yellow" >}}
+{{< /cards >}}
