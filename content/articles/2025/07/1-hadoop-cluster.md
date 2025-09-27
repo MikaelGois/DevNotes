@@ -803,7 +803,7 @@ Quando não configurado, o YARN assume valores padrões definidos no `yarn-defau
 {{% /details %}}
 
 >[!NOTE]
-> Você pode consultar os valores padrão do YARNna [página oficial do yarn-default do Apache Hadoop](https://hadoop.apache.org/docs/r3.4.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml).  
+> Você pode consultar os valores padrão do YARN na [página oficial do yarn-default do Apache Hadoop](https://hadoop.apache.org/docs/r3.4.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml).  
 > Para demais configurações, consulte a [documentação oficial do Apache Hadoop (3.4.0)](https://hadoop.apache.org/docs/r3.4.0/).
 
 ##### 14.1.1 - Configurando os limites de recursos para aplicações (nodes):
