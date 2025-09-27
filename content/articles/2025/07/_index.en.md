@@ -19,5 +19,5 @@ Events of the month of July:
 ## Published articles:
 
 {{< cards cols="1" >}}
-  {{< card link="https://devnotes.msglabs.site/articles/2025/07/1-hadoop-cluster/" title="Creating a computer cluster with Apache Hadoop (portuguese only)" >}}
+  {{< card link="https://devnotes.msglabs.site/articles/2025/07/1-hadoop-cluster/" title="Creating a computer cluster with Apache Hadoop (portuguese only)" tag="Architecture" tagColor="yellow" >}}
 {{< /cards >}}

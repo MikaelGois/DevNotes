@@ -1,18 +1,20 @@
 ---
-title: Articles
+title: Published articles
 type: default
 next: 2025/
 ---
 
-## Published articles:
+<h2 style="text-align: center;">&larr; <a href="2025/">2025</a> &rarr;</h2>
 
-## [2025](2025/)
+<h3 style="text-align: center;"><a href="2025/08/">August</a></h3>
 
-### [August](2025/08/)
+{{< cards cols="1" >}}
+  {{< card link="https://devnotes.msglabs.site/articles/2025/08/2-dns-and-proxy-server-rockylinux/" title="Setting up a DNS server and transparent proxy on Rocky Linux (portuguese only)" tag="Network" tagColor="red" >}}
+  {{< card link="https://devnotes.msglabs.site/articles/2025/08/1-zabbix-and-grafana/" title="Monitoring a cluster of computers with Zabbix and Grafana (portuguese only)" tag="Network" tagColor="red" >}}
+{{< /cards >}}
 
-* [Setting up a DNS server and transparent proxy on Rocky Linux (portuguese only)](https://devnotes.msglabs.site/articles/2025/08/2-dns-and-proxy-server-rockylinux/)
-* [Monitoring a cluster of computers with Zabbix and Grafana (portuguese only)](https://devnotes.msglabs.site/articles/2025/08/1-zabbix-and-grafana/)
+<h3 style="text-align: center;"><a href="2025/07/">July</a></h3>
 
-### [July](2025/07/)
-
-* [Creating a computer cluster with Apache Hadoop (portuguese only)](https://devnotes.msglabs.site/articles/2025/07/1-hadoop-cluster/)
+{{< cards cols="1" >}}
+  {{< card link="https://devnotes.msglabs.site/articles/2025/07/1-hadoop-cluster/" title="Creating a computer cluster with Apache Hadoop (portuguese only)" tag="Architecture" tagColor="yellow" >}}
+{{< /cards >}}
