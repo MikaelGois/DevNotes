@@ -1,7 +1,7 @@
 ---
 title: Julho
 type: docs
-weight: 2
+weight: 6
 prev: articles/2025/08
 #next: articles/2025/07/1-raspberry-pi-cluster
 ---

@@ -2,7 +2,7 @@
 title: Configurando um servidor DNS e proxy transparente no Rocky Linux
 type: docs
 weight: 1
-editURL: "https://devnotes.msglabs.site/articles/dns-and-proxy-server-rockylinux/"
+editURL: "https://devnotes.msglabs.com.br/articles/dns-and-proxy-server-rockylinux/"
 next: /articles/2025/08/1-zabbix-and-grafana
 ---
 

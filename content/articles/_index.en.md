@@ -6,6 +6,24 @@ next: 2025/
 
 <h2 style="text-align: center;">&larr; <a href="2025/">2025</a> &rarr;</h2>
 
+<h3 style="text-align: center;"><a href="2025/11/">November</a></h3>
+
+{{< cards cols="1" >}}
+  Nothing yet. =(
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2025/10/">October</a></h3>
+
+{{< cards cols="1" >}}
+  No articles were published in October. ¯\_(ツ)_/¯
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2025/09/">September</a></h3>
+
+{{< cards cols="1" >}}
+  No articles were published in September. ¯\_(ツ)_/¯
+{{< /cards >}}
+
 <h3 style="text-align: center;"><a href="2025/08/">August</a></h3>
 
 {{< cards cols="1" >}}

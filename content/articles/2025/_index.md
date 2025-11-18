@@ -24,6 +24,24 @@ Há 100 anos (segundo a Wikipédia):
 
 ## Artigos publicados:
 
+### Novembro:
+
+{{< cards cols="1" >}}
+  Nada por enquanto. =(
+{{< /cards >}}
+
+### Outubro:
+
+{{< cards cols="1" >}}
+  Não foram publicados artigos em outubro. ¯\_(ツ)_/¯
+{{< /cards >}}
+
+### Setembro:
+
+{{< cards cols="1" >}}
+  Não foram publicados artigos em setembro. ¯\_(ツ)_/¯
+{{< /cards >}}
+
 ### Agosto:
 
 {{< cards cols="1" >}}
