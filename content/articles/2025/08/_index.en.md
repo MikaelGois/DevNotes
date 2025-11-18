@@ -1,8 +1,8 @@
 ---
 title: August
 type: docs
-weight: 1
-#prev: articles/2025/
+weight: 5
+prev: /articles/2025/09/
 next: /articles/2025/07/
 sidebar:
   open: true

@@ -2,7 +2,7 @@
 title: Criando um cluster de computadores com Apache Hadoop
 type: docs
 weight: 1
-editURL: "https://devnotes.msglabs.site/articles/hadoop-cluster/"
+editURL: "https://devnotes.msglabs.com.br/articles/hadoop-cluster/"
 prev: /articles/2025/08/1-zabbix-and-grafana
 ---
 

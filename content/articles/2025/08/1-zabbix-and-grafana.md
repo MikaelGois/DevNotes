@@ -2,7 +2,7 @@
 title: Monitorando o cluster de computadores com o Zabbix e o Grafana
 type: docs
 weight: 1
-editURL: "https://devnotes.msglabs.site/articles/zabbix-and-grafana/"
+editURL: "https://devnotes.msglabs.com.br/articles/zabbix-and-grafana/"
 next: /articles/2025/07/1-hadoop-cluster
 ---
 
