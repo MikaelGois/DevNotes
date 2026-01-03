@@ -14,4 +14,4 @@ Novembro é um mês de final da primavera no hemisfério sul e final do outono n
 
 ## Artigos publicados:
 
-Não houve publicações ainda.
+Não houve publicações em novembro.
