@@ -7,16 +7,16 @@ prev: /articles/2026/
 
 ## Welcome to 2025!
 
-The year 2025 corresponds to the year 4723 in the Chinese calendar, the year of the snake, and to the year 5785 in the Jewish calendar.
+The year 2025 corresponds to the years 4721-4722 in the Chinese calendar, since the new year begins on January 29, 2025, being the year of the snake, and to the period between 5785 and 5786 in the Jewish calendar, given that Rosh Hashanah 2025 occurs in September, beginning the year 5786.
 
 
 100 years ago (according to Wikipedia in Portuguese):
-* The first General Motors factory in Brazil opens.
+* General Motors of Brazil was founded.
 * The first São Silvestre race takes place.
 * Malcolm X is born.
 * Margaret Thatcher is born.
 * Gustav Ludwig Hertz receives the Nobel Prize in Physics in collaboration with James Franck.
-* A certain Austrian with a mustache publishes the first chapter of his book.
+* A certain Austrian with a small mustache published the first volume of his book.
 
 
 ## Published articles:
