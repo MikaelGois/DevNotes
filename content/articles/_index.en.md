@@ -1,15 +1,28 @@
 ---
 title: Published articles
 type: default
-next: 2025/
 ---
 
+<h2 style="text-align: center;">&larr; <a href="2026/">2026</a> &rarr;</h2>
+
+<h3 style="text-align: center;"><a href="2026/01/">January</a></h3>
+
+{{< cards cols="1" >}}
+  Nothing yet. =(
+{{< /cards >}}
+
 <h2 style="text-align: center;">&larr; <a href="2025/">2025</a> &rarr;</h2>
+
+<h3 style="text-align: center;"><a href="2025/12/">December</a></h3>
+
+{{< cards cols="1" >}}
+  No articles were published in December. ¯\_(ツ)_/¯
+{{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/11/">November</a></h3>
 
 {{< cards cols="1" >}}
-  Nothing yet. =(
+  No articles were published in November. ¯\_(ツ)_/¯
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/10/">October</a></h3>
