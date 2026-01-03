@@ -24,10 +24,16 @@ The year 2025 corresponds to the year 4723 in the Chinese calendar, the year of 
 
 ## Published articles:
 
+### December:
+
+{{< cards cols="1" >}}
+  No articles were published in December. ¯\_(ツ)_/¯
+{{< /cards >}}
+
 ### November:
 
 {{< cards cols="1" >}}
-  Nothing yet. =(
+  No articles were published in November. ¯\_(ツ)_/¯
 {{< /cards >}}
 
 ### October:
