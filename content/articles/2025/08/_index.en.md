@@ -4,8 +4,6 @@ type: docs
 weight: 5
 prev: /articles/2025/09/
 next: /articles/2025/07/
-sidebar:
-  open: true
 ---
 
 August is the eighth month of the year in the Gregorian calendar and has 31 days. It is named after the Roman Emperor Caesar Augustus (27 BCE - 14 CE), and was previously called Sextilis or Sextile in Latin, since it was the sixth month of Romulus' Roman calendar. It is often said that the month has 31 days because Caesar Augustus wanted the same number of days as his predecessor. However, August (Sextilis) has had 31 days since Julius Caesar's reform.

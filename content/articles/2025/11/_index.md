@@ -4,8 +4,6 @@ type: docs
 weight: 2
 prev: /articles/2025/12/
 next: /articles/2025/10/
-sidebar:
-  open: true
 ---
 
 Novembro é o décimo primeiro e penúltimo mês do ano no calendário gregoriano e o penúltimo mês do ano, tendo a duração de 30 dias. Novembro deve o seu nome à palavra latina novem (nove), dado que era o nono mês do calendário romano, que começava em março. Novembro foi o nono mês do calendário de Rômulo c.  750 a.C. Novembro manteve seu nome (do latim novem que significa "nove") quando janeiro e fevereiro foram adicionados ao calendário romano.

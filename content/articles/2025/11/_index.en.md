@@ -4,8 +4,6 @@ type: docs
 weight: 2
 prev: /articles/2025/12/
 next: /articles/2025/10/
-sidebar:
-  open: true
 ---
 
 November is the eleventh and penultimate month of the year in the Gregorian calendar, and the second-to-last month of the year, lasting 30 days. November owes its name to the Latin word novem (nine), as it was the ninth month of the Roman calendar, which began in March. November was the ninth month of Romulus' calendar c. 750 BC. November retained its name (from the Latin novem meaning "nine") when January and February were added to the Roman calendar.

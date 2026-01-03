@@ -4,8 +4,6 @@ type: docs
 weight: 1
 prev: /articles/2026/01/
 next: /articles/2025/11/
-sidebar:
-  open: true
 ---
 
 December is the twelfth and final month of the year in the Gregorian calendar, lasting 31 days. December owes its name to the Latin word *decem* (ten), as it was the tenth month of the Roman calendar, which began in March.

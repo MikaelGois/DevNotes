@@ -3,7 +3,6 @@ title: July
 type: docs
 weight: 6
 prev: articles/2025/08
-#next: articles/2025/07/1-raspberry-pi-cluster
 ---
 
 July is the seventh month of the year in the Gregorian calendar and has 31 days.

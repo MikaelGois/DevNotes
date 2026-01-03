@@ -4,8 +4,6 @@ type: docs
 weight: 1
 prev: /articles/2026/01/
 next: /articles/2025/11/
-sidebar:
-  open: true
 ---
 
 Dezembro é o décimo segundo e último mês do ano no calendário gregoriano, tendo a duração de 31 dias. Dezembro deve o seu nome à palavra latina decem (dez), dado que era o décimo mês do calendário romano, que começava em março.

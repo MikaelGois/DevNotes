@@ -1,11 +1,8 @@
 ---
 title: 2025
 type: docs
-weight: 1
-# prev: articles/08/
-# next: 07/
-sidebar:
-  open: true
+weight: 2
+prev: /articles/2026/
 ---
 
 ## Welcome to 2025!
