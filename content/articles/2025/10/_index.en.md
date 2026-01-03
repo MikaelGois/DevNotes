@@ -4,8 +4,6 @@ type: docs
 weight: 3
 prev: /articles/2025/11/
 next: /articles/2025/09/
-sidebar:
-  open: true
 ---
 
 October is the tenth and third-to-last month of the year in the Gregorian calendar, lasting 31 days. October owes its name to the Latin word octo (eight), since it was the eighth month of the Roman calendar, which began in March.

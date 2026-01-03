@@ -4,8 +4,6 @@ type: docs
 weight: 3
 prev: /articles/2025/11/
 next: /articles/2025/09/
-sidebar:
-  open: true
 ---
 
 Outubro é o décimo e antepenúltimo mês do ano no calendário gregoriano, tendo a duração de 31 dias. Outubro deve o seu nome à palavra latina octo (oito), dado que era o oitavo mês do calendário romano, que começava em março.

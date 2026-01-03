@@ -4,8 +4,6 @@ type: docs
 weight: 5
 prev: /articles/2025/09/
 next: /articles/2025/07/
-sidebar:
-  open: true
 ---
 
 O mês de Agosto é o oitavo mês do ano no Calendário gregoriano, e tem uma duração de 31 dias. 

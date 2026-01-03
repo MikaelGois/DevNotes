@@ -1,11 +1,8 @@
 ---
 title: 2025
 type: docs
-weight: 1
-# prev: articles/08/
-# next: 07/
-sidebar:
-  open: true
+weight: 2
+prev: /articles/2026/
 ---
 
 ## Bem-vindos a 2025!
@@ -24,10 +21,16 @@ Há 100 anos (segundo a Wikipédia):
 
 ## Artigos publicados:
 
+### Dezembro:
+
+{{< cards cols="1" >}}
+  Não foram publicados artigos em dezembro. ¯\_(ツ)_/¯
+{{< /cards >}}
+
 ### Novembro:
 
 {{< cards cols="1" >}}
-  Nada por enquanto. =(
+    Não foram publicados artigos em novembro. ¯\_(ツ)_/¯
 {{< /cards >}}
 
 ### Outubro:
