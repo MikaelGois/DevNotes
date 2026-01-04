@@ -7,7 +7,7 @@ prev: /articles/2026/
 
 ## Bem-vindos a 2025!
 
-O ano de 2025 corresponde aos anos 4721-4722 no calendário chinês, ja que o novo ano começa em 29 de janeiro de 2025, sendo o ano da serpente e ao periodo entre 5785 e 5786 no calendário judaico, visto que o Rosh Hashaná de 2025 ocorre em setembro, iniciando o ano 5786.
+O ano de 2025 corresponde aos anos 4721-4722 no calendário chinês, já que o novo ano começa em 29 de janeiro de 2025, sendo o ano da serpente e ao periodo entre 5785 e 5786 no calendário judaico, visto que o Rosh Hashaná de 2025 ocorre em setembro, iniciando o ano 5786.
 
 
 Há 100 anos (segundo a Wikipédia):
