@@ -16,7 +16,7 @@ The year 2025 corresponds to the years 4721-4722 in the Chinese calendar, since 
 * Malcolm X is born.
 * Margaret Thatcher is born.
 * Gustav Ludwig Hertz receives the Nobel Prize in Physics in collaboration with James Franck.
-* A certain Austrian with a small mustache published the first volume of his book.
+* A certain Austrian with a small mustache publishes the first volume of his book.
 
 
 ## Published articles:
