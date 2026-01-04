@@ -10,7 +10,7 @@ sidebar:
 
 ## Bem-vindos a 2026!
 
-O ano de 2026 corresponde aos anos 4722–4723 no calendário chinês, já que o novo ano começa em 17 de fevereiro de 2026, sendo o ano do cavalo e ao periodo entre 5786 e 5787 no calendário judaico, visto que o Rosh Hashaná de 2026 ocorre em setembro, iniciando o ano 5787.
+O ano de 2026 corresponde aos anos 4722–4723 no calendário chinês, já que o novo ano começa em 17 de fevereiro de 2026, sendo o ano do cavalo e ao período entre 5786 e 5787 no calendário judaico, visto que o Rosh Hashaná de 2026 ocorre em setembro, iniciando o ano 5787.
 
 
 Há 100 anos (segundo a Wikipédia):
