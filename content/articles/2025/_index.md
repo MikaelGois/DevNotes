@@ -7,16 +7,16 @@ prev: /articles/2026/
 
 ## Bem-vindos a 2025!
 
-O ano de 2025 corresponde ao ano 4723 no calendário chinês, sendo o ano da serpente e ao ano 5785 no calendário judaico.
+O ano de 2025 corresponde aos anos 4721-4722 no calendário chinês, já que o novo ano começa em 29 de janeiro de 2025, sendo o ano da serpente e ao periodo entre 5785 e 5786 no calendário judaico, visto que o Rosh Hashaná de 2025 ocorre em setembro, iniciando o ano 5786.
 
 
 Há 100 anos (segundo a Wikipédia):
-* A primeira fábrica da General Motors do Brasil é inaugurada.
+* A General Motors do Brasil foi fundada.
 * É realizada a primeira edição da Corrida de São Silvestre.
 * Nasce Malcolm X.
 * Nasce Margaret Thatcher.
 * Gustav Ludwig Hertz recebe o Nobel de Física em colaboração com James Franck.
-* Um certo austríaco de bigodinho publica o primeiro capítulo do seu livro.
+* Um certo austríaco de bigodinho publica o primeiro volume do seu livro.
 
 
 ## Artigos publicados:
