@@ -10,5 +10,4 @@ Setembro é o nono e pré-antepenúltimo mês do ano no calendário gregoriano, 
 
 ## Artigos publicados:
 
-Não fui produtivo em Setembro, estava de férias da faculdade e resolvi descansar. Espero compensar isso em Outubro!
-
+Não houve publicações em setembro.

@@ -25,8 +25,26 @@ The year 2026 corresponds to the years 4722–4723 in the Chinese calendar, sinc
 
 ## Published articles:
 
+### April:
+
+{{< cards cols="1" >}}
+  There have been no publications so far.
+{{< /cards >}}
+
+### March:
+
+{{< cards cols="1" >}}
+  No articles were published in March.
+{{< /cards >}}
+
+### February:
+
+{{< cards cols="1" >}}
+  No articles were published in February.
+{{< /cards >}}
+
 ### January:
 
 {{< cards cols="1" >}}
-  Nothing yet. =(
+  No articles were published in January.
 {{< /cards >}}

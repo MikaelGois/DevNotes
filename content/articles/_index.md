@@ -5,10 +5,28 @@ type: default
 
 <h2 style="text-align: center;">&larr; <a href="2026/">2026</a> &rarr;</h2>
 
+<h3 style="text-align: center;"><a href="2026/04/">Abril</a></h3>
+
+{{< cards cols="1" >}}
+  Não houve publicações até o momento.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/03/">Março</a></h3>
+
+{{< cards cols="1" >}}
+  Não houve publicações em março.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/02/">Fevereiro</a></h3>
+
+{{< cards cols="1" >}}
+  Não houve publicações em Fevereiro.
+{{< /cards >}}
+
 <h3 style="text-align: center;"><a href="2026/01/">Janeiro</a></h3>
 
 {{< cards cols="1" >}}
-  Nada ainda. =(
+  Não houve publicações em janeiro.
 {{< /cards >}}
 
 <h2 style="text-align: center;">&larr; <a href="2025/">2025</a> &rarr;</h2>
@@ -16,25 +34,25 @@ type: default
 <h3 style="text-align: center;"><a href="2025/12/">Dezembro</a></h3>
 
 {{< cards cols="1" >}}
-  Nenhum artigo foi publicado em Dezembro. ¯\_(ツ)_/¯
+  Não houve publicações em Dezembro.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/11/">Novembro</a></h3>
 
 {{< cards cols="1" >}}
-  Nenhum artigo foi publicado em Novembro. ¯\_(ツ)_/¯
+  Não houve publicações em Novembro.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/10/">Outubro</a></h3>
 
 {{< cards cols="1" >}}
-  Nenhum artigo foi publicado em Outubro. ¯\_(ツ)_/¯
+  Não houve publicações em Outubro.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/09/">Setembro</a></h3>
 
 {{< cards cols="1" >}}
-  Nenhum artigo foi publicado em Setembro. ¯\_(ツ)_/¯
+  Não houve publicações em Setembro.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/08/">Agosto</a></h3>

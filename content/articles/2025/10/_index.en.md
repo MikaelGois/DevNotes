@@ -14,4 +14,4 @@ October always begins on the same day of the week as January, except when the ye
 
 ## Published articles:
 
-Apparently the lack of productivity wasn't just in September, as I also couldn't publish anything in October. I hope November will be better!
+No articles were published in October.

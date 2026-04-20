@@ -20,7 +20,7 @@ tanto para aprender mais sobre o modo multilíngue em um site quanto para pratic
 
 Para conferir a versão em inglês do site clique em "Português" no lado esquerdo do rodapé da página, 
 isso irá abrir um menu suspenso com os idiomas disponíveis, 
-na sequência basta selecionar a opção "English", ou clicar [aqui](https://devnotes.msglabs.site/en/).
+na sequência basta selecionar a opção "English", ou clicar [aqui](https://devnotes.msglabs.com.br/en/).
 
 
 A ideia surgiu a partir da percepção de que anotações poderiam auxiliar a fixar o entendimento dos tópicos estudados. 

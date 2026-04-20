@@ -1,9 +1,9 @@
 ---
 title: Janeiro
 type: docs
-weight: 1
-prev: /articles/2026/01/
-next: /articles/2025/11/
+weight: 4
+prev: /articles/2026/02/
+next: /articles/2025/12/
 sidebar:
   open: true
 ---
@@ -14,5 +14,5 @@ Janeiro é o primeiro mês do ano no calendário juliano e gregoriano, tendo a d
 
 ## Artigos publicados:
 
-Nada por enquanto. =(
+Não houve publicações em janeiro.
 

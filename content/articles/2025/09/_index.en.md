@@ -10,4 +10,4 @@ September is the ninth and second-to-last month of the year in the Gregorian cal
 
 ## Published articles:
 
-I wasn't productive in September; I was on vacation from university and decided to rest. I hope to make up for it in October!
+No articles were published in September.

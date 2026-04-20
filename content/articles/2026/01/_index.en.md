@@ -1,9 +1,9 @@
 ---
 title: January
 type: docs
-weight: 1
-prev: /articles/2026/01/
-next: /articles/2025/11/
+weight: 4
+prev: /articles/2026/02/
+next: /articles/2025/12/
 sidebar:
   open: true
 ---
@@ -14,4 +14,4 @@ It is on average the warmest month in most of the Southern Hemisphere, where it 
 
 ## Published articles:
 
-Nothing yet. =(
+No articles were published in January.
