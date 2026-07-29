@@ -1270,11 +1270,11 @@ Com este playbook o Ansible fica encarregado de injetar configurações crítica
 
 ## Executando o Playbook de provisionamento
 
-Com todas as configurações e arquivos no lugar, você pode iniciar o provisionamento. Como as 4 etapas rodam em alvos diferentes (`novos_nos`, `main` e `localhost`), você precisa indicar todos no parâmetro `--limit`. Dentro do diretório `/etc/ansible`:
+Com todas as configurações e arquivos no lugar, você pode iniciar o provisionamento. Como as 4 etapas rodam em alvos diferentes (`novos_nos`, `cluster` e `localhost`), você precisa indicar todos no parâmetro `--limit`. Dentro do diretório `/etc/ansible`:
 
 ```bash
 sudo ansible-playbook -i hosts.ini playbooks/provisionar_no_hadoop.yaml \
-  --limit novos_nos,localhost,main --vault-password-file .vault_pass --ask-pass
+  --limit novos_nos,localhost,cluster --vault-password-file .vault_pass --ask-pass
 ```
 
 {{% details title="Explicação das flags (Clique para expandir)" closed="true" %}}
@@ -1282,7 +1282,7 @@ sudo ansible-playbook -i hosts.ini playbooks/provisionar_no_hadoop.yaml \
 | Flag                                         | Função                                                                                                                                                                                |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `-i hosts.ini`                               | Caminho do arquivo de inventário. Mesmo estando em `ansible.cfg`, é boa prática mantê-lo explícito nos exemplos.                                                                       |
-| `--limit novos_nos,localhost,main`           | Restringe a execução aos hosts dos grupos `novos_nos` (alvos do provisionamento), `main` (atualização do `workers`) e `localhost` (registro no Zabbix). Sem isso, rodaria em todos os hosts. |
+| `--limit novos_nos,localhost,cluster`          | Restringe a execução aos hosts dos grupos `novos_nos` (alvos do provisionamento), `cluster` (atualização do `/etc/hosts` em todos os nós existentes e do `workers` na `main`) e `localhost` (registro no Zabbix). Sem isso, rodaria em todos os hosts. |
 | `--vault-password-file .vault_pass`          | Indica qual arquivo contém a senha mestre do Vault. Embora o `ansible.cfg` já a aponte via `vault_password_file`, deixar explícito aqui ajuda em execuções com Vault alternativo.       |
 | `--ask-pass`                                 | Solicita a senha SSH do usuário `hadoop` para que a Etapa 1 (bootstrap da chave) consiga de fato copiar a chave. Após o bootstrap, as etapas seguintes usam a chave SSH e a senha de `sudo` (do Vault). |
 
@@ -1291,7 +1291,7 @@ sudo ansible-playbook -i hosts.ini playbooks/provisionar_no_hadoop.yaml \
 > [!NOTE]
 > Se você já configurou o `ansible.cfg` com `vault_password_file = .vault_pass` e não precisa de `-i hosts.ini` explícito, o comando mínimo fica:
 > ```bash
-> sudo ansible-playbook playbooks/provisionar_no_hadoop.yaml --limit novos_nos,localhost,main --ask-pass
+> sudo ansible-playbook playbooks/provisionar_no_hadoop.yaml --limit novos_nos,localhost,cluster --ask-pass
 > ```
 
 ### Retomando a execução a partir de uma tarefa específica
@@ -1300,7 +1300,7 @@ Se o playbook falhar ou for interrompido em algum ponto — ou se o nó já poss
 
 ```bash
 sudo ansible-playbook -i hosts.ini playbooks/provisionar_no_hadoop.yaml \
-  --limit novos_nos,localhost,main --vault-password-file .vault_pass \
+  --limit novos_nos,localhost,cluster --vault-password-file .vault_pass \
   --start-at-task "Instalação e Configuração do Hadoop"
 ```
 
@@ -1312,7 +1312,7 @@ Para maior controle, você pode marcar tarefas ou *blocks* inteiros com tags no 
 
 ```bash
 sudo ansible-playbook -i hosts.ini playbooks/provisionar_no_hadoop.yaml \
-  --limit novos_nos,localhost,main --vault-password-file .vault_pass \
+  --limit novos_nos,localhost,cluster --vault-password-file .vault_pass \
   --tags hadoop
 ```
 
@@ -1322,7 +1322,7 @@ Para comparação, em um cenário onde você ainda **não** usa o Vault (sem `an
 
 ```bash
 sudo ansible-playbook -i hosts.ini playbooks/provisionar_no_hadoop.yaml \
-  --limit novos_nos,localhost,main --ask-pass -K
+  --limit novos_nos,localhost,cluster --ask-pass -K
 ```
 
 | Cenário                                                            | Comando                                                                                                                                                                  |
@@ -1337,7 +1337,7 @@ Mesmo com o `--limit` apontando para os três grupos corretos, você pode querer
 
 ```bash
 sudo ansible-playbook -i hosts.ini playbooks/provisionar_no_hadoop.yaml \
-  --limit node2,localhost,main --vault-password-file .vault_pass --ask-pass
+  --limit node2,localhost,cluster --vault-password-file .vault_pass --ask-pass
 ```
 
 É possivel também combinar esses parâmetros de controle de execução (`--limit`, `--start-at-task` e `--tags`), permitindo que você execute apenas as partes necessárias, retome a execução a partir de um ponto específico ou execute a tarefa para um grupo específico de hosts, ou ainda uma combinação de tudo isso, o que pode economizar tempo e recursos, especialmente em playbooks mais longos ou complexos.
