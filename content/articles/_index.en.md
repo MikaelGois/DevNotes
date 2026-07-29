@@ -5,10 +5,28 @@ type: default
 
 <h2 style="text-align: center;">&larr; <a href="2026/">2026</a> &rarr;</h2>
 
-<h3 style="text-align: center;"><a href="2026/01/">January</a></h3>
+<h3 style="text-align: center;"><a href="2026/07/">July</a></h3>
 
 {{< cards cols="1" >}}
-  There have been no publications so far.
+  {{< card link="https://devnotes.msglabs.com.br/articles/2026/07/1-ansible/" title="Automating server configuration with Ansible (portuguese only)" tag="Automation" tagColor="blue" >}}
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/06/">June</a></h3>
+
+{{< cards cols="1" >}}
+  No articles were published in June.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/05/">May</a></h3>
+
+{{< cards cols="1" >}}
+  No articles were published in May.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/04/">April</a></h3>
+
+{{< cards cols="1" >}}
+  No articles were published in April.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2026/03/">March</a></h3>

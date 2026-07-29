@@ -1,0 +1,6 @@
+/* Sobrescreve a largura máxima padrão do container principal do Hextra */
+.hx-max-w-screen-xl {
+  /* O valor original é 1280px.
+     Aumente para o valor que desejar. 1536px é um bom começo. */
+  max-width: 1330px;
+}

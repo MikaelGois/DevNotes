@@ -1,11 +1,9 @@
 ---
 title: March
 type: docs
-weight: 2
+weight: 5
 prev: /articles/2026/04/
 next: /articles/2026/02/
-sidebar:
-  open: true
 ---
 
 March is the third month of the year in the Julian and Gregorian calendars, lasting 31 days. March owes its name to the Latin word *Martius*, dedicated to Mars, the Roman god of war. Julius Caesar established that the year should begin on the first new moon after the winter solstice, which in the Northern Hemisphere was December 21st, starting in the Roman year 709 (45 BC). At that time, the beginning of the year occurred eight days after the solstice. Later, the beginning of the year was changed to eleven days after the solstice.

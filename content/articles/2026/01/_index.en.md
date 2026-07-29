@@ -1,11 +1,9 @@
 ---
 title: January
 type: docs
-weight: 4
+weight: 7
 prev: /articles/2026/02/
 next: /articles/2025/12/
-sidebar:
-  open: true
 ---
 
 January is the first month of the year in the Julian and Gregorian calendars, lasting 31 days. January owes its name to the Latin word *Ianuarius*, the eleventh month of Numa Pompilius' calendar, which was a tribute to Janus, the Roman god of beginnings, who had two faces, one looking back to the past and the other forward to the future. Julius Caesar established that the year should begin on the first new moon after the winter solstice, which in the Northern Hemisphere was December 21st, starting in the Roman year 709 (45 BC). At that time, the beginning of the year occurred eight days after the solstice. Later, the beginning of the year was changed to eleven days after the solstice.
