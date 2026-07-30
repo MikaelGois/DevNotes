@@ -708,8 +708,11 @@ O playbook `provisionar_no_hadoop.yaml` é dividido em 4 etapas (*plays*) indepe
 | ------- | ------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | ETAPA 1 | `novos_nos`  | Bootstrap da chave SSH — copia a chave pública do mestre para o novo nó usando senha (uma única vez).                   |
 | ETAPA 2 | `novos_nos`  | Provisionamento completo do nó (com `become: true`) — hostname, NTP, Java, Hadoop, swap, Zabbix Agent e reboot. **(Zabbix Agent e reboot são opcionais)** |
-| ETAPA 3 | `main`       | Atualiza o arquivo `workers` na máquina principal para que o mestre reconheça o novo DataNode.                            |
+| ETAPA 3 | `cluster`     | Atualiza o `/etc/hosts` de todos os nós já existentes (`main` + `nodes`) com o IP/hostname do novo nó, e o arquivo `workers` apenas na `main` para que o mestre reconheça o novo DataNode. |
 | ETAPA 4 | `localhost`  | Registra o novo nó no Zabbix via API REST, sem precisar de SSH até o servidor de monitoração. **(opcional)**                           |
+
+> [!WARNING]
+> **Ao adicionar novos nós ao cluster, pode ser necessário executar `hdfs namenode -format` novamente no mestre.** Esse comando apaga os metadados existentes do NameNode, o que significa que **todos os dados do HDFS serão perdidos** — o cluster volta ao estado "vazio". Antes de formatar, é preciso **limpar as pastas de dados** tanto do NameNode (no mestre) quanto dos DataNodes (em cada nó), definidas em `hdfs-site.xml` pelas propriedades `dfs.namenode.name.dir` e `dfs.datanode.data.dir`. Em laboratório isso costuma ser aceitável; em produção, avalie o impacto e faça *backup* antes de prosseguir.
 
 Para facilitar o entendimento, vamos apresentar cada etapa separadamente, com explicações sobre os blocos. Você pode criar o arquivo do playbook com o seguinte comando e depois juntar todos os trechos abaixo na mesma ordem:
 
