@@ -151,7 +151,7 @@ inventory = hosts.ini
 host_key_checking = False
 vault_password_file = .vault_pass
 remote_user = hadoop
-private_key_file = ~/.ssh/ansible
+private_key_file = /home/backoffice/.ssh/ansible
 ```
 
 {{% details title="Explicação das diretivas (Clique para expandir)" closed="true" %}}
@@ -162,9 +162,12 @@ private_key_file = ~/.ssh/ansible
 | `host_key_checking`   | Quando `False`, o Ansible não pergunta se confia na chave SSH do host remoto no primeiro acesso — essencial para automação desassistida.                                                                              |
 | `vault_password_file` | Caminho do arquivo com a senha mestre do Vault, lido automaticamente para criptografar/descriptografar variáveis — dispensa digitar `--vault-password-file .vault_pass` em cada comando.                               |
 | `remote_user`         | Usuário SSH usado para se conectar aos nós geridos (neste projeto, `hadoop`).                                                                                                                                         |
-| `private_key_file`    | Caminho da chave privada SSH usada na autenticação por chave após o bootstrap ser concluído.                                                                                                                          |
+| `private_key_file`    | Caminho absoluto da chave privada SSH usada na autenticação por chave após o bootstrap ser concluído. Usamos o caminho absoluto `/home/backoffice/.ssh/ansible` (e não `~/.ssh/ansible`) porque o `~` expande para o *home* do usuário que executa o comando — ao rodar `ansible-playbook` com `sudo`, o `~` vira `/root` e a chave não é encontrada. |
 
 {{% /details %}}
+
+> [!WARNING]
+> O caminho da `private_key_file` deve ser **absoluto** (`/home/backoffice/.ssh/ansible`), não relativo com `~`. O til (`~`) expande para o *home* do usuário que executa o comando: ao rodar `ansible-playbook` com `sudo`, o `~` vira `/root/.ssh/ansible` — e a chave não existe lá, gerando o erro `no such identity: /root/.ssh/ansible`. Com o caminho absoluto, o Ansible encontra a chave independentemente de executar com ou sem `sudo`.
 
 > [!NOTE]
 > O arquivo `ansible.cfg` instalado pelo pacote oficial (ou gerado por `ansible-config init`) vem cheio de diretivas comentadas como documentação de referência. Você precisa apenas garantir que as diretivas acima estejam descomentadas em `[defaults]`; o restante pode ser mantido como referência ou removido conforme preferir.
@@ -305,9 +308,6 @@ Adicione o seguinte conteúdo:
 # Arquivo de origem com os dados dos hosts (hostname senha)
 ARQUIVO_SENHAS="hosts-pass.yaml"
 
-# Arquivo com a senha do Ansible Vault
-VAULT_PASS_FILE=".vault_pass"
-
 # Verifica se o arquivo de senhas existe
 if [ ! -f "$ARQUIVO_SENHAS" ]; then
     echo "Erro: O arquivo '$ARQUIVO_SENHAS' não foi encontrado."
@@ -329,8 +329,12 @@ while read -r hostname password; do
 
     # Cria o conteúdo YAML com a senha de sudo do host
     # e o criptografa usando ansible-vault, lendo do stdin.
+    # Não passamos --vault-password-file aqui: o ansible.cfg já define
+    # vault_password_file = .vault_pass, e passar a flag explicitamente
+    # faria o ansible-vault enxergar dois vault-ids "default" (um do
+    # ansible.cfg, outro da flag) e falhar com "default,default".
     printf -- 'ansible_become_password: "%s"\n' "$password" | \
-    ansible-vault encrypt --vault-password-file "$VAULT_PASS_FILE" --output "$output_file"
+    ansible-vault encrypt --output "$output_file"
 
 done < "$ARQUIVO_SENHAS"
 
@@ -362,11 +366,18 @@ cd /etc/ansible && sudo ./mk-host-vars.sh
 
 Ao final, cada host terá um arquivo `/etc/ansible/host_vars/<host>.yaml` criptografado. Quando o Ansible se conectar a esse host, ele usará o arquivo correspondente para obter a senha de `sudo` automaticamente, viabilizando o provisionamento de forma automatizada.
 
+> [!IMPORTANT]
+> Como o script foi executado com `sudo`, os arquivos `host_vars/*.yaml` gerados ficarão pertencentes ao usuário `root`. Se você pretende executar `ansible-playbook` **sem** `sudo` (aproveitando que a `private_key_file` agora usa caminho absoluto), ajuste o dono desses arquivos para o seu usuário, caso contrário o Ansible não conseguirá lê-los:
+> ```bash
+> sudo chown -R backoffice:backoffice /etc/ansible/host_vars/
+> ```
+> Se você sempre executar `ansible-playbook` com `sudo`, pode ignorar este passo — o `root` já tem acesso aos arquivos.
+
 > [!NOTE]
 > É necessário gerar esses arquivos para **todas** as máquinas do cluster, incluindo a máquina main, mesmo que ela já esteja configurada, para garantir que o Ansible tenha as credenciais necessárias para se conectar a todas as máquinas de forma automatizada.
 
 > [!NOTE]
-> Não precisamos especificar o caminho do arquivo de senha do Vault no script nem nos comandos `ansible-playbook`, porque o `ansible.cfg` já indica o caminho do arquivo de senha mestre com `vault_password_file = .vault_pass`, então o Ansible lê automáticamente a senha. No entanto, no script `mk-host-vars.sh`, passamos `--vault-password-file "$VAULT_PASS_FILE"` explicitamente por uma questão de robustez — o `ansible-vault encrypt` é uma ferramenta CLI separada que nem sempre herda as configurações do `ansible.cfg`.
+> Não precisamos especificar o caminho do arquivo de senha do Vault no script nem nos comandos `ansible-playbook`, porque o `ansible.cfg` já indica o caminho do arquivo de senha mestre com `vault_password_file = .vault_pass`, então o Ansible lê automáticamente a senha. O `ansible-vault encrypt` **herda** essa configuração do `ansible.cfg` — por isso o script não passa `--vault-password-file` explicitamente. Se passássemos a flag, o `ansible-vault` enxergaria dois vault-ids `default` (um do `ansible.cfg`, outro da flag) e abortaria com o erro `The vault-ids default,default are available to encrypt`.
 
 
 
@@ -397,9 +408,9 @@ Você pode utilizar os comandos abaixo para copiar os arquivos do nó pré-confi
 
 ```bash
 sudo scp hadoop@192.168.0.10:/home/hadoop/.ssh/id_rsa.pub /etc/ansible/files-to-send/
-sudo cp ~/.ssh/ansible.pub /etc/ansible/files-to-send/
+sudo cp /home/backoffice/.ssh/ansible.pub /etc/ansible/files-to-send/
 sudo scp hadoop@192.168.0.11:/home/hadoop/hadoop-3.3.6.tar.gz /etc/ansible/files-to-send/
-sudo scp -r hadoop@192.168.0.11:/usr/local/hadoop/etc/hadoop /etc/ansible/files-to-send/hadoop-files
+sudo scp -r hadoop@192.168.0.11:/usr/local/hadoop/etc/hadoop/* /etc/ansible/files-to-send/hadoop-files/
 sudo scp hadoop@192.168.0.11:/home/hadoop/.bashrc /etc/ansible/files-to-send/
 ```
 
@@ -444,7 +455,7 @@ Acesse ou crie o arquivo na pasta:
 sudo nano 01-network.yaml
 ```
 
-As configurações de rede devem seguir o formato abaixo, onde você deve substituir as informações de acordo com a sua rede e interfaces. O backoffice precisa de duas interfaces de rede: uma conectada à rede interna do cluster (com IP estático, `enp0s3` no exemplo) e outra conectada a uma rede com acesso à internet (via DHCP, `enp0s8` no exemplo). A interface com internet pode ser tanto uma interface cabeada (LAN) quanto uma interface Wi-Fi — ajuste o nome e o bloco correspondente (em `ethernets:` para cabeada, ou em `wifis:` para Wi-Fi) conforme o seu hardware:
+As configurações de rede devem seguir o formato abaixo, onde você deve substituir as informações de acordo com a sua rede e interfaces. O backoffice precisa de duas interfaces de rede no nosso caso, visto que também servirá como gateway, será uma conectada à rede interna do cluster (com IP estático, `enp0s3` no exemplo) e outra conectada a uma rede com acesso à internet (via DHCP, `enp0s8` no exemplo). A interface com internet pode ser tanto uma interface cabeada (LAN) quanto uma interface Wi-Fi — basta ajustar o nome da interface (ex.: `wlan0` no lugar de `enp0s8`) dentro do bloco `ethernets:` conforme o seu hardware:
 
 ```yaml {filename="01-network.yaml"}
 network:
@@ -463,21 +474,18 @@ network:
                     - 8.8.8.8
                     - 8.8.4.4
         # Interface conectada à rede com acesso à internet (DHCP)
-        # Mude o nome (enp0s8) pelo da sua interface real. Se for Wi-Fi,
-        # mova este bloco para a seção 'wifis:' e adicione 'access-points:'.
+        # Mude o nome (enp0s8) pelo da sua interface real (ex.: wlan0 para Wi-Fi).
         enp0s8:
             dhcp4: true
 # RESPEITE A INDENTAÇÃO!
 # 'enp0s3': interface conectada à rede interna do cluster. Substitua pelo nome real.
-# 'enp0s8': interface conectada à rede com internet. Substitua pelo nome real.
-#          Se for Wi-Fi, mova a configuração para o bloco 'wifis:' e adicione 'access-points:' com a senha da rede.
+# 'enp0s8': interface conectada à rede com internet. Substitua pelo nome real (ex.: wlan0 para Wi-Fi).
 # 'addresses: 192.168.0.1/24' Define o endereço IP do backoffice na rede do cluster. É comum usar o .1 para o gateway.
 # 'nameservers: search:' Define domínios de busca. Pode ser outro domínio, ex.: lab.local.
 # 'nameservers: addresses:' Define endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
 ```
 
 > [!NOTE]
-> O bloco `wifis:` é específico do Netplan para interfaces Wi-Fi e exige o `networkd` ou `NetworkManager` com suporte a Wi-Fi. Se a sua interface com internet for Wi-Fi, mova a configuração da `enp0s8` de `ethernets:` para um bloco `wifis:` e adicione a seção `access-points:` com o nome e a senha da rede. Caso a sua interface Wi-Fi já esteja sendo gerida por outro mecanismo (ex.: NetworkManager via GUI), basta omitir a configuração dela neste arquivo e manter apenas a interface interna em `ethernets:`.
 > Caso decida utilizar o arquivo `50-cloud-init.yaml` é necessário desativar o **cloud init** conforme instruido nos comentários do início do arquivo.
 > Você pode configurar outras faixas de IP, porém as máquinas só irão conseguir se comunicar se estiverem na mesma rede.
 
@@ -664,20 +672,20 @@ Insira o seguinte conteúdo:
 
 {{% /details %}}
 
-Rode esse playbook pela primeira vez para estabelecer a sincronia com os hardwares já presentes (como o `main` e o `node1`):
+Rode esse playbook pela primeira vez para estabelecer a sincronia com os hardwares já presentes (como o `main` e o `node1`). Como a Etapa 1 roda em `localhost` e a Etapa 2 roda em `cluster`, limite a execução a esses dois grupos — não faz sentido rodar em `novos_nos`, que ainda não foram provisionados:
 
 ```bash
-cd /etc/ansible && sudo ansible-playbook -i hosts.ini playbooks/sincronizar_tempo.yaml
+cd /etc/ansible && sudo ansible-playbook --limit cluster,localhost playbooks/sincronizar_tempo.yaml
 ```
 
 > [!TIP]
 > Se a sua rede for diferente de `192.168.0.0/24`, sobrescreva a variável na linha de comando sem editar o playbook:
 > ```bash
-> sudo ansible-playbook -i hosts.ini playbooks/sincronizar_tempo.yaml -e "cluster_network=10.0.0.0/24"
+> sudo ansible-playbook --limit cluster,localhost playbooks/sincronizar_tempo.yaml -e "cluster_network=10.0.0.0/24"
 > ```
 
 > [!NOTE]
-> Existe também um playbook alternativo `configure_ntp_clients.yaml` no repositório do laboratório que reescreve todo o arquivo `chrony.conf` usando um *template* Jinja2 (`templates/chrony.conf.client.j2`) em vez de editar o arquivo linha por linha. Essa abordagem é útil quando se quer um arquivo de configuração "limpo" e gerenciado inteiramente pelo Ansible, mas consome um pouco mais de cuidado para não sobrescrever configurações locais pré-existentes.
+> Alternativamente, em vez de editar o `chrony.conf` linha por linha, é possível reescrever todo o arquivo usando um *template* Jinja2. Essa abordagem é útil quando se quer um arquivo de configuração "limpo" e gerenciado inteiramente pelo Ansible, mas consome um pouco mais de cuidado para não sobrescrever configurações locais pré-existentes.
 
 
 
@@ -685,6 +693,9 @@ cd /etc/ansible && sudo ansible-playbook -i hosts.ini playbooks/sincronizar_temp
 ## Gerindo o Cluster com Ansible
 
 Agora que o ambiente está preparado e já temos os arquivos base do Hadoop copiados para `files-to-send`, vamos criar o playbook principal, chamado `provisionar_no_hadoop.yaml`. Ele será responsável por transformar uma máquina "nua" (apenas com sistema operacional, rede e SSH) em um DataNode completo do cluster, incluindo o registro automático no Zabbix.
+
+> [!NOTE]
+> **Pré-requisitos do nó:** antes de executar o playbook, cada nó deve ter (1) IP estático configurado, (2) SSH instalado e acessível, e (3) o cache de pacotes atualizado (`sudo apt update`). Esses três pontos garantem que o Ansible consiga conectar e instalar os pacotes (chrony, Java, etc.) sem erros de cache desatualizado (ex.: `404 Not Found`).
 
 > [!IMPORTANT]
 > **Lembre-se: o playbook abaixo reflete a implementação executada por mim em laboratório.** Cada um dos grandes blocos que compõem o playbook (bootstrap da chave SSH, definição de hostname, sincronização NTP, instalação do Java, instalação/configuração do Hadoop, configuração de *swap*, instalação do Zabbix Agent, reinicialização, atualização do mestre e registro no Zabbix via API) foi escolhido conforme as necessidades específicas do meu projeto. Eles são **independentes e adaptáveis** — sinta-se livre para **incluir, ajustar, reordenar ou remover** qualquer um deles de acordo com o que faz sentido para o seu próprio projeto. Trate este playbook como uma **referência**, não como uma receita obrigatória.
@@ -696,9 +707,9 @@ O playbook `provisionar_no_hadoop.yaml` é dividido em 4 etapas (*plays*) indepe
 | Etapa  | Alvo (hosts) | Função                                                                                                                  |
 | ------- | ------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | ETAPA 1 | `novos_nos`  | Bootstrap da chave SSH — copia a chave pública do mestre para o novo nó usando senha (uma única vez).                   |
-| ETAPA 2 | `novos_nos`  | Provisionamento completo do nó (com `become: true`) — hostname, NTP, Java, Hadoop, swap, Zabbix Agent e reboot.         |
+| ETAPA 2 | `novos_nos`  | Provisionamento completo do nó (com `become: true`) — hostname, NTP, Java, Hadoop, swap, Zabbix Agent e reboot. **(Zabbix Agent e reboot são opcionais)** |
 | ETAPA 3 | `main`       | Atualiza o arquivo `workers` na máquina principal para que o mestre reconheça o novo DataNode.                            |
-| ETAPA 4 | `localhost`  | Registra o novo nó no Zabbix via API REST, sem precisar de SSH até o servidor de monitoração.                           |
+| ETAPA 4 | `localhost`  | Registra o novo nó no Zabbix via API REST, sem precisar de SSH até o servidor de monitoração. **(opcional)**                           |
 
 Para facilitar o entendimento, vamos apresentar cada etapa separadamente, com explicações sobre os blocos. Você pode criar o arquivo do playbook com o seguinte comando e depois juntar todos os trechos abaixo na mesma ordem:
 
@@ -746,12 +757,15 @@ A primeira etapa do playbook usa a senha (provida pelo Vault) apenas uma única 
 {{% /details %}}
 
 > [!NOTE]
-> No projeto do laboratório, enviamos duas chaves públicas para o novo nó: a do mestre (`/etc/ansible/files-to-send/id_rsa.pub`), copiada previamente da máquina `main` via `scp`, e a do backoffice (`/etc/ansible/files-to-send/ansible.pub`), copiada localmente no backoffice via `cp` — ambas conforme a seção [3 - Pré-configuração do Cluster Hadoop](#3---pré-configuração-do-cluster-hadoop). A chave do backoffice é essencial porque o `ansible.cfg` define `private_key_file = ~/.ssh/ansible`; sem ela no `authorized_keys` do novo nó, o Ansible não conseguiria autenticar via SSH nas etapas seguintes. A chave do mestre, por sua vez, é necessária para a comunicação interna do cluster Hadoop (SSH *passwordless* entre o `main` e os *workers*). Essa escolha não é obrigatória; você pode enviar quantas chaves públicas quiser, replicando a tarefa `loop`-ando sobre uma lista de arquivos `.pub`.
+> No projeto do laboratório, enviamos duas chaves públicas para o novo nó: a do mestre (`/etc/ansible/files-to-send/id_rsa.pub`), copiada previamente da máquina `main` via `scp`, e a do backoffice (`/etc/ansible/files-to-send/ansible.pub`), copiada localmente no backoffice via `cp` — ambas conforme a seção [3 - Pré-configuração do Cluster Hadoop](#3---pré-configuração-do-cluster-hadoop). A chave do backoffice é essencial porque o `ansible.cfg` define `private_key_file = /home/backoffice/.ssh/ansible`; sem ela no `authorized_keys` do novo nó, o Ansible não conseguiria autenticar via SSH nas etapas seguintes. A chave do mestre, por sua vez, é necessária para a comunicação interna do cluster Hadoop (SSH *passwordless* entre o `main` e os *workers*). Essa escolha não é obrigatória; você pode enviar quantas chaves públicas quiser, replicando a tarefa `loop`-ando sobre uma lista de arquivos `.pub`.
 
 
 
 
 ### 3 - ETAPA 2: Cabeçalho, variáveis, hostname e `/etc/hosts` do nó
+
+> [!NOTE]
+> **Esta etapa é opcional.** A instalação do Zabbix Agent e o registro do nó no Zabbix via API (ETAPA 4) são etapas opcionais — se você não utiliza Zabbix, pode remover os blocos correspondentes do playbook sem afetar o provisionamento do Hadoop.
 
 A Etapa 2 é o coração do playbook. Todas as operações de instalação e configuração do novo nó ocorrem aqui, em sequência. Inicie pela definição das variáveis, coleta de fatos do `localhost` (necessária para resolver o IP do backoffice como servidor NTP) e definição do hostname e do bloco de hosts:
 
@@ -781,6 +795,16 @@ A Etapa 2 é o coração do playbook. Todas as operações de instalação e con
     - name: Definir o hostname da máquina
       ansible.builtin.hostname:
         name: "{{ novo_hostname }}"
+
+    - name: Limpar o /etc/hosts antes de adicionar as entradas do cluster
+      ansible.builtin.copy:
+        dest: /etc/hosts
+        content: |
+          127.0.0.1 localhost
+          ::1 localhost
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Garantir que a linha do próprio nó exista em /etc/hosts
       ansible.builtin.lineinfile:
@@ -814,11 +838,15 @@ A Etapa 2 é o coração do playbook. Todas as operações de instalação e con
 | `delegate_to: localhost`              | Tarefa excepcional — ela é "deslocada" (delegada) para rodar na própria máquina de controle Ansible (não no nó remoto), coletando seus fatos de rede. Sem ela, as etapas de NTP não teriam como saber o IP do backoffice. |
 | `delegate_facts: true`                | Permite que os fatos coletados no `localhost` fiquem disponíveis para as demais tarefas da *play* via `hostvars['localhost']`.                                                       |
 | `ansible.builtin.hostname`             | Define o *system hostname* persistente do novo nó usando a variável `novo_hostname` declarada no `hosts.ini`.                                                                          |
+| `ansible.builtin.copy` (limpeza)       | **Sobrescreve** o `/etc/hosts` inteiro com apenas as entradas `localhost` (`127.0.0.1` e `::1`) antes de inserir as linhas do cluster — garante que o arquivo esteja limpo, sem resquícios de configurações anteriores do nó. |
 | `ansible.builtin.lineinfile`           | Garante que cada linha de host exista em `/etc/hosts` de forma idempotente (`state: present`) — adiciona a linha apenas se ela ainda não estiver presente.                              |
 | `loop: "{{ groups['nodes'] }}"`        | Itera sobre todos os nós já existentes no grupo `[nodes]` do inventário, adicionando suas respectivas entradas (`IP hostname`) ao `/etc/hosts` do novo nó.                              |
 | `hostvars[item]['ansible_host']`       | Recupera o IP (`ansible_host`) de cada nó diretamente do `hosts.ini` — não é preciso codificar IPs no playbook, basta manter o inventário atualizado.                                  |
 
 {{% /details %}}
+
+> [!NOTE]
+> A tarefa `Limpar o /etc/hosts` sobrescreve o arquivo inteiro com apenas as entradas `localhost` (`127.0.0.1` e `::1`). Isso é necessário porque, ao provisionar um novo nó (por exemplo `node3`), o `/etc/hosts` pode conter entradas antigas ou resquícios de configurações anteriores que conflitam com as entradas do cluster. Após a limpeza, as tarefas `lineinfile` seguintes reescrevem o arquivo com as entradas corretas — o próprio nó, o nó mestre (`main`) e todos os nós já existentes.
 
 > [!TIP]
 > Como os IPs são lidos diretamente do `hosts.ini` via `hostvars[item]['ansible_host']`, não é preciso ajustar nenhum `range` ou soma no playbook — basta manter o inventário atualizado. Quando um novo nó for provisionado, mova-o do grupo `[novos_nos]` para `[nodes]` e execute o playbook novamente para que todos os nós atualizem seus `/etc/hosts`.
@@ -834,6 +862,10 @@ Logo após o hostname ser definido, sincronizamos o relógio do nó com o backof
         - name: Definir o fuso horário para America/Sao_Paulo (UTC-3)
           timezone:
             name: America/Sao_Paulo
+        - name: Tentar atualizar o cache do apt (ignora erros)
+          ansible.builtin.apt:
+            update_cache: yes
+          ignore_errors: true
         - name: Instalar chrony
           ansible.builtin.package:
             name: chrony
@@ -882,7 +914,7 @@ Logo após o hostname ser definido, sincronizamos o relógio do nó com o backof
 | `block:`                              | Agrupa tarefas relacionadas numa única unidade lógica, melhorando a leitura do playbook.                                                                                                |
 | `chronyc waitsync 30 0.5`             | Comando do *chrony* que bloqueia até a sincronização ocorrer (até 30 amostras, com precisão de 0.5 segundos). Evita outras etapas rodarem com relógio dessincronizado.            |
 | `changed_when: false`                 | Como essa tarefa é apenas uma leitura (*wait*), marcá-la como *changed=false* evita ruído na saída do Ansible (a tarefa fica sempre "ok" em vez de "changed").                       |
-| `ignore_errors: true`                 | Permite que o `apt update_cache` falhe (ex.: internet instável) sem abortar toda a instalação — útil quando o cache local já é suficiente.                                            |
+| `ignore_errors: true`                 | Permite que o `apt update_cache` falhe (ex.: internet instável) sem abortar toda a instalação — útil quando o cache local já é suficiente. Aplicado tanto antes de instalar o `chrony` quanto antes do OpenJDK 11, para evitar erros de cache `apt` desatualizado (ex.: `404 Not Found` ao buscar pacotes como `tzdata`).  |
 | `ansible.builtin.apt`                  | Módulo específico para Debian/Ubuntu. Para provisões em RedHat/CentOS, troque por `ansible.builtin.dnf` ou use `ansible.builtin.package`.                                             |
 
 {{% /details %}}
@@ -972,7 +1004,7 @@ Neste bloco, o pacote `.tar.gz` do Hadoop (que está em `files-to-send/`) é env
 {{% /details %}}
 
 > [!WARNING]
-> O caminho `{{ hadoop_install_dir }}/data/datanode` precisa estar em consonância com `dfs.datanode.data.dir` no `hdfs-site.xml` em `hadoop-files/`. Se você configurar o diretório de dados em outro lugar (por exemplo, em um cartão SD montado em `/mnt/hdfs-sdcard` via o playbook `preparar_disco_sd.yaml`), ajuste este bloco — ou remova-o — conforme a sua realidade.
+> O caminho `{{ hadoop_install_dir }}/data/datanode` precisa estar em consonância com `dfs.datanode.data.dir` no `hdfs-site.xml` em `hadoop-files/`. Se você configurar o diretório de dados em outro lugar (por exemplo, em um cartão SD montado em `/mnt/hdfs-sdcard`), ajuste este bloco — ou remova-o — conforme a sua realidade.
 
 
 ### 6 - ETAPA 2 (cont.): Swap de 1G (opcional)
@@ -1061,7 +1093,7 @@ Neste bloco, o `zabbix-agent` é instalado e configurado em modo **ativo** — o
 {{% /details %}}
 
 > [!WARNING]
-> A instalação do `zabbix-agent` via `ansible.builtin.package` assume que o pacote já está disponível nos repositórios do nó. Em Debian/Ubuntu sem Internet ao cluster, é preciso configurar o repositório do Zabbix previamente em cada nó (ou enviar um `.deb` pré-baixado no `files-to-send/` e instalá-lo via `ansible.builtin.apt` com `deb:`). O playbook `instalar_zabbix_agent.yaml`, apresentado mais adiante, mostra uma versão mais robusta que lida com Debian e RedHat — incluindo a configuração do repositório.
+> A instalação do `zabbix-agent` via `ansible.builtin.package` assume que o pacote já está disponível nos repositórios do nó. Em distribuições como **Debian/Ubuntu** "puros", pode ser necessário adicionar o repositório oficial do Zabbix previamente em cada nó (ou enviar um `.deb` pré-baixado no `files-to-send/` e instalá-lo via `ansible.builtin.apt` com `deb:`).
 
 
 ### 8 - ETAPA 3: Atualizar o arquivo `workers` na máquina main
@@ -1129,6 +1161,9 @@ Agora que o novo nó está de fato provisionado, precisamos avisar o restante do
 
 
 ### 9 - ETAPA 4: Registrar o novo nó no Zabbix via API
+
+> [!NOTE]
+> **Esta etapa é opcional.** O registro do nó no Zabbix via API só é necessário se você utiliza o Zabbix como sistema de monitoramento. Caso contrário, pode remover esta etapa inteira do playbook sem impacto no provisionamento do Hadoop.
 
 Por fim, registramos o novo nó automaticamente no Zabbix via sua API JSON-RPC. Esta etapa roda em `localhost` (no próprio backoffice, onde o servidor Zabbix está hospedado) e usa variáveis criptografadas em `zabbix_secrets.yaml` para a senha da API:
 
@@ -1434,47 +1469,4 @@ sudo ansible-playbook -i hosts.ini playbooks/executar_comando.yaml \
 
 > [!WARNING]
 > Cuidado com comandos de escrita/destrutivos. O `become: "{{ sudo | default(false) | bool }}"` protege contra escalonamento acidental, mas `rm -rf` ou `dd` com `sudo=true` são irrecuperáveis. Teste sempre em um único host com `--limit` antes de rodar contra o `cluster` inteiro.
-
-
-### 2 - Outros playbooks (visão geral)
-
-Os demais playbooks no diretório `playbooks/` do laboratório atendem necessidades específicas do hardware e do projeto; não são necessários em todos os cenários:
-
-| Playbook                             | Função                                                                                                                                                                  | Quando é útil                                                                                       |
-| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `bootstrap.yaml`                     | Bootstrap isolado da chave SSH — mesma função da Etapa 1 de `provisionar_no_hadoop.yaml`, mas como playbook único.                                                       | Raramente — a Etapa 1 do `provisionar_no_hadoop.yaml` já cobre este caso. Útil quando se quer apenas replicar a chave do mestre a nós já provisionados anteriormente. |
-| `copiar_arquivos.yaml`                | Distribui arquivos/diretórios do backoffice para um ou mais hosts do cluster, com `origin_dir`/`dest_dir` parametrizáveis via `-e` e suporte opcional a `sudo`.        | Útil para enviar configurações ad-hoc, *patches* ou novos arquivos de configuração (`hdfs-site.xml`, `core-site.xml`, etc.) sem reescrever o playbook de provisionamento. |
-| `instalar_zabbix_agent.yaml`          | Instala e configura o Zabbix Agent de forma idempotente, com suporte a Debian/Ubuntu (via `apt`) e RedHat/CentOS (via `dnf` + repositório oficial do Zabbix 6.0).          | Útil quando se quer adicionar monitoração a hosts que já estavam provisionados antes do Zabbix existir, ou em uma rede que ainda não tem o pacote `zabbix-agent` disponível por padrão. |
-| `preparar_disco_sd.yaml`              | Formata, monta em `/mnt/hdfs-sdcard` e define permissões de um disco/cartão SD adicional para uso como diretório de dados do HDFS.                                        | Específico a nós com discos secundários (cartões SD em TV-Box ARM). Configure `device_path` cautelosamente — formata o dispositivo indicado. |
-| `configurar_coleta_temperatura.yaml`  | Cria um `UserParameter` do Zabbix Agent que lê a temperatura do CPU em sistemas ARM a partir de `/sys/class/thermal/thermal_zone0/temp`.                                | Específico a nós ARM (TV-Box, Raspberry Pi). Precede `garantir_include_zabbix.yaml` e `criar_template_temperatura_zabbix.yaml`. |
-| `garantir_include_zabbix.yaml`        | Garante que o `zabbix_agentd.conf` esteja incluindo arquivos de configuração personalizados do diretório `/etc/zabbix/zabbix_agentd.d/`.                                | Necessário após a execução de `configurar_coleta_temperatura.yaml` em sistemas onde o `Include=` ainda não está habilitado. |
-| `remover_userparameter_antigo.yaml`   | Remove a antiga definição de `UserParameter=system.cpu.temp` baseada no comando `sensors` do arquivo principal `zabbix_agentd.conf`.                                    | Limpeza — usado quando se está migrando da abordagem antiga (com `sensors`) para a nova (lendo direto do `sysfs`). |
-| `criar_template_temperatura_zabbix.yaml` | Cria um template "Template Linux Temperatura CPU" no Zabbix via API, contendo o item `system.cpu.temp`.                                                               | Roda uma única vez em `localhost`. Precede o uso do item `system.cpu.temp` em dashboards e alertas do Zabbix. |
-
-#### Como usá-los:
-
-Consulte o cabeçalho comentado de cada arquivo YAML para o comando exato, mas em geral o padrão é:
-
-```bash
-# copiar_arquivos.yaml — com sudo e diretórios customizados:
-sudo ansible-playbook -i hosts.ini playbooks/copiar_arquivos.yaml \
-  --limit nodes -e "origin_dir=/etc/ansible/files-to-send/hadoop-files/" \
-  -e "dest_dir=/usr/local/hadoop/etc/hadoop/" -e "sudo=true" \
-  --vault-password-file .vault_pass -K
-
-# instalar_zabbix_agent.yaml — em hosts que ainda não têm o agente:
-sudo ansible-playbook -i hosts.ini playbooks/instalar_zabbix_agent.yaml \
-  -e "zabbix_server_ip=192.168.0.1" --vault-password-file .vault_pass
-
-# preparar_disco_sd.yaml — em nós com cartão SD adicional:
-sudo ansible-playbook -i hosts.ini playbooks/preparar_disco_sd.yaml \
-  --limit node2,node3 --vault-password-file .vault_pass
-# AVISO: verifique `device_path` no playbook antes de rodar!
-
-# configurar_coleta_temperatura.yaml + garantir_include_zabbix.yaml (em ARM):
-sudo ansible-playbook -i hosts.ini playbooks/configurar_coleta_temperatura.yaml \
-  --limit cluster --vault-password-file .vault_pass
-sudo ansible-playbook -i hosts.ini playbooks/garantir_include_zabbix.yaml \
-  --limit cluster --vault-password-file .vault_pass
-```
 
