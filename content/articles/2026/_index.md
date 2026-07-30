@@ -25,8 +25,44 @@ Há 100 anos (segundo a Wikipédia):
 
 ## Artigos publicados:
 
+### Julho:
+
+{{< cards cols="1" >}}
+  {{< card link="07/1-ansible" title="Automatizando a configuração de servidores com Ansible" tag="Automação" tagColor="blue" >}}
+{{< /cards >}}
+
+### Junho:
+
+{{< cards cols="1" >}}
+  Não houve publicações em junho.
+{{< /cards >}}
+
+### Maio:
+
+{{< cards cols="1" >}}
+  Não houve publicações em maio.
+{{< /cards >}}
+
+### Abril:
+
+{{< cards cols="1" >}}
+  Não houve publicações em abril.
+{{< /cards >}}
+
+### Março:
+
+{{< cards cols="1" >}}
+  Não houve publicações em março.
+{{< /cards >}}
+
+### Fevereiro:
+
+{{< cards cols="1" >}}
+  Não houve publicações em fevereiro.
+{{< /cards >}}
+
 ### Janeiro:
 
 {{< cards cols="1" >}}
-  Nada por enquanto. =(
+  Não houve publicações em janeiro.
 {{< /cards >}}

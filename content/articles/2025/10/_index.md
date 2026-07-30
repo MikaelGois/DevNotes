@@ -14,5 +14,4 @@ Outubro começa sempre no mesmo dia da semana que o mês de janeiro, exceto quan
 
 ## Artigos publicados:
 
-Aparentemente a falta de produtividade não foi só em setembro, pois em outubro também não consegui publicar nada. Espero que novembro seja melhor!
-
+Não houve publicações em outubro.

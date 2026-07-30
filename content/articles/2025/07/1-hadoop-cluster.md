@@ -29,8 +29,6 @@ sudo apt update && sudo apt upgrade
 
 Os passos a seguir são fundamentais para o funcionamento do *cluster*:
 
-
-
 ### 1 - Instalação do Java openJDK (main/nodes):
 
 Instale o Java openJDK tanto na máquina *main* quanto nas máquinas *node*:
@@ -59,7 +57,7 @@ Descompacte o pacote:  
 tar xzf hadoop-3.3.6.tar.gz
 ```
 
-De preferência, renomeie a pasta apenas para “hadoop” e mova a pasta para `/usr/local/`, o comando a seguir realiza as duas operações:
+De preferência, renomeie a pasta apenas para “hadoop” e mova a pasta para um local que possa ser acessado facilmente, como `/` ou `/usr/local/`, o comando a seguir realiza as duas operações:
 ```bash
 sudo mv hadoop-3.3.6 /usr/local/hadoop
 ```
@@ -74,14 +72,14 @@ Acesse o script de *environment* do hadoop:
 sudo nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 ```
 
-Procure por `export JAVA_HOME`, remova o comentário e indique o caminho do Java OpenJDK:
+Procure por `export JAVA_HOME`, remova a indicação de comentário (`#`) e indique o caminho do Java OpenJDK:
 ```sh {filename="hadoop-env.sh"}
 export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
 ```
 
 > [!WARNING]
 > O nome do pacote deve corresponder com a versão da arquitetura do sistema!  
-> Para saber o nome do arquivo você pode navegar até `/usr/lib/jvm`.
+> Para saber o nome do arquivo você pode navegar até `/usr/lib/jvm` e dentro da pasta listar os diretórios com o comando `ls`.
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
@@ -113,7 +111,7 @@ Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 ### 5 - Usuário hadoop (main/nodes):
 
 > [!WARNING]
-> O passo a seguir é necessário apenas caso o seu usuário padrão não seja hadoop.
+> O passo a seguir é necessário apenas caso o seu usuário padrão não seja hadoop. Caso o usuário hadoop já exista, basta pular para o próximo passo.
 
 Adicione usuário hadoop:
 ```bash
@@ -138,8 +136,16 @@ sudo adduser hadoop sudo
 
 #### 6.1 - Habilite o SSH:
 
+Digite um dos comandos abaixo para habilitar o serviço de SSH, o comando `enable` ativa o serviço para iniciar automaticamente durante a inicialização do sistema, e o comando `start` inicia o serviço imediatamente, o `&&` permite que ambos os comandos sejam executados em sequência. O comando `enable --now` combina as duas ações, ativando o serviço para iniciar automaticamente e iniciando-o imediatamente sem a necessidade de rodar os comandos separadamente ou com o uso de `&&`.
+
 ```bash
 sudo systemctl enable ssh && sudo systemctl start ssh
+```
+
+ou 
+
+```bash
+sudo systemctl enable --now ssh
 ```
 
 #### 6.2 - Configure o IP estático (Debian):
@@ -169,6 +175,7 @@ iface enp0s3 inet static
     netmask 255.255.255.0
     gateway 192.168.0.1
     dns-nameservers 192.168.0.1 8.8.8.8
+    dns-search cluster.local
 
 # 'allow-hotplug enp0s3': pode ser 'auto enp0s3'.
 # 'iface enp0s3 inet static:' Substitua pelo nome da interface e desabilite o DHCP.
@@ -176,11 +183,12 @@ iface enp0s3 inet static
 # 'netmask 255.255.255.0': Define a máscara de sub-rede.
 # 'gateway 192.168.0.1': Define o endereço do Gateway.
 # 'dns-nameservers 192.168.0.1 8.8.8.8': Define os endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
+# 'dns-search cluster.local': Define os domínios de busca. Pode ser outro domínio, ex.: lab.local.
 ```
 
 > [!NOTE]
 > O `X` será o número da máquina. Por exemplo, `192.168.0.10/24` para a *main*/*master*.  
-> No `dns-nameservers`você pode configurar mais de um servidor DNS, como o do google: `8.8.8.8` e `1.1.1.1`, ou o IP do seu roteador caso tenha um na rede.  
+> No `dns-nameservers`você pode configurar mais de um servidor DNS, como o do google: `8.8.8.8` e `8.8.4.4`, ou o IP do seu roteador caso tenha um na rede.  
 > Você pode configurar outras faixas de IP, porém as máquinas so irão conseguir se comunicar se estiverem na mesma rede.
 
 > [!WARNING]
@@ -188,36 +196,30 @@ iface enp0s3 inet static
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
-Para configurar o serviço de resolução de nomes, acesse:  
+Aplique as novas configurações de rede:
 ```bash
-sudo nano /etc/resolv.conf
+sudo ifdown enp0s3 && sudo ifup enp0s3
 ```
 
-Insira as informações:
-```sh {filename="resolv.conf"}
-domain home.local
-search home.local
-nameserver 192.168.0.1
-nameserver 8.8.8.8
-# 'domain home.local' Define o domínio, ex.: cluster.local.
-# 'search home.local' Define os domínios de busca, ex.: cluster.local.
-# 'nameserver 192.168.0.1': Define os servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1 Um por linha!
-```
-
-Você pode aplicar as configurações reiniciando o computador ou o serviço de *network*.
+Caso não funcione, você pode aplicar as configurações reiniciando o computador ou o serviço de *network*.
 Caso esteja acessando a máquina via ssh, provavelmente irá perder a conexão e pode ter problemas para conectar com o novo IP.
-
-No meu caso, irei reiniciar a máquina:
-```bash
-sudo reboot
-```
 
 Para reiniciar o serviço:
 ```bash
 sudo systemctl restart networking
 ```
 
+Reiniciar a máquina:
+```bash
+sudo reboot
+```
+
 #### 6.3 - Configure o IP estático (Ubuntu):
+
+> [!CAUTION]
+> No nosso cenário, os testes estavam sendo realizados na faculdade, e para evitar maiores problemas, colocamos as máquinas em uma rede isolada conectadas apenas em um switch L2 simples.  
+> Dependendo da configuração, a máquina poderá perder o acesso a internet!  
+> Então, se tiver alguma configuração opcional que precise baixar pacotes da internet, como programas de monitoramento, pode ser uma boa hora para realizar essa configuração.
 
 Digite o seguinte comando para descobrir a *interface* de rede onde está configurado o IP:  
 ```bash
@@ -258,6 +260,8 @@ network:
                 - to: default
                   via: 192.168.0.1
             nameservers:
+                search:
+                    - cluster.local
                 addresses:
                     - 192.168.0.1
                     - 8.8.8.8
@@ -265,7 +269,9 @@ network:
 # 'enp0s3': Substitua pelo nome da interface, pode ser enp0s3, eth0, etc.
 # 'dhcp4: false' desabilita o DHCP.
 # 'addresses: 192.168.0.X/24' Define o endereço IP da máquina.
-# 'gateway4: 192.168.0.1' Define o endereço do Gateway.
+# 'routes: to: default' Define a rota padrão.
+# 'routes: via: 192.168.0.1' Define o endereço do Gateway.
+# 'nameservers: search:' Define os domínios de busca. Pode ser outro domínio, ex.: lab.local.
 # 'nameservers: addresses:' Define os endereços dos servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1
 ```
 
@@ -279,6 +285,11 @@ network:
 
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
+Mude as permissões do arquivo para evitar problemas de acesso:
+```bash
+sudo chmod 600 01-network.yaml
+```
+
 Aplique as novas configurações de rede:
 ```bash
 sudo netplan try
@@ -289,29 +300,6 @@ O comando acima primeiro testa a configuração e, caso as notações e as inden
 Caso deseje aplicar as modificações diretamente, sem testar, use o seguinte comando:
 ```bash
 sudo netplan apply
-```
-
-Para configurar o serviço de resolução de nomes, acesse:
-```bash
-sudo nano /etc/resolv.conf
-```
-
-Insira as informações:
-```sh {filename="resolv.conf"}
-domain home.local
-search home.local
-nameserver 192.168.0.1
-nameserver 8.8.8.8
-# 'domain home.local' ou outro domínio, ex.: cluster.local.
-# 'search home.local' ou outros servidores DNS, ex.: cluster.local.
-# 'nameserver 192.168.0.1' ou outros servidores DNS, ex.: 8.8.4.4 9.9.9.9 1.1.1.1 Um por linha!
-```
-
-Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
-
-Você pode aplicar as configurações reiniciando o serviço do `resolv.conf`:
-```bash
-sudo systemctl restart resolvconf
 ```
 
 #### 6.4 - Configurar o arquivo de host e nome de host:
@@ -349,7 +337,7 @@ sudo reboot
 
 ### 7 - Configurar acesso SSH (main):
 
-Acesse o usuário hadoop:  
+Caso o usuário `hadoop` não seja o usuário padrão e você tenha criado o usuário na etapa `5 - Usuário hadoop`, mude para o usuário `hadoop`:
 ```bash
 su - hadoop
 ```
@@ -359,7 +347,8 @@ Execute o comando a seguir para gerar uma chave ssh:
 ssh-keygen -t rsa
 ```
 
-Quando for solicitado para preencher o local onde a *key* será criada e a *passphrase*, basta ignorar clicando `ENTER`.
+> [!TIP]
+> Quando for solicitado para preencher o local onde a *key* será criada e a *passphrase*, basta ignorar clicando `ENTER`.
 
 Envie essa chave para as outras máquinas:
 ```bash
@@ -369,9 +358,8 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@X
 > [!NOTE]
 > O parâmetro “X” corresponde ao nome da máquina. Exemplo: `hadoop@node1` para enviar para a máquina `node1`.
 
-> [!NOTE]
-> É necessário enviar as chaves da *main* para todos os outros *nodes*, e dos *nodes* para os outros *nodes* e para a *main*.  
-> Na duvida, envie para as três máquinas, assim não tem chance de erro.
+> [!WARNING]
+> É necessário enviar as chaves da *main* para todos os outros *nodes*.
 
 
 
@@ -610,6 +598,9 @@ scp /usr/local/hadoop/etc/hadoop/* X:/usr/local/hadoop/etc/hadoop/
 > [!NOTE]
 > O parâmetro “X” corresponde ao nome da máquina. Exemplo: "node1:/usr/local/hadoop/etc/hadoop/" para enviar para a máquina `node1`.
 
+> [!WARNING]
+> É necessário enviar os arquivos modificados da *main* para todos os outros *nodes*.
+
 #### 8.7 - Exportação dos paths:
 
 Digite os comandos abaixo **em todas as máquinas** no usuário Hadoop para exportar os *PATH* das aplicações:
@@ -651,6 +642,7 @@ Digite o comando abaixo para carregar as variáveis de ambiente:
 ```bash
 source /etc/environment
 ```
+
 Digite o comando abaixo para realizar a formatação do HDFS:
 ```bash
 hdfs namenode -format
@@ -691,6 +683,9 @@ Caso tenha configurado o **JobHistory Server**, digite o seguinte comando para i
 mapred --daemon start historyserver
 ```
 
+> [!NOTE]
+> Caso apareça um erro "main: hadoop@main: Permission denied (publickey,password).", isso indica que o serviço de SSH não está conseguindo autenticar a máquina *main* com a chave SSH. Para corrigir, envie a chave SSH da máquina *main* para ela mesma usando o comando `ssh-copy-id`: `ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@main`
+
 Para encerrar os serviços do *cluster*, basta substituir `start` por `stop` no comando.
 
 Para verificar se o *cluster* foi inicializado corretamente, você pode digitar tanto na *main*, quanto nos *nodes*, o comando abaixo:  
@@ -714,6 +709,7 @@ Caso esteja usando o **JobHistory Server** deverá aparecer na saída do `jps` o
 #### 12.2 - Monitorando o cluster:
 
 ##### 12.2.1 - Acessando a interface web do NameNode:
+
 O comando `start-dfs`, além de inicializar o sistema de arquivos do Hadoop, também irá inicializar uma interface web com as informações sobre o *daemon* **NameNode**, nela você verá informações sobre o *cluster* e o *HDFS*.
 
 Para acessar, digite no navegador: `ip_do_nameNode:9870` ou `main:9870`.
@@ -721,6 +717,7 @@ Para acessar, digite no navegador: `ip_do_nameNode:9870` ou `main:9870`.
 Na aba Datanodes, você verá os *nodes* que estão conectados ao *cluster*.
 
 ##### 12.2.2 - Acessando a interface web do ResourceManager:
+
 O comando `start-yarn`, além de inicializar os serviços do *cluster*, também irá inicializar uma interface web com as informações sobre o *daemon* **ResourceManager**, e nela você poderá ver informações sobre os *nodes* conectados ao *cluster* e as aplicações submetidas, em execução e finalizadas.
 
 Para acessar, digite no navegador: `ip_do_resourceManager:8088` ou `main:8088`.
@@ -728,6 +725,7 @@ Para acessar, digite no navegador: `ip_do_resourceManager:8088` ou `main:8088`.
 Você deverá ver informações sobre o *cluster* semelhante ao exemplo anterior com informações sobre os *nodes* conectados, como: número de containers, memória, vCores, etc., além das informações sobre os trabalhos/aplicações como informado anteriormente.
 
 ##### 12.2.3 - Acessando o JobHistory Server:
+
 O comando `mapred --daemon start historyserver` irá iniciar o *daemon* **MapReduce JobHistory Server**, que é responsável por armazenar o histórico dos trabalhos executados no *cluster*.
 
 Com `ip_do_JobHistory:19888/jobhistory` ou `main:19888/jobhistory`, você poderá acessar o histórico dos trabalhos que foram executados no *cluster*.
@@ -786,7 +784,7 @@ Agora você pode iniciar tudo com `start-all.sh && start-history` e parar tudo c
 
 #### 14.1 - Limites para Aplicações nos nós (via YARN):
 
-Quando não configurado, o YARN assume valores padrões definidos no `yarn-default.xml`, o que pode não ser o ideal em um *cluster* com nós  que possuem baixa capacidade de recursos, como o cluster de *Raspberry Pi*, por exemplo. O hadoop também é capaz de detectar automaticamente os recursos das máquinas. Para realizar essa configuração, veja a seção [15 - Configurando detecção de recursos](#15---configurando-detecção-de-recursos).
+Quando não configurado, o YARN assume valores padrões definidos no `yarn-default.xml`, o que pode não ser o ideal em um *cluster* com nós  que possuem baixa capacidade de recursos, como o cluster de *Raspberry Pi*, por exemplo. O hadoop também é capaz de detectar automaticamente os recursos das máquinas. Para realizar essa configuração, veja a seção [15 - Configurando detecção automática de recursos](#15---configurando-detecção-automática-de-recursos).
 
 <!-- Os valores padrão para o YARN são: -->
 {{% details title="Valores padrão para o YARN (Clique para expandir)" closed="true" %}}
@@ -888,6 +886,7 @@ No caso dos *Daemons* do Hadoop, é importante configurar o tamanho do *heap* (t
 Não existe um valor padrão, pois ele escala de forma automática baseado na capacidade da máquina.
 
 ##### 14.2.1 - Configurando os limites de recursos para Daemons (main):
+
 Acesse o arquivo `hadoop-env.sh` na máquina *main*:
 ```bash
 sudo nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh
@@ -921,6 +920,7 @@ export HADOOP_JOB_HISTORYSERVER_OPTS="-Xms1024m -Xmx2048m"
 Pressione `Ctrl + S` para salvar, `Ctrl + X` para sair.
 
 ##### 14.2.2 - Configurando os limites de recursos para Daemons (nodes):
+
 Acesse o arquivo `hadoop-env.sh` em cada *node*:
 ```bash
 sudo nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh
@@ -1049,6 +1049,7 @@ Caso apareça um erro sobre o limite de recursos ao rodar um trabalho, é sinal 
 O Hadoop é capaz de detectar automaticamente algumas configurações de *hardware*, porém é necessário indicar que isso deve acontecer, caso contrário, se não houver essa configuração e não houver limites definidos, os valores padrão serão aplicados. Seguem instruções de como configurar a detecção automática.
 
 #### 15.1 - Configure os nodes.
+
 Acesse o arquivo `yarn-site.xml` em cada *node*:
 ```bash
 sudo nano /usr/local/hadoop/etc/hadoop/yarn-site.xml
@@ -1136,6 +1137,7 @@ stop-all.sh && start-all.sh
 O *Swap* é uma área no disco rígido que o sistema operacional usa como uma extensão da memória RAM. Ele é útil quando a RAM física está cheia, permitindo que o sistema continue funcionando, mas com uma queda significativa de desempenho. É importante configurar o *Swap* para evitar que o sistema fique sem memória e trave. Em máquinas com pouca RAM, isso pode ser especialmente importante.
 
 #### 16.1 - Verifique o espaço de Swap:
+
 Para verificar se o *Swap* está configurado, execute o seguinte comando:
 ```bash
 sudo swapon --show
@@ -1150,6 +1152,7 @@ NAME      TYPE SIZE USED PRIO
 ```
 
 #### 16.2 - Crie o arquivo de Swap:
+
 Para criar um arquivo de *Swap*, execute os seguintes comandos:
 ```bash
 sudo fallocate -l 2G /swapfile
@@ -1180,14 +1183,15 @@ sudo dd if=/dev/zero of=/swapfile bs=1G count=2
 
 {{% /details %}}
 
-#### 16.2.1 - Defina as permissões do arquivo de Swap:
+##### 16.2.1 - Defina as permissões do arquivo de Swap:
 
 Por segurança, apenas o usuário root deve ter permissão para ler e escrever no arquivo de swap.
 ```bash
 sudo chmod 600 /swapfile
 ```
 
-#### 16.2.2 - Formate o arquivo de Swap e ative-o:
+##### 16.2.2 - Formate o arquivo de Swap e ative-o:
+
 Este comando prepara o arquivo para ser usado como swap:
 ```bash
 sudo mkswap /swapfile
@@ -1199,6 +1203,7 @@ sudo swapon /swapfile
 ```
 
 #### 16.3 - Tornando o Swap permanente:
+
 Para tornar o espaço de *Swap* permanente, adicione a seguinte linha ao arquivo `/etc/fstab`:
 ```bash
 sudo nano /etc/fstab
@@ -1210,6 +1215,7 @@ Adicione a seguinte linha ao final do arquivo:
 ```
 
 #### 16.4 - Verificando novamente o espaço de Swap:
+
 Após criar o espaço de *Swap*, execute novamente o comando:
 ```bash
 sudo swapon --show
@@ -1240,7 +1246,7 @@ A saída do `free -h` na linha "Swap" agora deve mostrar a capacidade total soma
 
 ### 18 - Automatizando o processo de configuração do cluster com Ansible:
 
-* [Automatizando a configuração de servidores com Ansible (em breve)](#)
+* [Automatizando a configuração de servidores com Ansible](/articles/2026/01/1-ansible)
 
 
 
