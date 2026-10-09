@@ -70,9 +70,13 @@ O `.gitignore` da raiz mantém fora do versionamento:
 | Padrão | Motivo |
 | ------ | ------ |
 | `public/`, `resources/`, `.hugo_build.lock` | Saída de build do Hugo |
-| `.vscode/` | Configuração de editor |
+| `.vscode/` | Configuração de editor (inclui `extensions.json`) |
 | `session-ses_*.md`, `tempgemini.txt`, `validate_yaml.py` | Artefatos locais de sessões e scripts auxiliares do agente |
+| `test_signature.txt` | Artefato de teste de assinatura SSH (fora do versionamento) |
 | `WIP/` | Artigos e imagens não publicados (ver seção anterior) |
+
+> [!NOTE]
+> `.devcontainer/` e `.gitpod.yml` **ficam** versionados: são ambientes de desenvolvimento na nuvem (Codespaces/Gitpod) e nenhum dos dois participa do build (`hugo`) nem do deploy (`pages.yaml`).
 
 > [!NOTE]
 > O `opencode.json` autoriza `edit` apenas para `*.md` — para alterar o `.gitignore`, use o `bash` (PowerShell).

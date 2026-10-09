@@ -11,5 +11,8 @@ session-ses_*.md
 tempgemini.txt
 validate_yaml.py
 
+# Test artifacts
+test_signature.txt
+
 # Work in progress (nao publicado)
 WIP/
