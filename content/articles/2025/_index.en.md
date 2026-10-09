@@ -24,36 +24,36 @@ The year 2025 corresponds to the years 4721-4722 in the Chinese calendar, since 
 ### December:
 
 {{< cards cols="1" >}}
-  No articles were published in December. ¯\_(ツ)_/¯
+  No articles were published in December.
 {{< /cards >}}
 
 ### November:
 
 {{< cards cols="1" >}}
-  No articles were published in November. ¯\_(ツ)_/¯
+  No articles were published in November.
 {{< /cards >}}
 
 ### October:
 
 {{< cards cols="1" >}}
-  No articles were published in October. ¯\_(ツ)_/¯
+  No articles were published in October.
 {{< /cards >}}
 
 ### September:
 
 {{< cards cols="1" >}}
-  No articles were published in September. ¯\_(ツ)_/¯
+  No articles were published in September.
 {{< /cards >}}
 
 ### August:
 
 {{< cards cols="1" >}}
-  {{< card link="https://devnotes.msglabs.site/articles/2025/08/2-dns-and-proxy-server-rockylinux/" title="Setting up a DNS server and transparent proxy on Rocky Linux (portuguese only)" tag="Network" tagColor="red" >}}
-  {{< card link="https://devnotes.msglabs.site/articles/2025/08/1-zabbix-and-grafana/" title="Monitoring a cluster of computers with Zabbix and Grafana (portuguese only)" tag="Network" tagColor="red" >}}
+  {{< card link="https://devnotes.msglabs.com.br/articles/2025/08/2-dns-and-proxy-server-rockylinux/" title="Setting up a DNS server and transparent proxy on Rocky Linux (portuguese only)" tag="Network" tagColor="red" >}}
+  {{< card link="https://devnotes.msglabs.com.br/articles/2025/08/1-zabbix-and-grafana/" title="Monitoring a cluster of computers with Zabbix and Grafana (portuguese only)" tag="Network" tagColor="red" >}}
 {{< /cards >}}
 
 ### July:
 
 {{< cards cols="1" >}}
-  {{< card link="https://devnotes.msglabs.site/articles/2025/07/1-hadoop-cluster/" title="Creating a computer cluster with Apache Hadoop (portuguese only)" tag="Architecture" tagColor="yellow" >}}
+  {{< card link="https://devnotes.msglabs.com.br/articles/2025/07/1-hadoop-cluster/" title="Creating a computer cluster with Apache Hadoop (portuguese only)" tag="Architecture" tagColor="yellow" >}}
 {{< /cards >}}

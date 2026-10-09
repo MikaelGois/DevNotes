@@ -5,10 +5,46 @@ type: default
 
 <h2 style="text-align: center;">&larr; <a href="2026/">2026</a> &rarr;</h2>
 
+<h3 style="text-align: center;"><a href="2026/07/">Julho</a></h3>
+
+{{< cards cols="1" >}}
+  {{< card link="2026/07/1-ansible" title="Automatizando a configuração de servidores com Ansible" tag="Automação" tagColor="blue" >}}
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/06/">Junho</a></h3>
+
+{{< cards cols="1" >}}
+  Não houve publicações em junho.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/05/">Maio</a></h3>
+
+{{< cards cols="1" >}}
+  Não houve publicações em maio.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/04/">Abril</a></h3>
+
+{{< cards cols="1" >}}
+  Não houve publicações em abril.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/03/">Março</a></h3>
+
+{{< cards cols="1" >}}
+  Não houve publicações em março.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/02/">Fevereiro</a></h3>
+
+{{< cards cols="1" >}}
+  Não houve publicações em fevereiro.
+{{< /cards >}}
+
 <h3 style="text-align: center;"><a href="2026/01/">Janeiro</a></h3>
 
 {{< cards cols="1" >}}
-  Nada ainda. =(
+  Não houve publicações em janeiro.
 {{< /cards >}}
 
 <h2 style="text-align: center;">&larr; <a href="2025/">2025</a> &rarr;</h2>
@@ -16,25 +52,25 @@ type: default
 <h3 style="text-align: center;"><a href="2025/12/">Dezembro</a></h3>
 
 {{< cards cols="1" >}}
-  Nenhum artigo foi publicado em Dezembro. ¯\_(ツ)_/¯
+  Não houve publicações em dezembro.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/11/">Novembro</a></h3>
 
 {{< cards cols="1" >}}
-  Nenhum artigo foi publicado em Novembro. ¯\_(ツ)_/¯
+  Não houve publicações em novembro.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/10/">Outubro</a></h3>
 
 {{< cards cols="1" >}}
-  Nenhum artigo foi publicado em Outubro. ¯\_(ツ)_/¯
+  Não houve publicações em outubro.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/09/">Setembro</a></h3>
 
 {{< cards cols="1" >}}
-  Nenhum artigo foi publicado em Setembro. ¯\_(ツ)_/¯
+  Não houve publicações em setembro.
 {{< /cards >}}
 
 <h3 style="text-align: center;"><a href="2025/08/">Agosto</a></h3>

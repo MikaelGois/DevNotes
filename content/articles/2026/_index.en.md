@@ -25,8 +25,44 @@ The year 2026 corresponds to the years 4722–4723 in the Chinese calendar, sinc
 
 ## Published articles:
 
+### July:
+
+{{< cards cols="1" >}}
+  {{< card link="https://devnotes.msglabs.com.br/articles/2026/07/1-ansible/" title="Automating server configuration with Ansible (portuguese only)" tag="Automation" tagColor="blue" >}}
+{{< /cards >}}
+
+### June:
+
+{{< cards cols="1" >}}
+  No articles were published in June.
+{{< /cards >}}
+
+### May:
+
+{{< cards cols="1" >}}
+  No articles were published in May.
+{{< /cards >}}
+
+### April:
+
+{{< cards cols="1" >}}
+  No articles were published in April.
+{{< /cards >}}
+
+### March:
+
+{{< cards cols="1" >}}
+  No articles were published in March.
+{{< /cards >}}
+
+### February:
+
+{{< cards cols="1" >}}
+  No articles were published in February.
+{{< /cards >}}
+
 ### January:
 
 {{< cards cols="1" >}}
-  Nothing yet. =(
+  No articles were published in January.
 {{< /cards >}}

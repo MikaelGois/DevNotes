@@ -6,7 +6,7 @@ editURL: "https://devnotes.msglabs.com.br/articles/zabbix-and-grafana/"
 next: /articles/2025/07/1-hadoop-cluster
 ---
 
-Esse artigo descreve como instalar e configurar o Zabbix e o Grafana para monitorar o cluster de computadores que foi configurado no artigo anterior, sendo o segundo de uma série de 4 artigos. Porém, as informações podem ser usadas para em qualquer outro cenário.
+Esse artigo descreve como instalar e configurar o Zabbix e o Grafana para monitorar o cluster de computadores que foi configurado no artigo anterior, sendo o segundo artigo de uma série de 4 artigos. Porém, as informações podem ser usadas para em qualquer outro cenário.
 
 No cenário do cluster, os passos a seguir são opcionais, ou seja, não são essenciais para o funcionamento dele. 
 Porém, monitoramento é algo essencial para qualquer sistema, portanto é recomendado a implementação.
@@ -17,8 +17,8 @@ Porém, monitoramento é algo essencial para qualquer sistema, portanto é recom
 
 Outros artigos da série:
 * [Criando um cluster de computadores com Apache Hadoop](/articles/2025/07/1-hadoop-cluster)
+* [Automatizando a configuração de servidores com Ansible](/articles/2026/01/1-ansible)
 * [Realizando testes de benchmark com o Hadoop (em breve)](#)
-* [Automatizando a configuração de servidores com Ansible (em breve)](#)
 
 ### 1 - Instalação e configuração do zabbix:
 

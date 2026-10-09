@@ -12,4 +12,4 @@ November is a late spring month in the Southern Hemisphere and a late autumn mon
 
 ## Published articles:
 
-There haven't been any posts in November.
+No articles were published in November.
