@@ -1,11 +1,9 @@
 ---
 title: Julho
 type: docs
-weight: 1
+weight: 4
 prev: /articles/2026/08/
 next: /articles/2026/06/
-sidebar:
-  open: true
 ---
 
 Julho é o sétimo mês do ano no calendário juliano e gregoriano, tendo a duração de 31 dias. Julho deve o seu nome ao líder militar e político romano Júlio César (*Gaius Iulius Caesar*), que nasceu neste mês. Inicialmente chamado *Quintilis* (do latim *quintus*, "quinto", pois era o quinto mês do antigo calendário romano), foi renomeado em sua homenagem por decisão do Senado romano em 44 a.C., ano de sua morte. Júlio César estabeleceu que o ano deveria começar na primeira lua nova após o solstício de inverno, que no hemisfério norte era a 21 de dezembro, a partir do ano 709 romanos (45 a.C.). Nessa ocasião o início do ano ocorreu oito dias após o solstício. Posteriormente o início do ano foi alterado para onze dias após o solstício.

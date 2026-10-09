@@ -25,6 +25,24 @@ The year 2026 corresponds to the years 4722–4723 in the Chinese calendar, sinc
 
 ## Published articles:
 
+### October:
+
+{{< cards cols="1" >}}
+  {{< card link="10/1-python-oop" title="A general guide to object-oriented programming with Python" tag="Programming" tagColor="green" >}}
+{{< /cards >}}
+
+### September:
+
+{{< cards cols="1" >}}
+  No articles were published in September.
+{{< /cards >}}
+
+### August:
+
+{{< cards cols="1" >}}
+  No articles were published in August.
+{{< /cards >}}
+
 ### July:
 
 {{< cards cols="1" >}}

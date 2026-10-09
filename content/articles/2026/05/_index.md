@@ -1,7 +1,7 @@
 ---
 title: Maio
 type: docs
-weight: 3
+weight: 6
 prev: /articles/2026/06/
 next: /articles/2026/04/
 ---

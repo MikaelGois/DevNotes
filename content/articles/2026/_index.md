@@ -25,6 +25,24 @@ Há 100 anos (segundo a Wikipédia):
 
 ## Artigos publicados:
 
+### Outubro:
+
+{{< cards cols="1" >}}
+  {{< card link="10/1-python-oop" title="Guia geral de programação orientada a objetos com Python" tag="Programação" tagColor="green" >}}
+{{< /cards >}}
+
+### Setembro:
+
+{{< cards cols="1" >}}
+  Não houve publicações em setembro.
+{{< /cards >}}
+
+### Agosto:
+
+{{< cards cols="1" >}}
+  Não houve publicações em agosto.
+{{< /cards >}}
+
 ### Julho:
 
 {{< cards cols="1" >}}
