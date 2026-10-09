@@ -6,11 +6,14 @@ editURL: "https://devnotes.msglabs.com.br/articles/python-oop/"
 next: /articles/2026/07/1-ansible
 ---
 
-Object-oriented programming (OOP) is the paradigm behind most modern languages, such as Java, C# and Python. Instead of organizing the code into loose variables and scattered functions, OOP groups data and behavior around real-world entities, represented by objects.
+Object-oriented programming (OOP) is the paradigm behind most modern languages, such as Java, C# and Python. Instead of organizing the code into standalone variables and unrelated functions, OOP groups data and behavior around real-world entities, represented by objects.
 
 This guide was organized so that the concepts appear in the order that makes the most sense. The idea is to start with the problem that OOP solves, create simple objects and gradually advance to organizing code into packages and *decorators*.
 
 A small school system will be used as the main example.
+
+> [!NOTE]
+> Throughout this English translation, the code examples intentionally retain Portuguese identifiers and user-facing messages from the original article. The sample outputs reproduce those messages as printed.
 
 > [!NOTE]
 > To follow this article, it is important to master the topics listed in section [0. Prerequisites](#0-prerequisites). If you already master them, you can go straight to section [1. What problem does OOP solve?](#1-what-problem-does-oop-solve).
@@ -42,7 +45,7 @@ In OOP, functions related to the same entity are organized inside classes.
 
 Consider a system that registers students.
 
-Without OOP, we could create loose variables:
+Without OOP, we could create standalone variables:
 
 ```python
 nome_aluno_1 = "Ana"
@@ -54,7 +57,7 @@ idade_aluno_2 = 22
 matricula_aluno_2 = "2025002"
 ```
 
-We would also need functions that receive many arguments:
+We would also need functions that receive several pieces of data:
 
 ```python
 def apresentar_aluno(nome, idade, matricula):
@@ -99,7 +102,7 @@ Think of it this way:
 
 ### 2.2 Object: an instance of the class
 
-An object is a concrete occurrence created from a class.
+An object is a concrete instance created from a class.
 
 ```python
 class Aluno:
@@ -200,7 +203,7 @@ With a constructor:
 aluno = Aluno("Ana", 20, "2025001")
 ```
 
-The object is born with a valid structure.
+The object is created with a valid structure.
 
 ### 4.1 Default values
 
@@ -265,7 +268,7 @@ Notice:
 self.nome = nome
 ```
 
-- `nome` is the received parameter;
+- `nome` is the incoming parameter;
 - `self.nome` is the attribute stored in the object.
 
 Without `self`, the value would exist only during the method's execution:
@@ -314,9 +317,6 @@ The `apresentar()` method uses `self` to access the data of the object that call
 ### 6.1 Methods that take parameters
 
 A method can also receive additional data.
-
-> [!NOTE]
-> Throughout this English translation, the code examples intentionally retain Portuguese identifiers and user-facing messages from the original article. The sample outputs reproduce those messages as printed.
 
 ```python
 class Aluno:
@@ -884,7 +884,7 @@ print(aluno.estudar("POO com Python"))
 - checking permissions;
 - measuring execution time;
 - validating access;
-- caching results;
+- saving results to *cache*;
 - recording audits.
 
 ### 16.1 The idea before the syntax
@@ -1206,7 +1206,7 @@ class Turma(Aluno):
     pass
 ```
 
-A class group has students, but a class group is not a student. A more appropriate model would be:
+A class group has students, but it is not a student. A more appropriate model would be:
 
 ```python
 class Turma:
