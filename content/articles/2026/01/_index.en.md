@@ -1,7 +1,7 @@
 ---
 title: January
 type: docs
-weight: 7
+weight: 10
 prev: /articles/2026/02/
 next: /articles/2025/12/
 ---

@@ -1,7 +1,7 @@
 ---
 title: Fevereiro
 type: docs
-weight: 6
+weight: 9
 prev: /articles/2026/03/
 next: /articles/2026/01/
 ---

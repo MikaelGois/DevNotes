@@ -1,7 +1,7 @@
 ---
 title: Junho
 type: docs
-weight: 2
+weight: 5
 prev: /articles/2026/07/
 next: /articles/2026/05/
 ---

@@ -48,6 +48,35 @@ content/
     └── ...
 ```
 
+### Trabalho em progresso (WIP)
+
+Artigos e imagens ainda não prontos para publicação **não** devem permanecer em `content/` — o Hugo constrói tudo que estiver lá (inclusive arquivos sem frontmatter, que geram páginas indesejadas). Mova-os para a pasta `WIP/` na **raiz** do repositório:
+
+```
+WIP/
+├── 1-artigo-inacabado.md    # nunca é buildado nem versionado
+├── 2-outro-artigo.md
+└── image-*.png
+```
+
+- `WIP/` está no `.gitignore`: não aparece no `git status`, não vai para o remote e não é buildado pelo Hugo.
+- Ao **finalizar** um artigo, mova os arquivos de volta para `content/articles/<ANO>/<MES>/` (nomes `N-<slug>.md` e imagens `image-*.png` na mesma pasta) e registre-o nos cards do mês, do ano e da lista geral (PT e EN).
+- Ao **mover para o WIP**, faça o caminho inverso: remova os cards correspondentes dos índices, se houver, e confirme com `hugo --gc --minify` que as páginas órfãs não permanecem em `public/` (o build com `--gc` não remove páginas HTML de conteúdo que foi apagado — apague-as manualmente).
+
+### `.gitignore`
+
+O `.gitignore` da raiz mantém fora do versionamento:
+
+| Padrão | Motivo |
+| ------ | ------ |
+| `public/`, `resources/`, `.hugo_build.lock` | Saída de build do Hugo |
+| `.vscode/` | Configuração de editor |
+| `session-ses_*.md`, `tempgemini.txt`, `validate_yaml.py` | Artefatos locais de sessões e scripts auxiliares do agente |
+| `WIP/` | Artigos e imagens não publicados (ver seção anterior) |
+
+> [!NOTE]
+> O `opencode.json` autoriza `edit` apenas para `*.md` — para alterar o `.gitignore`, use o `bash` (PowerShell).
+
 ### Frontmatter dos `_index.md`
 
 #### `_index.md` do mês
@@ -65,8 +94,9 @@ sidebar:
 ```
 
 - **Pesos:** sem valores negativos. Mês mais recente do ano = peso **1**; meses anteriores crescem a partir de 2. Na sidebar do Hextra (ordenada por `weight`), o menor peso fica embaixo — portanto o mês mais novo aparece no topo da ordem cronológica quando combinado com os `prev`/`next`. Sempre siga o padrão do mês anterior.
+- **Ao criar meses novos mais recentes que os existentes** (ex.: em outubro/2026, criar 08, 09 e 10 com julho já existente): reajuste o `weight` de **todos** os meses do ano para que o mais recente volte a ser 1 (ex.: 10=1, 09=2, 08=3, 07=4, 06=5, ..., 01=10), **mova** `sidebar.open: true` do antigo mês corrente para o novo, corrija a cadeia `prev`/`next` (o `prev` do mês mais novo fica comentado até existir um mês posterior) e atualize os `_index.md` do ano e da lista geral (PT e EN).
 - `prev`/`next` seguem a ordem cronológica encadeada (Julho aponta para Agosto em `prev`, e para Junho em `next`). Janeiro de um ano novo aponta para Dezembro do ano anterior em `next`.
-- **`sidebar.open: true`** só para o `_index.md` do **mês em andamento** do ano corrente (ex.: `2026/07/_index.md` em julho/2026). Todos os meses passados do ano corrente e todos os meses de anos passados **não** devem ter `sidebar.open` — a seção começa recolhida na sidebar.
+- **`sidebar.open: true`** só para o `_index.md` do **mês em andamento** do ano corrente (ex.: `2026/10/_index.md` em outubro/2026). Todos os meses passados do ano corrente e todos os meses de anos passados **não** devem ter `sidebar.open` — a seção começa recolhida na sidebar.
 
 #### `_index.md` do ano
 
@@ -115,7 +145,7 @@ O uso do envelope `{{< cards cols="1" >}}...{{< /cards >}}` depende do nível do
 
 - Em **`_index.md` do mês**, o `link` aponta para o slug relativo (ex.: `1-hadoop-cluster`).
 - Em **`_index.md` do ano** e na **lista geral** (`content/articles/_index.md`), o `link` aponta para o caminho completo relativo ao ano (ex.: `07/1-hadoop-cluster`).
-- Na versão **inglesa** (`.en.md`), o `link` aponta para a URL pública de produção quando o artigo não tem versão em inglês (ex.: `https://devnotes.msglabs.com.br/articles/2025/07/1-hadoop-cluster/`), com sufixo "(portuguese only)" no título.
+- Na versão **inglesa** (`.en.md`): se o artigo **não** tem tradução, o `link` aponta para a URL pública de produção (ex.: `https://devnotes.msglabs.com.br/articles/2025/07/1-hadoop-cluster/`) e o título recebe o sufixo "(portuguese only)"; se o artigo **tem** o `.en.md` irmão, use o mesmo slug relativo do PT (ex.: `1-python-oop` no mês, `10/1-python-oop` no ano e na lista geral) **sem** o sufixo.
 
 #### Sem artigo publicado
 
@@ -152,6 +182,7 @@ Cores já estabelecidas para categorias do DevNotes:
 | Arquitetura / Architecture | `yellow` | `Arquitetura` | `Architecture` |
 | Redes / Network            | `red`    | `Redes`       | `Network` |
 | Automação / Automation     | `blue`   | `Automação`   | `Automation` |
+| Programação / Programming  | `green`  | `Programação` | `Programming` |
 
 Ao criar uma nova categoria, escolha uma cor ainda não usada e — se a cor não estiver habilitada no `tailwind.config.js` do Hextra — adicione-a ao mapa em `layouts/partials/shortcodes/badge.html`.
 
@@ -190,7 +221,8 @@ O `opencode.json` na raiz autoriza `edit` apenas para arquivos `*.md` no workspa
 - `content/articles/2025/07/_index.md` — referência de estilo para cards de artigos publicados e estrutura do mês.
 - `content/articles/2025/_index.md` — referência para `_index.md` do ano (cards, seções mensais).
 - `content/articles/_index.md` — referência para a lista de artigos geral.
-- `content/articles/2026/07/_index.md` — referência de estilo para o mês corrente (categoria Automação, `sidebar.open: true`).
-- `content/articles/2026/07/1-ansible.md` — exemplo de artigo da categoria Automação (português-only, com `editURL` e `next` encadeado).
+- `content/articles/2026/10/_index.md` — referência de estilo para o mês corrente (categoria Programação, `sidebar.open: true`, cadeia `prev`/`next` com o `prev` comentado no mês mais novo).
+- `content/articles/2026/10/1-python-oop.md` — exemplo de artigo completo com tradução EN (`1-python-oop.en.md`), callouts, `{{% details %}}` e blocos `{filename="..."}`.
+- `content/articles/2026/07/1-ansible.md` — exemplo de artigo em português-only (sem `.en.md`), com `editURL` e `next` encadeado.
 - `hugo.yaml` — configurações do site.
 - `opencode.json` — regras de permissão do agente.

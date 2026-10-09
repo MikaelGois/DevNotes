@@ -5,6 +5,24 @@ type: default
 
 <h2 style="text-align: center;">&larr; <a href="2026/">2026</a> &rarr;</h2>
 
+<h3 style="text-align: center;"><a href="2026/10/">October</a></h3>
+
+{{< cards cols="1" >}}
+  {{< card link="2026/10/1-python-oop" title="A general guide to object-oriented programming with Python" tag="Programming" tagColor="green" >}}
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/09/">September</a></h3>
+
+{{< cards cols="1" >}}
+  No articles were published in September.
+{{< /cards >}}
+
+<h3 style="text-align: center;"><a href="2026/08/">August</a></h3>
+
+{{< cards cols="1" >}}
+  No articles were published in August.
+{{< /cards >}}
+
 <h3 style="text-align: center;"><a href="2026/07/">July</a></h3>
 
 {{< cards cols="1" >}}

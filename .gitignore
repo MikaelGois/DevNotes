@@ -5,3 +5,11 @@ resources/
 
 # Editor
 .vscode/
+
+# Sessions / temporary files
+session-ses_*.md
+tempgemini.txt
+validate_yaml.py
+
+# Work in progress (nao publicado)
+WIP/

@@ -1,7 +1,7 @@
 ---
 title: April
 type: docs
-weight: 4
+weight: 7
 prev: /articles/2026/05/
 next: /articles/2026/03/
 ---
