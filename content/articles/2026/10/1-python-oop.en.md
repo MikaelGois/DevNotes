@@ -315,6 +315,9 @@ The `apresentar()` method uses `self` to access the data of the object that call
 
 A method can also receive additional data.
 
+> [!NOTE]
+> Throughout this English translation, the code examples intentionally retain Portuguese identifiers and user-facing messages from the original article. The sample outputs reproduce those messages as printed.
+
 ```python
 class Aluno:
     def __init__(self, nome):
