@@ -13,6 +13,7 @@ validate_yaml.py
 
 # Test artifacts
 test_signature.txt
+*.bak-*
 
 # Work in progress (nao publicado)
 WIP/
